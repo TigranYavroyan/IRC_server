@@ -71,5 +71,5 @@ void IRC_server<PORT>::setupServer () {
         _exit(1);
     }
 
-    std::cout << "Listening on port " << PORT << "..." << std::endl;
+    std::cout << "Listening on " << INADDR_ANY << ":" << PORT << "..." << std::endl;
 }
