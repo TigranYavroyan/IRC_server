@@ -1,15 +1,16 @@
 template <port_id PORT>
 IRC_server<PORT>::~IRC_server () {
-    close_connection_all();
+    closeConnectionAll();
 }
 
 template <port_id PORT>
-void IRC_server<PORT>::close_connection_all () {
+void IRC_server<PORT>::closeConnectionAll () {
     close(server_fd);
     for (int client : clients) {
         close(client);
     }
 }
+
 
 template <port_id PORT>
 void IRC_server<PORT>::setupServer () {
@@ -63,7 +64,9 @@ void IRC_server<PORT>::setupServer () {
 
     /**
      * @param server_fd for listening the port defined after binding
-     * @param backlog the maximum value of pending connection until the accepting
+     * @param backlog the maximum value of pending connections until the accepting
+     * 
+     * $ server_fd is a passive socket, which listenning on setuped IP:PORT
     */
     const int MAX_PENDING_CONNECTIONS = 2;
     if (listen(server_fd, MAX_PENDING_CONNECTIONS)) {
@@ -71,5 +74,47 @@ void IRC_server<PORT>::setupServer () {
         _exit(1);
     }
 
+    /**
+     * $ We need fd_sets for knowing is there something happened or not (someone connected or sent message) 
+    */
+    FD_ZERO(&all_fdset);
+    FD_SET(server_fd, &all_fdset);
+    max_fd = server_fd;
+
     std::cout << "Listening on " << INADDR_ANY << ":" << PORT << "..." << std::endl;
+}
+
+
+template <port_id PORT>
+void IRC_server<PORT>::acceptConnection () {
+    
+    struct sockaddr_in client_addr;
+    socklen_t addr_len = sizeof(client_addr);
+
+    /**
+     * @param server_fd , passive socket , which listening some IP : PORT
+     * @param GSA
+     * @param sizeof_GSA
+     * 
+     * $ accept returning active sockets fd, which is the fd of the client side 
+    */
+    int new_client = accept(server_fd, (struct sockaddr*)&client_addr, &addr_len);
+    if (new_client < 0) {
+        perror("accept");
+        exit(1);
+    }
+
+    clients.push_back(new_client);
+
+    /**
+     * @param socket_fd
+     * @param fd_set (int this case all_fdset representing all connected users and servers)
+    */
+    FD_SET(new_client, &all_fdset);
+    max_fd = std::max(max_fd, new_client);
+
+    std::cout << "New client connected: " << new_client << "\n";
+    std::string welcome_msg = "Welcome to the IRC-like chat server!\n";
+    if (send(new_client, welcome_msg.c_str(), welcome_msg.size(), 0) < 0)
+        perror("send");
 }

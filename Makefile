@@ -7,7 +7,8 @@ OBJS = $(SRC:.cpp=.o)
 
 RM = rm -rf
 
-all:$(NAME)
+all: $(NAME)
+
 
 $(NAME): $(OBJS)
 	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
