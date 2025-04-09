@@ -1,6 +1,6 @@
 CC = c++
-CFLAGS = -Wall -Wextra -Werror -std=c++2a
-NAME = irc
+CFLAGS = -Wall -Wextra -Werror -std=c++98
+NAME = ircserv
 
 SRC = main.cpp
 OBJS = $(SRC:.cpp=.o)
