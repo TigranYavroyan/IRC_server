@@ -2,14 +2,14 @@ NAME       = ircserv
 CXX        = c++
 RM         = rm -f
 
-SRC_DIRS   = user \
-             server/channel \
-             server/eventhandler \
-             server/irc_server \
-             exceptions \
-             commands \
-             cmdExecutor \
-			 /
+SRC_DIRS   = ./user \
+             ./server/channel \
+             ./server/eventhandler \
+             ./server/irc_server \
+             ./exceptions \
+             ./commands \
+             ./cmdExecutor \
+			 ./main
 
 INCLUDES   = $(addprefix -I, $(SRC_DIRS) .)
 
