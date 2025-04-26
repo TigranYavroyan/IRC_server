@@ -1,20 +1,23 @@
 CC = c++
-CFLAGS = -Wall -Wextra -Werror -std=c++98
-NAME = ircserv
 
-SRC = main.cpp
-OBJS = $(SRC:.cpp=.o)
+CLASSPATH = ./user/ ./server/channel/ ./server/eventhandler/ ./server/irc_server/ ./exceptions/ ./commands/ ./cmdExecutor/
+SRCS = $(wildcard $(CLASSPATH)*.cpp)
+OBJS = $(patsubst $(CLASSPATH)%.cpp, $(CLASSPATH)%.o, $(SRCS))
+INCLUDES = $(foreach H, $(INCPATH), -I$(H))
 
 RM = rm -rf
+
+NAME = ircserv
+CFLAGS = -Wall -Wextra -Werror -std=c++98 $(INCLUDES)
 
 all: $(NAME)
 
 
 $(NAME): $(OBJS)
-	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
-.cpp.o:
-	@$(CC) $(CFLAGS) -c $< -o $@
+$(SRCSPATH)%.o: $(SRCSPATH)%.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	@$(RM) $(OBJS)

@@ -1,0 +1,4 @@
+#ifndef INPUTERROR_HPP
+#define INPUTERROR_HPP
+
+#endif // INPUTERROR_HPP
