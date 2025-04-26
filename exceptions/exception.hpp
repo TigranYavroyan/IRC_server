@@ -10,17 +10,13 @@ namespace IRC {
 		std::string msg;
 		exception() {}
 	public:
-		explicit exception (const char* _msg): msg(_msg ? _msg : "") {}
-		explicit exception (const std::string& _msg): msg(_msg) {}
-		exception (const exception& other) throw(): msg(other.msg) {}
+		explicit exception (const char* _msg);
+		explicit exception (const std::string& _msg);
+		exception (const exception& other) throw();
 
-		exception& operator= (const exception& other) {
-			msg = other.msg;
-		}
+		exception& operator= (const exception& other);
 
-		virtual const char* what() const throw() {
-			return msg.c_str();
-		}
+		virtual const char* what() const throw();
 	};
 }
 

@@ -3,7 +3,7 @@ CC = c++
 CLASSPATH = ./user/ ./server/channel/ ./server/eventhandler/ ./server/irc_server/ ./exceptions/ ./commands/ ./cmdExecutor/
 SRCS = $(wildcard $(CLASSPATH)*.cpp)
 OBJS = $(patsubst $(CLASSPATH)%.cpp, $(CLASSPATH)%.o, $(SRCS))
-INCLUDES = $(foreach H, $(INCPATH), -I$(H))
+INCLUDES = $(foreach H, $(CLASSPATH), -I$(H))
 
 RM = rm -rf
 
