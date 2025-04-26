@@ -8,8 +8,11 @@ IRC::exception::exception(const exception& other) throw(): msg(other.msg) {}
 
 IRC::exception& IRC::exception::operator= (const exception& other) {
 	msg = other.msg;
+	return *this;
 }
 
 const char* IRC::exception::what() const throw() {
 	return msg.c_str();
 }
+
+IRC::exception::~exception () throw() {}

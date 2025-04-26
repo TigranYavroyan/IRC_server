@@ -1,30 +1,42 @@
-CC = c++
+NAME       = ircserv
+CXX        = c++
+RM         = rm -f
 
-CLASSPATH = ./user/ ./server/channel/ ./server/eventhandler/ ./server/irc_server/ ./exceptions/ ./commands/ ./cmdExecutor/
-SRCS = $(wildcard $(CLASSPATH)*.cpp)
-OBJS = $(patsubst $(CLASSPATH)%.cpp, $(CLASSPATH)%.o, $(SRCS))
-INCLUDES = $(foreach H, $(CLASSPATH), -I$(H))
+SRC_DIRS   = user \
+             server/channel \
+             server/eventhandler \
+             server/irc_server \
+             exceptions \
+             commands \
+             cmdExecutor \
+			 /
 
-RM = rm -rf
+INCLUDES   = $(addprefix -I, $(SRC_DIRS) .)
 
-NAME = ircserv
-CFLAGS = -Wall -Wextra -Werror -std=c++98 $(INCLUDES)
+SRCS       = $(wildcard $(addsuffix /*.cpp, $(SRC_DIRS)))
+OBJS       = $(SRCS:.cpp=.o)
+
+CXXFLAGS   = -Wall -Wextra -Werror -std=c++98 $(INCLUDES)
+
 
 all: $(NAME)
 
-
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	$(CXX) $(OBJS) -o $@
 
-$(SRCSPATH)%.o: $(SRCSPATH)%.cpp
-	$(CC) $(CFLAGS) -c $< -o $@
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	@$(RM) $(OBJS)
+	$(RM) $(OBJS)
 
 fclean: clean
-	@$(RM) $(NAME)
+	$(RM) $(NAME)
 
 re: fclean all
 
-.PHONY: all clean fclean re
+info:
+	$(info Sources: $(SRCS))
+	$(info Includes: $(INCLUDES))
+
+.PHONY: all clean fclean re info

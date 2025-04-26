@@ -6,15 +6,11 @@
 namespace IRC {
 	class ServerError : public IRC::exception {
 	public:
-		ServerError(const char* _msg): IRC::exception(_msg) {}
-		ServerError(const std::string& _msg): IRC::exception(_msg.c_str()) {}
-		ServerError(const ServerError& other) {
-			this->msg = other.msg;
-		}
+		ServerError(const char* _msg);
+		ServerError(const std::string& _msg);
+		ServerError(const ServerError& other) throw();
 
-		ServerError& operator= (const ServerError& other) {
-			this->msg = other.msg;
-		}
+		ServerError& operator= (const ServerError& other);
 	};
 }
 

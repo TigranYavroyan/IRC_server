@@ -17,6 +17,8 @@ namespace IRC {
 		exception& operator= (const exception& other);
 
 		virtual const char* what() const throw();
+
+		virtual ~exception () throw();
 	};
 }
 
