@@ -40,12 +40,7 @@ void IRC_server::setupServer () {
         _exit(1);
     }
 
-    /**
-     * $ We need fd_sets for knowing is there something happened or not (someone connected or sent message) 
-    */
-    FD_ZERO(&all_fdset);
-    FD_SET(server_fd, &all_fdset);
-    max_fd = server_fd;
+    eventhandler.subscribe(server_fd);
 
     std::cout << "Listening on " << INADDR_ANY << ":" << PORT << "..." << std::endl;
 }
@@ -64,14 +59,7 @@ void IRC_server::__acceptConnection () {
 
     clients.push_back(new_client);
 
-    /**
-     * @param socket_fd
-     * @param fd_set (int this case all_fdset representing all connected users and servers)
-     * 
-     * $ we need the max_fd for select
-    */
-    FD_SET(new_client, &all_fdset);
-    max_fd = std::max(max_fd, new_client);
+    eventhandler.subscribe(new_client);
 
     std::cout << "New client is trying to connect: " << new_client << "\n";
     std::string welcome_msg = "Welcome to the IRC-like chat server!\nEnter the password: ";
@@ -117,7 +105,7 @@ void IRC_server::__messageChecking (int client) {
     
     if (bytes_received <= 0) {
         close(client);
-        FD_CLR(client, &all_fdset);
+        eventhandler.unsubscribe(client);
         clients.erase(std::find(clients.begin(), clients.end(), client));
         auths.erase(client);
         std::cout << "Client disconnected: " << client << std::endl;
@@ -155,16 +143,14 @@ void IRC_server::__messageChecking (int client) {
 
 void IRC_server::run () {
     while (true) {
-        read_fdset = all_fdset;
-
-        if (select(max_fd + 1, &read_fdset, NULL, NULL, NULL) < 0)
+        if (eventhandler.wait_event() < 0)
             perror("select");
 
-        if (FD_ISSET(server_fd, &read_fdset))
+        if (eventhandler.is_new_event(server_fd))
             __acceptConnection();
 
         for (std::size_t i = 0; i < clients.size(); ++i) {
-            if (FD_ISSET(clients[i], &read_fdset))
+            if (eventhandler.is_new_event(clients[i]))
                 __messageChecking(clients[i]);
         }
     }

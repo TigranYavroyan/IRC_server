@@ -1,7 +1,6 @@
 #ifndef IRC_SERVER_HPP
 #define IRC_SERVER_HPP
 
-
 #include <vector>
 #include <iostream>
 #include <set>
@@ -15,6 +14,8 @@
 #include <cstdio>
 #include <sys/select.h>
 
+#include <EventHandler.hpp>
+
 class IRC_server {
     std::vector<int> clients;
     const std::string password;
@@ -23,9 +24,7 @@ class IRC_server {
     
     const std::size_t BUFFER_SIZE;
     int server_fd;
-    int max_fd;
-    fd_set all_fdset;
-    fd_set read_fdset;
+    EventHandler eventhandler;
 public:
     IRC_server (const std::string& _password = "hello", int port = 8080) : password(_password), PORT(port), BUFFER_SIZE(1000) {}
     ~IRC_server ();

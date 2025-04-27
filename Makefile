@@ -35,8 +35,4 @@ fclean: clean
 
 re: fclean all
 
-info:
-	$(info Sources: $(SRCS))
-	$(info Includes: $(INCLUDES))
-
-.PHONY: all clean fclean re info
+.PHONY: all clean fclean re
