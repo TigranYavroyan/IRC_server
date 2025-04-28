@@ -26,7 +26,7 @@ class IRC_server {
     int server_fd;
     EventHandler eventhandler;
 public:
-    IRC_server (const std::string& _password = "hello", int port = 8080) : password(_password), PORT(port), BUFFER_SIZE(1000) {}
+    IRC_server (const std::string& _password = "hello", int port = 8080) : password(_password), PORT(port), BUFFER_SIZE(1024) {}
     ~IRC_server ();
 public:
     void closeConnectionAll ();

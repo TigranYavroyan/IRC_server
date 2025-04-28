@@ -6,6 +6,8 @@
 #include <algorithm>
 
 class EventHandler {
+	fd_set write_subscriptors;
+	fd_set ready_write;
 	fd_set read_subscriptors;
 	fd_set ready_read;
 	int max_fd;
@@ -13,11 +15,13 @@ public:
 	EventHandler();
 	~EventHandler();
 public:
-	bool is_new_event (int socket_fd);
+	bool is_read_event (int socket_fd);
 	int wait_event();
-	void subscribe (int socket_fd);
-	void unsubscribe (int socket_fd);
-	void clear_subscriptions () throw();
+	void subscribe_read (int socket_fd);
+	void unsubscribe_read (int socket_fd);
+	void subscribe_write (int socket_fd);
+	void unsubscribe_write (int socket_fd);
+	void clear_all_subscriptions () throw();
 };
 
 #endif // EVENTHANDLER_HPP
