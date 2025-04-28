@@ -13,6 +13,7 @@
 #include <netinet/in.h>
 #include <cstdio>
 #include <sys/select.h>
+#include <fcntl.h>
 
 #include <EventHandler.hpp>
 

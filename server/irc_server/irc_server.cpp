@@ -1,11 +1,13 @@
 #include "irc_server.hpp"
+#include <errno.h>
 
 IRC_server::~IRC_server () {
     closeConnectionAll();
 }
 
 void IRC_server::closeConnectionAll () {
-    close(server_fd);
+    if (server_fd >= 0)
+        close(server_fd);
     for (std::size_t i = 0; i < clients.size(); ++i) {
         close(clients[i]);
     }
@@ -18,13 +20,17 @@ void IRC_server::setupServer () {
         _exit(1);
     }
 
-    struct sockaddr_in server_addr;
     int opt = 1;
-
+    fcntl(server_fd, F_SETFL, O_NONBLOCK);    
+    
     if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt))) {
         perror("setsockopt");
         _exit(1);
     }
+
+    struct sockaddr_in server_addr;
+    std::memset(&server_addr, 0, sizeof(server_addr));
+
     server_addr.sin_family = AF_INET; // IPv4
     server_addr.sin_addr.s_addr = INADDR_ANY; // the IP
     server_addr.sin_port = htons(PORT); // the PORT
@@ -34,8 +40,7 @@ void IRC_server::setupServer () {
         _exit(1);
     }
 
-    const int MAX_PENDING_CONNECTIONS = 2;
-    if (listen(server_fd, MAX_PENDING_CONNECTIONS)) {
+    if (listen(server_fd, SOMAXCONN)) {
         perror("listen");
         _exit(1);
     }
@@ -53,13 +58,16 @@ void IRC_server::__acceptConnection () {
     std::memset(&client_addr, 0, addr_len);
 
     int new_client = accept(server_fd, (struct sockaddr*)&client_addr, &addr_len);
+    fcntl(new_client, F_SETFL, O_NONBLOCK);
+   
     if (new_client < 0) {
-        perror("accept");
-        _exit(1);
+        if (errno != EAGAIN && errno != EWOULDBLOCK) {
+            perror("accept");
+        }
+        return;
     }
 
     clients.push_back(new_client);
-
     eventhandler.subscribe_read(new_client);
 
     std::cout << "New client is trying to connect: " << new_client << "\n";
@@ -105,11 +113,14 @@ void IRC_server::__messageChecking (int client) {
     int bytes_received = recv(client, buffer, BUFFER_SIZE, 0);
     
     if (bytes_received <= 0) {
-        close(client);
-        eventhandler.unsubscribe_read(client);
-        clients.erase(std::find(clients.begin(), clients.end(), client));
-        auths.erase(client);
-        std::cout << "Client disconnected: " << client << std::endl;
+        if (bytes_received == 0 || (errno != EAGAIN && errno != EWOULDBLOCK)) {
+            close(client);
+            eventhandler.unsubscribe_read(client);
+            clients.erase(std::find(clients.begin(), clients.end(), client));
+            auths.erase(client);
+            std::cout << "Client disconnected: " << client << std::endl;
+
+        }
         return;
     }
     std::string message = buffer;

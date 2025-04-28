@@ -18,7 +18,6 @@ OBJS       = $(SRCS:.cpp=.o)
 
 CXXFLAGS   = -Wall -Wextra -Werror -std=c++98 $(INCLUDES)
 
-
 all: $(NAME)
 
 $(NAME): $(OBJS)
