@@ -35,4 +35,10 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+push:
+	@read -p "Input the commit message: " $COMMIT_MSG
+	git add .
+	git commit -m $COMMIT_MSG
+	git push
+
+.PHONY: all clean fclean re push
