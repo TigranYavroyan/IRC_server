@@ -1,7 +1,7 @@
 #ifndef SERVERERROR_HPP
 #define SERVERERROR_HPP
 
-#include "exception.hpp"
+#include <exception.hpp>
 
 namespace IRC {
 	class ServerError : public IRC::exception {

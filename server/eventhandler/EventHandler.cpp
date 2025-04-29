@@ -1,4 +1,4 @@
-#include "EventHandler.hpp"
+#include <EventHandler.hpp>
 
 EventHandler::EventHandler () {
 	clear_all_subscriptions();

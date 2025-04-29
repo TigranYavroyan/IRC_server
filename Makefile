@@ -10,14 +10,16 @@ SRC_DIRS   = ./user \
              ./commands \
              ./cmdExecutor \
 			 ./main \
-			 ./parsing
+			 ./parsing \
+			 ./helpers
 
 INCLUDES   = $(addprefix -I, $(SRC_DIRS) .)
 
 SRCS       = $(wildcard $(addsuffix /*.cpp, $(SRC_DIRS)))
 OBJS       = $(SRCS:.cpp=.o)
 
-CXXFLAGS   = -Wall -Wextra -Werror -std=c++98 $(INCLUDES)
+CXXERRFLAGS =# -Wall -Wextra -Werror
+CXXFLAGS   = $(CXXERRFLAGS) -std=c++98 $(INCLUDES)
 
 all: $(NAME)
 

@@ -1,4 +1,4 @@
-#include "exception.hpp"
+#include <exception.hpp>
 
 IRC::exception::exception(const char* _msg): msg(_msg ? _msg : "") {}
 

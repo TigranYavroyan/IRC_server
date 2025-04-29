@@ -1,5 +1,5 @@
-#ifndef IRC_SERVER_HPP
-#define IRC_SERVER_HPP
+#ifndef IRCServer_HPP
+#define IRCServer_HPP
 
 #include <vector>
 #include <iostream>
@@ -16,19 +16,21 @@
 #include <fcntl.h>
 
 #include <EventHandler.hpp>
+#include <Helpers.hpp>
 
-class IRC_server {
-    std::vector<int> clients;
-    const std::string password;
+class IRCServer {
 	const int PORT;
+    const std::string password;
+
+    std::vector<int> clients;
     std::set<int> auths;
     
     const std::size_t BUFFER_SIZE;
     int server_fd;
     EventHandler eventhandler;
 public:
-    IRC_server (const std::string& _password = "hello", int port = 6667) : password(_password), PORT(port), BUFFER_SIZE(1024) {}
-    ~IRC_server ();
+    IRCServer (int port, const std::string _password): PORT(port), password(_password), BUFFER_SIZE(1024) {}
+    ~IRCServer ();
 public:
     void closeConnectionAll ();
     void setupServer ();
@@ -38,12 +40,6 @@ private:
     void __messageChecking (int client);
     void __broadcastMessage (int client, const std::string& msg);
     bool __is_client_logged_in (int client) const;
-    static void __right_trim (std::string& str, const char* delims = " \n\t\r");
-    static void __left_trim (std::string& str, const char* delims = " \n\t\r");
-    static void __trim (std::string& str, const char* delims = " \n\t\r");
-
-    template <typename T>
-    static std::string to_string(const T& value);
 };
 
-#endif // IRC_SERVER_HPP
+#endif // IRCServer_HPP

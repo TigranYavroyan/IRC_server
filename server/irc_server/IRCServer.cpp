@@ -1,11 +1,11 @@
-#include "irc_server.hpp"
+#include <IRCServer.hpp>
 #include <errno.h>
 
-IRC_server::~IRC_server () {
+IRCServer::~IRCServer () {
     closeConnectionAll();
 }
 
-void IRC_server::closeConnectionAll () {
+void IRCServer::closeConnectionAll () {
     if (server_fd >= 0)
         close(server_fd);
     for (std::size_t i = 0; i < clients.size(); ++i) {
@@ -13,7 +13,7 @@ void IRC_server::closeConnectionAll () {
     }
 }
 
-void IRC_server::setupServer () {
+void IRCServer::setupServer () {
     server_fd = socket(AF_INET, SOCK_STREAM, 0);
     if (server_fd < 0) {
         perror("socket");
@@ -51,7 +51,7 @@ void IRC_server::setupServer () {
 }
 
 
-void IRC_server::__acceptConnection () {
+void IRCServer::__acceptConnection () {
     
     struct sockaddr_in client_addr;
     socklen_t addr_len = sizeof(client_addr);
@@ -76,39 +76,18 @@ void IRC_server::__acceptConnection () {
         perror("send");
 }
 
-void IRC_server::__right_trim (std::string& str, const char* delims) {
-    str.erase(str.find_last_not_of(delims) + 1);
-}
-
-void IRC_server::__left_trim (std::string& str, const char* delims) {
-    str.erase(0, str.find_first_not_of(delims));
-}
-
-void IRC_server::__trim (std::string& str, const char* delims) {
-    __left_trim(str, delims);
-    __right_trim(str, delims);
-}
-
-template <typename T>
-std::string IRC_server::to_string(const T& value) {
-    std::ostringstream oss;
-    oss << value;
-    return oss.str();
-}
-
-
-bool IRC_server::__is_client_logged_in (int client) const {
+bool IRCServer::__is_client_logged_in (int client) const {
     return auths.find(client) != auths.end();
 }
 
-void IRC_server::__broadcastMessage (int client, const std::string& msg) {
+void IRCServer::__broadcastMessage (int client, const std::string& msg) {
     for (std::size_t i = 0; i < clients.size(); ++i) {
         if (client != clients[i])
             send(clients[i], msg.c_str(), msg.size(), 0);
     }
 }
 
-void IRC_server::__messageChecking (int client) {
+void IRCServer::__messageChecking (int client) {
     char buffer[BUFFER_SIZE] = {0};
     int bytes_received = recv(client, buffer, BUFFER_SIZE, 0);
 
@@ -123,7 +102,7 @@ void IRC_server::__messageChecking (int client) {
         return;
     }
     std::string message = buffer;
-    __trim(message);
+    Helpers::trim(message);
     if (!__is_client_logged_in(client)) {
         if (message == password)
         {
@@ -144,7 +123,7 @@ void IRC_server::__messageChecking (int client) {
         if (message.empty())
             return;
 
-        std::string log = ("Client " + to_string(client) + ": " + message + '\n');
+        std::string log = ("Client " + Helpers::to_string(client) + ": " + message + '\n');
         std::cout << log;
         std::cout.flush();
     
@@ -152,7 +131,7 @@ void IRC_server::__messageChecking (int client) {
     }
 }
 
-void IRC_server::run () {
+void IRCServer::run () {
     while (true) {
         if (eventhandler.wait_event() < 0)
             perror("select");
