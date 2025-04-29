@@ -15,13 +15,14 @@ public:
 	EventHandler();
 	~EventHandler();
 public:
-	bool is_read_event (int socket_fd);
+	bool is_get_event (int socket_fd);
+	bool is_send_event (int socket_fd);
 	int wait_event();
-	void subscribe_read (int socket_fd);
-	void unsubscribe_read (int socket_fd);
-	void subscribe_write (int socket_fd);
-	void unsubscribe_write (int socket_fd);
-	void clear_all_subscriptions () throw();
+	void subscribe_get (int socket_fd);
+	void unsubscribe_get (int socket_fd);
+	void subscribe_send (int socket_fd);
+	void unsubscribe_send (int socket_fd);
+	void clear_all_subscriptions ();
 };
 
 #endif // EVENTHANDLER_HPP

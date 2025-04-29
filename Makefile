@@ -9,7 +9,8 @@ SRC_DIRS   = ./user \
              ./exceptions \
              ./commands \
              ./cmdExecutor \
-			 ./main
+			 ./main \
+			 ./parsing
 
 INCLUDES   = $(addprefix -I, $(SRC_DIRS) .)
 

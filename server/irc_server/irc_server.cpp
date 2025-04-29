@@ -45,7 +45,7 @@ void IRC_server::setupServer () {
         _exit(1);
     }
 
-    eventhandler.subscribe_read(server_fd);
+    eventhandler.subscribe_get(server_fd);
 
     std::cout << "Listening on " << INADDR_ANY << ":" << PORT << "..." << std::endl;
 }
@@ -58,17 +58,17 @@ void IRC_server::__acceptConnection () {
     std::memset(&client_addr, 0, addr_len);
 
     int new_client = accept(server_fd, (struct sockaddr*)&client_addr, &addr_len);
-    fcntl(new_client, F_SETFL, O_NONBLOCK);
-   
+    
     if (new_client < 0) {
         if (errno != EAGAIN && errno != EWOULDBLOCK) {
             perror("accept");
         }
         return;
     }
-
+    fcntl(new_client, F_SETFL, O_NONBLOCK);
+    
     clients.push_back(new_client);
-    eventhandler.subscribe_read(new_client);
+    eventhandler.subscribe_get(new_client);
 
     std::cout << "New client is trying to connect: " << new_client << "\n";
     std::string welcome_msg = "Welcome to the IRC-like chat server!\nEnter the password: ";
@@ -111,15 +111,14 @@ void IRC_server::__broadcastMessage (int client, const std::string& msg) {
 void IRC_server::__messageChecking (int client) {
     char buffer[BUFFER_SIZE] = {0};
     int bytes_received = recv(client, buffer, BUFFER_SIZE, 0);
-    
+
     if (bytes_received <= 0) {
         if (bytes_received == 0 || (errno != EAGAIN && errno != EWOULDBLOCK)) {
             close(client);
-            eventhandler.unsubscribe_read(client);
+            eventhandler.unsubscribe_get(client);
             clients.erase(std::find(clients.begin(), clients.end(), client));
             auths.erase(client);
             std::cout << "Client disconnected: " << client << std::endl;
-
         }
         return;
     }
@@ -158,11 +157,11 @@ void IRC_server::run () {
         if (eventhandler.wait_event() < 0)
             perror("select");
 
-        if (eventhandler.is_read_event(server_fd))
+        if (eventhandler.is_get_event(server_fd))
             __acceptConnection();
 
         for (std::size_t i = 0; i < clients.size(); ++i) {
-            if (eventhandler.is_read_event(clients[i]))
+            if (eventhandler.is_get_event(clients[i]))
                 __messageChecking(clients[i]);
         }
     }

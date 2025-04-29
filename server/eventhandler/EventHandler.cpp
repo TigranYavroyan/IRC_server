@@ -6,8 +6,12 @@ EventHandler::EventHandler () {
 
 EventHandler::~EventHandler () {}
 
-bool EventHandler::is_read_event (int socket_fd) {
+bool EventHandler::is_get_event (int socket_fd) {
 	return FD_ISSET(socket_fd, &ready_read);
+}
+
+bool EventHandler::is_send_event (int socket_fd) {
+	return FD_ISSET(socket_fd, &ready_write);
 }
 
 int EventHandler::wait_event () {
@@ -16,17 +20,17 @@ int EventHandler::wait_event () {
 	return select(max_fd + 1, &ready_read, &ready_write, NULL, NULL);
 }
 
-void EventHandler::subscribe_read (int socket_fd) {
+void EventHandler::subscribe_get (int socket_fd) {
 	FD_SET(socket_fd, &read_subscriptors);
 	max_fd = std::max(max_fd, socket_fd);
 }
 
-void EventHandler::subscribe_write (int socket_fd) {
+void EventHandler::subscribe_send (int socket_fd) {
 	FD_SET(socket_fd, &write_subscriptors);
 	max_fd = std::max(max_fd, socket_fd);
 }
 
-void EventHandler::unsubscribe_read (int socket_fd) {
+void EventHandler::unsubscribe_get (int socket_fd) {
 	FD_CLR(socket_fd, &read_subscriptors);
 	if (socket_fd == max_fd) {
         for (int i = max_fd - 1; i >= 0; --i) {
@@ -39,7 +43,7 @@ void EventHandler::unsubscribe_read (int socket_fd) {
     }
 }
 
-void EventHandler::unsubscribe_write (int socket_fd) {
+void EventHandler::unsubscribe_send (int socket_fd) {
 	FD_CLR(socket_fd, &write_subscriptors);
 	if (socket_fd == max_fd) {
         for (int i = max_fd - 1; i >= 0; --i) {
@@ -52,7 +56,7 @@ void EventHandler::unsubscribe_write (int socket_fd) {
     }
 }
 
-void EventHandler::clear_all_subscriptions () throw() {
+void EventHandler::clear_all_subscriptions () {
 	FD_ZERO(&ready_read);
 	FD_ZERO(&read_subscriptors);
 	FD_ZERO(&write_subscriptors);
