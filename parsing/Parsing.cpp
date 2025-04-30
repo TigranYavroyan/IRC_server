@@ -70,7 +70,7 @@ bool Parsing::is_valid_nickname (const std::string& nickname) {
 	if (nickname.size() > NICKNAME_SIZE)
 		return false;
 	
-	if (!(std::isalpha(nickname.front()) || __is_special_char(nickname.front())))
+	if (!(std::isalpha(nickname[0]) || __is_special_char(nickname[0])))
 		return false;
 	
 	for (std::size_t i = 0; i < nickname.size(); ++i) {
