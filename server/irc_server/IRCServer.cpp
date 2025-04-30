@@ -48,6 +48,7 @@ void IRCServer::setupServer () {
     eventhandler.subscribe_get(server_fd);
 
     std::cout << "Listening on " << INADDR_ANY << ":" << PORT << "..." << std::endl;
+    std::cout << "The password: " << password << std::endl;
 }
 
 

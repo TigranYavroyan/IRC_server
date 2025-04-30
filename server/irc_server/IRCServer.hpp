@@ -17,6 +17,7 @@
 
 #include <EventHandler.hpp>
 #include <Helpers.hpp>
+#include <Constants.hpp>
 
 class IRCServer {
 	const int PORT;
@@ -25,11 +26,10 @@ class IRCServer {
     std::vector<int> clients;
     std::set<int> auths;
     
-    const std::size_t BUFFER_SIZE;
     int server_fd;
     EventHandler eventhandler;
 public:
-    IRCServer (int port, const std::string _password): PORT(port), password(_password), BUFFER_SIZE(1024) {}
+    IRCServer (int port, const std::string _password): PORT(port), password(_password) {}
     ~IRCServer ();
 public:
     void closeConnectionAll ();

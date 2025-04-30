@@ -17,7 +17,8 @@ SRC_DIRS   = ./user \
              ./cmdExecutor \
 			 ./main \
 			 ./parsing \
-			 ./helpers
+			 ./helpers \
+			 ./constants
 
 INCLUDES   = $(addprefix -I, $(SRC_DIRS) .)
 
