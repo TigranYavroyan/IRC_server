@@ -17,6 +17,7 @@
 
 #include <EventHandler.hpp>
 #include <Helpers.hpp>
+#include <Parsing.hpp>
 #include <Constants.hpp>
 
 class IRCServer {

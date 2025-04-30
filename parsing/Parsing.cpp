@@ -36,10 +36,47 @@ std::pair<int, std::string> Parsing::validate_input (int argc, char* argv[]) {
 	return res;
 }
 
-std::vector<std::string> Parsing::parse_msg (const std::string& msg) {
+std::vector<std::string> Parsing::parse_msg (const char* msg) {
+	std::vector<std::string> tokens;
+	std::string input(msg);
+	std::string token;
+	std::istringstream ss(input);
 
+	while (ss >> token) {
+		tokens.push_back(token);
+	}
+
+	return tokens;
+}
+
+std::vector<std::string> Parsing::parse_msg (const std::string& msg) {
+	std::vector<std::string> tokens;
+	std::string token;
+	std::istringstream ss(msg);
+
+	while (ss >> token) {
+		tokens.push_back(token);
+	}
+
+	return tokens;
+}
+
+bool Parsing::__is_special_char (char ch) {
+	// [ \ ] ^ _ ` { | }
+	return ((ch >= 91 && ch <= 96) || (ch >= 123 && ch <= 125));
 }
 
 bool Parsing::is_valid_nickname (const std::string& nickname) {
+	if (nickname.size() > NICKNAME_SIZE)
+		return false;
+	
+	if (!(std::isalpha(nickname.front()) || __is_special_char(nickname.front())))
+		return false;
+	
+	for (std::size_t i = 0; i < nickname.size(); ++i) {
+		if (!(std::isalnum(nickname[i]) || __is_special_char(nickname[i]) || nickname[i] == '-'))
+			return false;
+	}
 
+	return true;
 }

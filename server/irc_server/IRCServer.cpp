@@ -102,8 +102,18 @@ void IRCServer::__messageChecking (int client) {
         }
         return;
     }
+
     std::string message = buffer;
     Helpers::trim(message);
+
+    std::vector<std::string> tokens = Parsing::parse_msg(message);
+
+    std::cout << "------ Tokens -------" << std::endl;
+    for (int i = 0; i < tokens.size(); ++i) {
+        std::cout << tokens[i] << std::endl;
+    }
+    std::cout << "----------------------" << std::endl;
+
     if (!__is_client_logged_in(client)) {
         if (message == password)
         {
