@@ -2,6 +2,12 @@ NAME       = ircserv
 CXX        = c++
 RM         = rm -f
 
+RED		= \033[1;31m
+GREEN	= \033[1;32m
+YELLOW	= \033[1;33m
+RESET	= \033[0;37m
+SKY		= \033[1;36m
+
 SRC_DIRS   = ./user \
              ./server/channel \
              ./server/eventhandler \
@@ -24,16 +30,21 @@ CXXFLAGS   = $(CXXERRFLAGS) -std=c++98 $(INCLUDES)
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	$(CXX) $(OBJS) -o $@
+	@$(CXX) $(OBJS) -o $@
+	@echo "$(GREEN)The executable file is ready$(RESET)"
 
 %.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	@$(CXX) $(CXXFLAGS) -c $< -o $@
+	@echo "$(YELLOW)The object file is compiled$(RESET)"
 
 clean:
-	$(RM) $(OBJS)
+	@$(RM) $(OBJS)
+	@echo "$(RED)The object file is removed$(RESET)"
+
 
 fclean: clean
-	$(RM) $(NAME)
+	@$(RM) $(NAME)
+	@echo "$(RED)The executable file is removed$(RESET)"
 
 re: fclean all
 
