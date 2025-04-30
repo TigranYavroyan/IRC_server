@@ -3,7 +3,6 @@
 #include <Helpers.hpp>
 #include <cstdlib>
 #include <cstring>
-#include <errno.h>
 
 int Parsing::__validate_port (char* port) {
 	char* port_end = NULL;
