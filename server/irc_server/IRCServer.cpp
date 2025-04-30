@@ -51,6 +51,22 @@ void IRCServer::setupServer () {
     std::cout << "The password: " << password << std::endl;
 }
 
+void IRCServer::run () {
+    while (true) {
+        if (eventhandler.wait_event() < 0)
+            perror("select");
+
+        if (eventhandler.is_get_event(server_fd))
+            __acceptConnection();
+
+        for (std::size_t i = 0; i < clients.size(); ++i) {
+            if (eventhandler.is_get_event(clients[i]))
+                __messageChecking(clients[i]);
+        }
+    }
+}
+
+// ----------------------------- Private methods ---------------------------------
 
 void IRCServer::__acceptConnection () {
     
@@ -139,20 +155,5 @@ void IRCServer::__messageChecking (int client) {
         std::cout.flush();
     
         __broadcastMessage(client, log);
-    }
-}
-
-void IRCServer::run () {
-    while (true) {
-        if (eventhandler.wait_event() < 0)
-            perror("select");
-
-        if (eventhandler.is_get_event(server_fd))
-            __acceptConnection();
-
-        for (std::size_t i = 0; i < clients.size(); ++i) {
-            if (eventhandler.is_get_event(clients[i]))
-                __messageChecking(clients[i]);
-        }
     }
 }
