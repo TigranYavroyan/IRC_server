@@ -18,7 +18,8 @@ SRC_DIRS   = ./user \
 			 ./main \
 			 ./parsing \
 			 ./helpers \
-			 ./constants
+			 ./constants \
+			 ./usertable
 
 INCLUDES   = $(addprefix -I, $(SRC_DIRS) .)
 

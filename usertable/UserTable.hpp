@@ -20,8 +20,10 @@ public:
 		bool is_auth = false
 	);
 
-	User get_user (int socket_fd);
-	User get_user (const std::string& nickname);
+	void set_user (const User& user);
+
+	User get_user (int socket_fd) const;
+	User get_user (const std::string& nickname) const;
 	void remove_user (int socket_fd);
 	void remove_user (const std::string& nickname);
 };
