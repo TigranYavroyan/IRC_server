@@ -5,8 +5,8 @@ UserTable::UserTable () {}
 
 void UserTable::set_user (
 	int socket_fd,
-	const std::string& username,
 	const std::string& nickname,
+	const std::string& username,
 	const std::string& hostname,
 	bool is_auth
 )
@@ -22,18 +22,64 @@ void UserTable::set_user (
 		);
 	}
 	else {
+		std::string old_nickname = it->second->get_nickname();
+
 		it->second->set(socket_fd, nickname, username, hostname, is_auth);
+
+		if (old_nickname == nickname)
+			return;
+
+		table_by_name.erase(old_nickname);
+		table_by_name.insert(
+			std::make_pair(nickname, it->second)
+		);
 	}
 }
 
 void UserTable::set_user (const User& user) {
 	set_user(
 		user.get_socket_fd(),
-		user.get_username(),
 		user.get_nickname(),
+		user.get_username(),
 		user.get_hostname(),
 		user.get_is_auth()
 	);
+}
+
+void UserTable::set_user_nickname (int socket_fd, const std::string& nickname) {
+	std::map<int, User*>::iterator it = table_by_socket.find(socket_fd);
+
+	if (it == table_by_socket.end())
+		throw IRC::ServerError("The user must be set for separate nickname set");
+
+	std::string old_nickname = it->second->get_nickname();
+	
+	if (nickname == old_nickname)
+	return;
+	
+	it->second->set_nickname(nickname);
+	table_by_name.erase(old_nickname);
+	table_by_name.insert(
+		std::make_pair(nickname, it->second)
+	);
+}
+
+void UserTable::set_user_username (int socket_fd, const std::string& username) {
+	std::map<int, User*>::iterator it = table_by_socket.find(socket_fd);
+
+	if (it == table_by_socket.end())
+		throw IRC::ServerError("The user must be set for separate username set");
+
+	it->second->set_username(username);
+}
+
+void UserTable::set_user_hostname (int socket_fd, const std::string& hostname) {
+	std::map<int, User*>::iterator it = table_by_socket.find(socket_fd);
+
+	if (it == table_by_socket.end())
+		throw IRC::ServerError("The user must be set for separate hostname set");
+
+	it->second->set_hostname(hostname);
 }
 
 UserTable::~UserTable () {
@@ -68,6 +114,7 @@ void UserTable::remove_user (int socket_fd) {
 		return;
 	
 	std::string nickname = it->second->get_nickname();
+
 	delete it->second;
 	table_by_socket.erase(it);
 	table_by_name.erase(nickname);
@@ -79,6 +126,7 @@ void UserTable::remove_user (const std::string& nickname) {
 		return;
 	
 	int socket_fd = it->second->get_socket_fd();
+
 	delete it->second;
 	table_by_name.erase(it);
 	table_by_socket.erase(socket_fd);

@@ -35,6 +35,8 @@ catch (const IRC::exception& ex) {
 //     }
 
 //     ut.remove_user(1);
+//     ut.set_user_nickname(2, "vayaa");
+//     ut.set_user_hostname(2, "iee");
 
 //     for (int i = 2; i <= vec.size(); ++i) {
 //         std::cout << ut.get_user(i) << std::endl;

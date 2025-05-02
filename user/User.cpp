@@ -27,6 +27,26 @@ void User::set(
 	is_auth = auth;
 }
 
+void User::set_username (const std::string& user) {
+	username = user;
+}
+
+void User::set_nickname (const std::string& nick) {
+	nickname = nick;
+}
+
+void User::set_hostname (const std::string& host) {
+	hostname = host;
+}
+
+void User::set_is_auth (bool auth) {
+	is_auth = auth;
+}
+
+void User::set_socket_fd (int fd) {
+	socket_fd = fd;
+}
+
 void User::set (const User& user) {
 	socket_fd = user.socket_fd;
 	nickname = user.nickname;
@@ -57,8 +77,8 @@ bool User::get_is_auth () const{
 
 std::ostream& operator<< (std::ostream& os, const User& user) {
 	os << "socket_fd: " << user.get_socket_fd()
-		<< "\nusername: " << user.get_username()
 		<< "\nnickname: " << user.get_nickname()
+		<< "\nusername: " << user.get_username()
 		<< "\nhostname: " << user.get_hostname()
 		<< "\nis_auth: " << user.get_is_auth();
 	return os;
