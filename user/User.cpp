@@ -5,10 +5,10 @@ User::User(int fd,
 	const std::string& nick,
 	const std::string& host,
 	bool auth)
- : socket_fd(fd)
- , username(user)
+ : username(user)
  , nickname(nick)
  , hostname(host)
+ , socket_fd(fd)
  , is_auth(auth)
 {}
 

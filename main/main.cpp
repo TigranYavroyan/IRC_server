@@ -1,6 +1,7 @@
 #include <IRCServer.hpp>
 #include <Parsing.hpp>
 #include <InputError.hpp>
+#include <ServerError.hpp>
 #include <UserTable.hpp>
 #include <User.hpp>
 
@@ -14,8 +15,8 @@ int main (int argc, char* argv[]) try {
 catch (const IRC::InputError& ex) {
     std::clog << "InputError: " << ex.what() << std::endl;
 }
-catch (const IRC::exception& ex) {
-    std::clog << "Error: " << ex.what() << std::endl;
+catch (const IRC::ServerError& ex) {
+    std::clog << "ServerError: " << ex.what() << std::endl;
 }
 
 // #include <vector>
@@ -30,15 +31,16 @@ catch (const IRC::exception& ex) {
 
 //     UserTable ut;
 
-//     for (int i = 0; i < vec.size(); ++i) {
+//     for (std::size_t i = 0; i < vec.size(); ++i) {
 //         ut.set_user(vec[i]);
 //     }
 
 //     ut.remove_user(1);
 //     ut.set_user_nickname(2, "vayaa");
 //     ut.set_user_hostname(2, "iee");
+//     ut.remove_user(2);
 
-//     for (int i = 2; i <= vec.size(); ++i) {
+//     for (std::size_t i = 3; i <= vec.size(); ++i) {
 //         std::cout << ut.get_user(i) << std::endl;
 //         std::cout << "----------------------" << std::endl;
 //     }
