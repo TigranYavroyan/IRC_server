@@ -30,7 +30,7 @@ class IRCServer {
     int server_fd;
     EventHandler eventhandler;
 public:
-    IRCServer (int port, const std::string _password): PORT(port), password(_password) {}
+    IRCServer (int port, const std::string& _password): PORT(port), password(_password) {}
     ~IRCServer ();
 public:
     void closeConnectionAll ();
