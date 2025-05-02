@@ -5,9 +5,10 @@
 #include <string>
 #include <User.hpp>
 #include <set>
+#include <UserTable.hpp>
 
 class Channel {
-	std::map<std::string, User> users;
+	UserTable users;
 	bool is_invite_only;
 	std::string name;
 	std::set<User> operators;
