@@ -14,7 +14,7 @@ SRC_DIRS   = ./user \
              ./server/irc_server \
              ./exceptions \
              ./commands \
-             ./cmdExecutor \
+             ./executor \
 			 ./main \
 			 ./parsing \
 			 ./helpers \
