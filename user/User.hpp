@@ -16,7 +16,7 @@ public:
 		const std::string& nick = "",
 		const std::string& host = "",
 		bool auth = false);
-
+public:
    void set(
 	int fd,
 	const std::string& nick,
