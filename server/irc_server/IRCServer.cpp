@@ -1,6 +1,10 @@
 #include <IRCServer.hpp>
 #include <errno.h>
 
+IRCServer::IRCServer (int port, const std::string& _password): PORT(port), password(_password) {
+    executor.set_server(*this);
+}
+
 IRCServer::~IRCServer () {
     closeConnectionAll();
 }
@@ -123,6 +127,8 @@ void IRCServer::__messageChecking (int client) {
     Helpers::trim(message);
 
     std::vector<std::string> tokens = Parsing::parse_msg(message);
+
+    executor.execute(client, tokens);
 
     if (!__is_client_logged_in(client)) {
         if (message == password)

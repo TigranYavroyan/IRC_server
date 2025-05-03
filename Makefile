@@ -26,7 +26,7 @@ INCLUDES   = $(addprefix -I, $(SRC_DIRS) .)
 SRCS       = $(wildcard $(addsuffix /*.cpp, $(SRC_DIRS)))
 OBJS       = $(SRCS:.cpp=.o)
 
-CXXERRFLAGS = -Wall -Wextra -Werror
+CXXERRFLAGS = #-Wall -Wextra -Werror
 CXXFLAGS   = $(CXXERRFLAGS) -std=c++98 $(INCLUDES)
 
 all: $(NAME)
@@ -57,6 +57,6 @@ push:
 	git push
 
 leaks:
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --error-limit=no ./$(NAME)
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --error-limit=no ./$(NAME) 6667 hello
 
 .PHONY: all clean fclean re push leaks

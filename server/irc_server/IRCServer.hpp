@@ -1,5 +1,5 @@
-#ifndef IRCServer_HPP
-#define IRCServer_HPP
+#ifndef IRCSERVER_HPP
+#define IRCSERVER_HPP
 
 #include <vector>
 #include <iostream>
@@ -19,6 +19,7 @@
 #include <Helpers.hpp>
 #include <Parsing.hpp>
 #include <Constants.hpp>
+#include <Executor.hpp>
 
 class IRCServer {
 	const int PORT;
@@ -29,8 +30,9 @@ class IRCServer {
     
     int server_fd;
     EventHandler eventhandler;
+    Executor executor;
 public:
-    IRCServer (int port, const std::string& _password): PORT(port), password(_password) {}
+    IRCServer (int port, const std::string& _password);
     ~IRCServer ();
 public:
     void closeConnectionAll ();
@@ -43,4 +45,4 @@ private:
     bool __is_client_logged_in (int client) const;
 };
 
-#endif // IRCServer_HPP
+#endif // IRCSERVER_HPP

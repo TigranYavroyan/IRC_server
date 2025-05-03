@@ -4,18 +4,24 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <utility>
 
-#include <IRCServer.hpp>
-#include <ACommand.hpp>
+#include <Commands.hpp>
+
+class IRCserver;
 
 class Executor {
-	std::vector<std::string> tokens;
-	IRCServer& server;
+	IRCServer* server;
 	std::map<std::string, ACommand*> commands_table;
 public:
-	Executor (IRCServer& _server, const std::vector<std::string>& _tokens);
+	Executor (): server(NULL) {}
+	Executor (IRCServer& _server);
+	void set_server (IRCServer& _server);
+	void execute (int socket_fd, const std::vector<std::string>& tokens) const;
+	void clear_cmds ();
+	~Executor ();
 private:
-	bool __is_command (const std::string& str);
+	void __create_cmds_table (IRCServer& server);
 };
 
 #endif // EXECUTOR_HPP
