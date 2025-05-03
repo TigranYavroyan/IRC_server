@@ -82,6 +82,15 @@ void UserTable::set_user_hostname (int socket_fd, const std::string& hostname) {
 	it->second->set_hostname(hostname);
 }
 
+void UserTable::set_user_auth (int socket_fd, bool auth) {
+	std::map<int, User*>::iterator it = table_by_socket.find(socket_fd);
+
+	if (it == table_by_socket.end())
+		throw IRC::ServerError("The user must be set for separate hostname set");
+
+	it->second->set_is_auth(auth);
+}
+
 UserTable::~UserTable () {
 	std::map<int, User*>::iterator begin = table_by_socket.begin();
 	std::map<int, User*>::iterator end = table_by_socket.end();

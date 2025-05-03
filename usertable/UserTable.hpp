@@ -24,6 +24,7 @@ public:
 	void set_user_nickname (int socket_fd, const std::string& nickname);
 	void set_user_username (int socket_fd, const std::string& username);
 	void set_user_hostname (int socket_fd, const std::string& hostname);
+	void set_user_auth (int socket_fd, bool auth = true);
 
 	User get_user (int socket_fd) const;
 	User get_user (const std::string& nickname) const;
