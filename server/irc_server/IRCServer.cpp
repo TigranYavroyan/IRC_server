@@ -12,7 +12,7 @@ IRCServer::~IRCServer () {
 void IRCServer::closeConnectionAll () {
     if (server_fd >= 0)
         close(server_fd);
-    std::map<int, User*>::iterator it = user_table.tsbegin();
+    UserBySocketIter it = user_table.tsbegin();
     while (it != user_table.tsend()) {
         close(it->first);
         ++it;
@@ -58,7 +58,7 @@ void IRCServer::setupServer () {
 }
 
 void IRCServer::run () {
-    std::map<int, User*>::iterator it;
+    UserBySocketIter it;
     int socket_fd;
 
     while (true) {
@@ -107,7 +107,7 @@ void IRCServer::__acceptConnection () {
 }
 
 void IRCServer::__broadcastMessage (int client, const std::string& msg) {
-    std::map<int, User*>::iterator it = user_table.tsbegin();
+    UserBySocketIter it = user_table.tsbegin();
 
     while (it != user_table.tsend()) {
         User to_send = user_table.get_user(it->first);

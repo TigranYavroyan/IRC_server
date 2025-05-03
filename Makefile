@@ -21,7 +21,8 @@ SRC_DIRS   = ./user \
 			 ./parsing \
 			 ./helpers \
 			 ./constants \
-			 ./usertable
+			 ./usertable \
+			 ./typedefs
 
 INCLUDES   = $(addprefix -I, $(SRC_DIRS) .)
 

@@ -4,8 +4,8 @@
 UserTable::UserTable () {}
 
 UserTable::~UserTable () {
-	std::map<int, User*>::iterator begin = table_by_socket.begin();
-	std::map<int, User*>::iterator end = table_by_socket.end();
+	UserBySocketIter begin = table_by_socket.begin();
+	UserBySocketIter end = table_by_socket.end();
 
 	while (begin != end) {
 		delete begin->second;
@@ -21,7 +21,7 @@ void UserTable::set_user (
 	bool is_auth
 )
 {
-	std::map<int, User*>::iterator it = table_by_socket.find(socket_fd);
+	UserBySocketIter it = table_by_socket.find(socket_fd);
 	if (it == table_by_socket.end()) {
 		User* new_user = new User(socket_fd, username, nickname, hostname, is_auth);
 		table_by_socket.insert(
@@ -57,7 +57,7 @@ void UserTable::set_user (const User& user) {
 }
 
 void UserTable::set_user_nickname (int socket_fd, const std::string& nickname) {
-	std::map<int, User*>::iterator it = table_by_socket.find(socket_fd);
+	UserBySocketIter it = table_by_socket.find(socket_fd);
 
 	if (it == table_by_socket.end())
 		throw IRC::ServerError("The user must be set for separate nickname set");
@@ -75,7 +75,7 @@ void UserTable::set_user_nickname (int socket_fd, const std::string& nickname) {
 }
 
 void UserTable::set_user_username (int socket_fd, const std::string& username) {
-	std::map<int, User*>::iterator it = table_by_socket.find(socket_fd);
+	UserBySocketIter it = table_by_socket.find(socket_fd);
 
 	if (it == table_by_socket.end())
 		throw IRC::ServerError("The user must be set for separate username set");
@@ -84,7 +84,7 @@ void UserTable::set_user_username (int socket_fd, const std::string& username) {
 }
 
 void UserTable::set_user_hostname (int socket_fd, const std::string& hostname) {
-	std::map<int, User*>::iterator it = table_by_socket.find(socket_fd);
+	UserBySocketIter it = table_by_socket.find(socket_fd);
 
 	if (it == table_by_socket.end())
 		throw IRC::ServerError("The user must be set for separate hostname set");
@@ -93,7 +93,7 @@ void UserTable::set_user_hostname (int socket_fd, const std::string& hostname) {
 }
 
 void UserTable::set_user_auth (int socket_fd, bool auth) {
-	std::map<int, User*>::iterator it = table_by_socket.find(socket_fd);
+	UserBySocketIter it = table_by_socket.find(socket_fd);
 
 	if (it == table_by_socket.end())
 		throw IRC::ServerError("The user must be set for separate hostname set");
@@ -118,7 +118,7 @@ User UserTable::get_user (const std::string& nickname) const {
 }
 
 void UserTable::remove_user (int socket_fd) {
-	std::map<int, User*>::iterator it = table_by_socket.find(socket_fd);
+	UserBySocketIter it = table_by_socket.find(socket_fd);
 	if (it == table_by_socket.end())
 		return;
 	
@@ -130,7 +130,7 @@ void UserTable::remove_user (int socket_fd) {
 }
 
 void UserTable::remove_user (const std::string& nickname) {
-	std::map<std::string, User*>::iterator it = table_by_name.find(nickname);
+	UserByNameIter it = table_by_name.find(nickname);
 	if (it == table_by_name.end())
 		return;
 	
@@ -141,18 +141,18 @@ void UserTable::remove_user (const std::string& nickname) {
 	table_by_socket.erase(socket_fd);
 }
 
-std::map<int, User*>::iterator UserTable::tsbegin() {
+UserBySocketIter UserTable::tsbegin() {
 	return table_by_socket.begin();
 }
 
-std::map<int, User*>::iterator UserTable::tsend() {
+UserBySocketIter UserTable::tsend() {
 	return table_by_socket.end();
 }
 
-std::map<std::string, User*>::iterator UserTable::tnbegin() {
+UserByNameIter UserTable::tnbegin() {
 	return table_by_name.begin();
 }
 
-std::map<std::string, User*>::iterator UserTable::tnend() {
+UserByNameIter UserTable::tnend() {
 	return table_by_name.end();
 }
