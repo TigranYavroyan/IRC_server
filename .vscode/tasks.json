@@ -1,9 +1,0 @@
-{
-	"args": [
-		"-std=c++17",   // or c++20, c++14, etc.
-		"-g",
-		"main.cpp",
-		"-o",
-		"main"
-	]
-}
