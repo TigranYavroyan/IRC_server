@@ -1,4 +1,3 @@
-./.vscode
-./*.o
-./*/*.o
-./*/*/*.o
+.vscode/
+*.o
+ircserv
