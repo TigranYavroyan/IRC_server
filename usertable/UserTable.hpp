@@ -26,6 +26,11 @@ public:
 	void set_user_hostname (int socket_fd, const std::string& hostname);
 	void set_user_auth (int socket_fd, bool auth = true);
 
+	std::map<int, User*>::iterator tsbegin();
+	std::map<int, User*>::iterator tsend();
+	std::map<std::string, User*>::iterator tnbegin();
+	std::map<std::string, User*>::iterator tnend();
+
 	User get_user (int socket_fd) const;
 	User get_user (const std::string& nickname) const;
 	

@@ -24,11 +24,9 @@
 class IRCServer {
 	const int PORT;
     const std::string password;
-
-    std::vector<int> clients;
-    std::set<int> auths;
-    
     int server_fd;
+
+    UserTable user_table;
     EventHandler eventhandler;
     Executor executor;
 public:
@@ -42,7 +40,6 @@ private:
     void __acceptConnection ();
     void __messageChecking (int client);
     void __broadcastMessage (int client, const std::string& msg);
-    bool __is_client_logged_in (int client) const;
 };
 
 #endif // IRCSERVER_HPP

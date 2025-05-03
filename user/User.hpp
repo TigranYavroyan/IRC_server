@@ -30,7 +30,7 @@ public:
    void set_username (const std::string& user);
    void set_nickname (const std::string& nick);
    void set_hostname (const std::string& host);
-   void set_is_auth (bool auth);
+   void set_is_auth (bool auth = true);
    void set_socket_fd (int fd);
 
    std::string get_username () const;

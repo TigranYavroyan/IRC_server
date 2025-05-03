@@ -12,8 +12,10 @@ IRCServer::~IRCServer () {
 void IRCServer::closeConnectionAll () {
     if (server_fd >= 0)
         close(server_fd);
-    for (std::size_t i = 0; i < clients.size(); ++i) {
-        close(clients[i]);
+    std::map<int, User*>::iterator it = user_table.tsbegin();
+    while (it != user_table.tsend()) {
+        close(it->first);
+        ++it;
     }
 }
 
@@ -56,6 +58,9 @@ void IRCServer::setupServer () {
 }
 
 void IRCServer::run () {
+    std::map<int, User*>::iterator it;
+    int socket_fd;
+
     while (true) {
         if (eventhandler.wait_event() < 0)
             perror("select");
@@ -63,9 +68,13 @@ void IRCServer::run () {
         if (eventhandler.is_get_event(server_fd))
             __acceptConnection();
 
-        for (std::size_t i = 0; i < clients.size(); ++i) {
-            if (eventhandler.is_get_event(clients[i]))
-                __messageChecking(clients[i]);
+        it = user_table.tsbegin();
+        while (it != user_table.tsend()) {
+            // for escaping the iterator erasing case
+            socket_fd = it->first;
+            ++it;
+            if (eventhandler.is_get_event(socket_fd))
+                __messageChecking(socket_fd);
         }
     }
 }
@@ -88,7 +97,7 @@ void IRCServer::__acceptConnection () {
     }
     fcntl(new_client, F_SETFL, O_NONBLOCK);
     
-    clients.push_back(new_client);
+    user_table.set_user(new_client);
     eventhandler.subscribe_get(new_client);
 
     std::cout << "New client is trying to connect: " << new_client << "\n";
@@ -97,14 +106,14 @@ void IRCServer::__acceptConnection () {
         perror("send");
 }
 
-bool IRCServer::__is_client_logged_in (int client) const {
-    return auths.find(client) != auths.end();
-}
-
 void IRCServer::__broadcastMessage (int client, const std::string& msg) {
-    for (std::size_t i = 0; i < clients.size(); ++i) {
-        if (client != clients[i])
-            send(clients[i], msg.c_str(), msg.size(), 0);
+    std::map<int, User*>::iterator it = user_table.tsbegin();
+
+    while (it != user_table.tsend()) {
+        User to_send = user_table.get_user(it->first);
+        if (client != it->first && to_send.get_is_auth())
+            send(it->first, msg.c_str(), msg.size(), 0);
+        ++it;
     }
 }
 
@@ -116,8 +125,7 @@ void IRCServer::__messageChecking (int client) {
         if (bytes_received == 0 || (errno != EAGAIN && errno != EWOULDBLOCK)) {
             close(client);
             eventhandler.unsubscribe_get(client);
-            clients.erase(std::find(clients.begin(), clients.end(), client));
-            auths.erase(client);
+            user_table.remove_user(client);
             std::cout << "Client disconnected: " << client << std::endl;
         }
         return;
@@ -129,14 +137,13 @@ void IRCServer::__messageChecking (int client) {
     std::vector<std::string> tokens = Parsing::parse_msg(message);
 
     executor.execute(client, tokens);
-
-    if (!__is_client_logged_in(client)) {
+    if (!(user_table.get_user(client).get_is_auth())) {
         if (message == password)
         {
             const char* login_msg = "Welcome to the chat!\n";
             std::cout << "New client connected: " << client << std::endl;
             send(client, login_msg, strlen(login_msg), 0);
-            auths.insert(client);
+            user_table.set_user_auth(client);
         }
         else {
             if (message.empty())

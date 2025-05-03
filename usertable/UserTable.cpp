@@ -3,6 +3,16 @@
 
 UserTable::UserTable () {}
 
+UserTable::~UserTable () {
+	std::map<int, User*>::iterator begin = table_by_socket.begin();
+	std::map<int, User*>::iterator end = table_by_socket.end();
+
+	while (begin != end) {
+		delete begin->second;
+		++begin;
+	}
+}
+
 void UserTable::set_user (
 	int socket_fd,
 	const std::string& nickname,
@@ -91,16 +101,6 @@ void UserTable::set_user_auth (int socket_fd, bool auth) {
 	it->second->set_is_auth(auth);
 }
 
-UserTable::~UserTable () {
-	std::map<int, User*>::iterator begin = table_by_socket.begin();
-	std::map<int, User*>::iterator end = table_by_socket.end();
-
-	while (begin != end) {
-		delete begin->second;
-		++begin;
-	}
-}
-
 User UserTable::get_user (int socket_fd) const {
 	std::map<int, User*>::const_iterator it = table_by_socket.find(socket_fd);
 	if (it == table_by_socket.end())
@@ -139,4 +139,20 @@ void UserTable::remove_user (const std::string& nickname) {
 	delete it->second;
 	table_by_name.erase(it);
 	table_by_socket.erase(socket_fd);
+}
+
+std::map<int, User*>::iterator UserTable::tsbegin() {
+	return table_by_socket.begin();
+}
+
+std::map<int, User*>::iterator UserTable::tsend() {
+	return table_by_socket.end();
+}
+
+std::map<std::string, User*>::iterator UserTable::tnbegin() {
+	return table_by_name.begin();
+}
+
+std::map<std::string, User*>::iterator UserTable::tnend() {
+	return table_by_name.end();
 }

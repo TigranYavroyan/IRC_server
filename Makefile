@@ -29,12 +29,13 @@ SRCS       = $(wildcard $(addsuffix /*.cpp, $(SRC_DIRS)))
 OBJS       = $(SRCS:.cpp=.o)
 
 CXXERRFLAGS = #-Wall -Wextra -Werror
+DEBUG = #-fsanitize=address
 CXXFLAGS   = $(CXXERRFLAGS) -std=c++98 $(INCLUDES)
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	@$(CXX) $(OBJS) -o $@
+	@$(CXX) $(DEBUG) $(OBJS) -o $@
 	@echo "$(GREEN) - The executable file is ready$(RESET)"
 
 %.o: %.cpp
