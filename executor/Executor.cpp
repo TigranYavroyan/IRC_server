@@ -30,13 +30,18 @@ void Executor::execute (int socket_fd, const std::vector<std::string>& tokens) c
 	std::string cmd = tokens[0];
 
 	std::map<std::string, ACommand*>::const_iterator it = commands_table.find(cmd);
-	if (it == commands_table.end())
-		return (std::cout << "Unknown command: " << tokens[0] << std::endl, (void)0);
+	if (it == commands_table.end()) {
+		std::cout << "Unknown command: " << tokens[0] << std::endl;
+		return;
+	}
 	
 	it->second->execute(socket_fd, tokens);
 }
 
 void Executor::clear_cmds () {
+	if (commands_table.empty())
+		return;
+
 	std::map<std::string, ACommand*>::iterator it = commands_table.begin();
 
 	while (it != commands_table.end()) {
