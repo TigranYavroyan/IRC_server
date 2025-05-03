@@ -61,4 +61,12 @@ listen(server_fd, MAX_PENDING_CONNECTIONS);
 */
 new_client = accept(server_fd, (struct sockaddr*)&client_addr, &addr_len);
 
+/**
+ * 
+ * 
+ * Write info about select
+ * 
+ * 
+*/
+
 }
