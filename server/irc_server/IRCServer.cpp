@@ -106,14 +106,15 @@ void IRCServer::__acceptConnection () {
         perror("send");
 }
 
+// This function must be in channel
 void IRCServer::__broadcastMessage (int client, const std::string& msg) {
     UserBySocketIter it = user_table.tsbegin();
 
     while (it != user_table.tsend()) {
         User to_send = user_table.get_user(it->first);
-        if (client != it->first && to_send.get_is_auth())
-            send(it->first, msg.c_str(), msg.size(), 0);
         ++it;
+        if (client != to_send.get_socket_fd() && to_send.get_is_auth())
+            send(to_send.get_socket_fd(), msg.c_str(), msg.size(), 0);
     }
 }
 
@@ -137,6 +138,9 @@ void IRCServer::__messageChecking (int client) {
     std::vector<std::string> tokens = Parsing::parse_msg(message);
 
     executor.execute(client, tokens);
+
+    // This section must moved into executors commands
+    // ----
     if (!(user_table.get_user(client).get_is_auth())) {
         if (message == password)
         {
@@ -163,4 +167,5 @@ void IRCServer::__messageChecking (int client) {
     
         __broadcastMessage(client, log);
     }
+    // ----
 }
