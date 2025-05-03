@@ -7,6 +7,8 @@ GREEN	= \033[1;32m
 YELLOW	= \033[1;33m
 RESET	= \033[0;37m
 SKY		= \033[1;36m
+PORT	= 6667
+PASS	= hello
 
 SRC_DIRS   = ./user \
              ./server/channel \
@@ -33,20 +35,20 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	@$(CXX) $(OBJS) -o $@
-	@echo "$(GREEN)The executable file is ready$(RESET)"
+	@echo "$(GREEN) - The executable file is ready$(RESET)"
 
 %.o: %.cpp
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
-	@echo "$(YELLOW)The object file is compiled$(RESET)"
+	@echo "$(YELLOW) - The object file is compiled$(RESET)"
 
 clean:
 	@$(RM) $(OBJS)
-	@echo "$(RED)The object file is removed$(RESET)"
+	@echo "$(RED) - The object file is removed$(RESET)"
 
 
 fclean: clean
 	@$(RM) $(NAME)
-	@echo "$(RED)The executable file is removed$(RESET)"
+	@echo "$(RED) - The executable file is removed$(RESET)"
 
 re: fclean all
 
@@ -56,7 +58,12 @@ push:
 	git commit -m "$$msg"; \
 	git push
 
-leaks:
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --error-limit=no ./$(NAME) 6667 hello
+leaks: $(NAME)
+	@echo "$(SKY) - Leaks check with valgrind$(RESET)"
+	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --error-limit=no ./$(NAME) $(PORT) $(PASS)
 
-.PHONY: all clean fclean re push leaks
+test: $(NAME)
+	@echo "$(SKY)---------------------- Test ----------------------$(RESET)"
+	@./$(NAME) $(PORT) $(PASS)
+
+.PHONY: all clean fclean re push leaks test
