@@ -21,20 +21,14 @@ void IRCServer::closeConnectionAll () {
 
 void IRCServer::setupServer () {
     server_fd = socket(AF_INET, SOCK_STREAM, 0);
-    if (server_fd < 0) {
+    if (server_fd < 0)
         throw IRC::exception(std::strerror(errno));
-
-        _exit(1);
-    }
 
     int opt = 1;
     fcntl(server_fd, F_SETFL, O_NONBLOCK);    
     
-    if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt))) {
+    if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)))
         throw IRC::exception(std::strerror(errno));
-
-        _exit(1);
-    }
 
     struct sockaddr_in server_addr;
     std::memset(&server_addr, 0, sizeof(server_addr));
@@ -43,17 +37,11 @@ void IRCServer::setupServer () {
     server_addr.sin_addr.s_addr = INADDR_ANY; // the IP
     server_addr.sin_port = htons(PORT); // the PORT
 
-    if (bind(server_fd, (struct sockaddr*)&server_addr, sizeof(server_addr))) {
+    if (bind(server_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)))
         throw IRC::exception(std::strerror(errno));
 
-        _exit(1);
-    }
-
-    if (listen(server_fd, SOMAXCONN)) {
+    if (listen(server_fd, SOMAXCONN))
         throw IRC::exception(std::strerror(errno));
-
-        _exit(1);
-    }
 
     eventhandler.subscribe_get(server_fd);
 
