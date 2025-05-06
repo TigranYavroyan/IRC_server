@@ -21,12 +21,14 @@
 #include <Parsing.hpp>
 #include <Constants.hpp>
 #include <Executor.hpp>
+#include <Channel.hpp>
 
 class IRCServer {
 	const int PORT;
     const std::string password;
     int server_fd;
 
+    std::map<std::string, Channel> channels;
     std::map<int, std::string> user_msg_buffer;
     UserTable user_table;
     EventHandler eventhandler;

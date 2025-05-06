@@ -25,7 +25,7 @@ void IRCServer::setupServer () {
         throw IRC::exception(std::strerror(errno));
 
     int opt = 1;
-    fcntl(server_fd, F_SETFL, O_NONBLOCK);    
+    fcntl(server_fd, F_SETFL, O_NONBLOCK);
     
     if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)))
         throw IRC::exception(std::strerror(errno));
@@ -87,8 +87,9 @@ void IRCServer::__accept_connection () {
             throw IRC::exception(std::strerror(errno));
         return;
     }
-    fcntl(new_client, F_SETFL, O_NONBLOCK);
     
+    fcntl(new_client, F_SETFL, O_NONBLOCK);
+    // --------
     user_table.set_user(new_client);
     user_msg_buffer[new_client] = "";
     eventhandler.subscribe_get(new_client);
