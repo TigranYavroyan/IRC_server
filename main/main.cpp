@@ -18,6 +18,9 @@ catch (const IRC::InputError& ex) {
 catch (const IRC::ServerError& ex) {
     std::clog << "ServerError: " << ex.what() << std::endl;
 }
+catch (const IRC::exception& ex) {
+    std::clog << "Excetion: " << ex.what() << std::endl;
+}
 
 // #include <vector>
 

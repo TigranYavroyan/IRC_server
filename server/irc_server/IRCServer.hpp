@@ -15,6 +15,7 @@
 #include <sys/select.h>
 #include <fcntl.h>
 
+#include <exception.hpp>
 #include <EventHandler.hpp>
 #include <Helpers.hpp>
 #include <Parsing.hpp>

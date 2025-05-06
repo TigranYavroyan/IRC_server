@@ -22,7 +22,8 @@ void IRCServer::closeConnectionAll () {
 void IRCServer::setupServer () {
     server_fd = socket(AF_INET, SOCK_STREAM, 0);
     if (server_fd < 0) {
-        perror("socket");
+        throw IRC::exception(std::strerror(errno));
+
         _exit(1);
     }
 
@@ -30,7 +31,8 @@ void IRCServer::setupServer () {
     fcntl(server_fd, F_SETFL, O_NONBLOCK);    
     
     if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt))) {
-        perror("setsockopt");
+        throw IRC::exception(std::strerror(errno));
+
         _exit(1);
     }
 
@@ -42,12 +44,14 @@ void IRCServer::setupServer () {
     server_addr.sin_port = htons(PORT); // the PORT
 
     if (bind(server_fd, (struct sockaddr*)&server_addr, sizeof(server_addr))) {
-        perror("bind");
+        throw IRC::exception(std::strerror(errno));
+
         _exit(1);
     }
 
     if (listen(server_fd, SOMAXCONN)) {
-        perror("listen");
+        throw IRC::exception(std::strerror(errno));
+
         _exit(1);
     }
 
@@ -63,7 +67,8 @@ void IRCServer::run () {
 
     while (true) {
         if (eventhandler.wait_event() < 0)
-            perror("select");
+            throw IRC::exception(std::strerror(errno));
+
 
         if (eventhandler.is_get_event(server_fd))
             __acceptConnection();
@@ -90,9 +95,8 @@ void IRCServer::__acceptConnection () {
     int new_client = accept(server_fd, (struct sockaddr*)&client_addr, &addr_len);
     
     if (new_client < 0) {
-        if (errno != EAGAIN && errno != EWOULDBLOCK) {
-            perror("accept");
-        }
+        if (errno != EAGAIN && errno != EWOULDBLOCK)
+            throw IRC::exception(std::strerror(errno));
         return;
     }
     fcntl(new_client, F_SETFL, O_NONBLOCK);
@@ -103,7 +107,8 @@ void IRCServer::__acceptConnection () {
     std::cout << "New client is trying to connect: " << new_client << "\n";
     std::string welcome_msg = "Welcome to the IRC-like chat server!\nEnter the password: ";
     if (send(new_client, welcome_msg.c_str(), welcome_msg.size(), 0) < 0)
-        perror("send");
+        throw IRC::exception(std::strerror(errno));
+
 }
 
 // This function must be in channel
