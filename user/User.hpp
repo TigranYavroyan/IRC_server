@@ -5,6 +5,7 @@
 #include <ostream>
 
 class User {
+	// realname
 	std::string username;
 	std::string nickname;
 	std::string hostname;

@@ -71,7 +71,7 @@ void IRCServer::run () {
 
 
         if (eventhandler.is_get_event(server_fd))
-            __acceptConnection();
+            __accept_connection();
 
         it = user_table.tsbegin();
         while (it != user_table.tsend()) {
@@ -79,14 +79,14 @@ void IRCServer::run () {
             socket_fd = it->first;
             ++it;
             if (eventhandler.is_get_event(socket_fd))
-                __messageChecking(socket_fd);
+                __message_checking(socket_fd);
         }
     }
 }
 
 // ----------------------------- Private methods ---------------------------------
 
-void IRCServer::__acceptConnection () {
+void IRCServer::__accept_connection () {
     
     struct sockaddr_in client_addr;
     socklen_t addr_len = sizeof(client_addr);
@@ -102,6 +102,7 @@ void IRCServer::__acceptConnection () {
     fcntl(new_client, F_SETFL, O_NONBLOCK);
     
     user_table.set_user(new_client);
+    user_msg_buffer[new_client] = "";
     eventhandler.subscribe_get(new_client);
 
     std::cout << "New client is trying to connect: " << new_client << "\n";
@@ -112,7 +113,7 @@ void IRCServer::__acceptConnection () {
 }
 
 // This function must be in channel
-void IRCServer::__broadcastMessage (int client, const std::string& msg) {
+void IRCServer::__broadcast_message (int client, const std::string& msg) {
     UserBySocketIter it = user_table.tsbegin();
 
     while (it != user_table.tsend()) {
@@ -123,25 +124,20 @@ void IRCServer::__broadcastMessage (int client, const std::string& msg) {
     }
 }
 
-void IRCServer::__messageChecking (int client) {
-    char buffer[BUFFER_SIZE] = {0};
-    int bytes_received = recv(client, buffer, BUFFER_SIZE, 0);
+void IRCServer::__user_disconnect (int client) {
+    close(client);
+    eventhandler.unsubscribe_get(client);
+    user_table.remove_user(client);
+    user_msg_buffer.erase(client);
+    std::cout << "Client disconnected: " << client << std::endl;
+}
 
-    if (bytes_received <= 0) {
-        if (bytes_received == 0 || (errno != EAGAIN && errno != EWOULDBLOCK)) {
-            close(client);
-            eventhandler.unsubscribe_get(client);
-            user_table.remove_user(client);
-            std::cout << "Client disconnected: " << client << std::endl;
-        }
-        return;
-    }
-
-    std::string message = buffer;
+void IRCServer::__message_execution (int client, std::string& message) {
     Helpers::trim(message);
+    if (message.empty())
+        return;
 
     std::vector<std::string> tokens = Parsing::parse_msg(message);
-
     executor.execute(client, tokens);
 
     // This section must moved into executors commands
@@ -155,22 +151,37 @@ void IRCServer::__messageChecking (int client) {
             user_table.set_user_auth(client);
         }
         else {
-            if (message.empty())
-                return;
-
             const char* login_msg = "The password is wrong: ";
             send(client, login_msg, strlen(login_msg), 0);
         }
     }
     else {
-        if (message.empty())
-            return;
-
         std::string log = ("Client " + Helpers::to_string(client) + ": " + message + '\n');
         std::cout << log;
         std::cout.flush();
     
-        __broadcastMessage(client, log);
+        __broadcast_message(client, log);
     }
     // ----
+}
+
+void IRCServer::__message_checking (int client) {
+    char buffer[BUFFER_SIZE] = {0};
+    int bytes_received = recv(client, buffer, BUFFER_SIZE, 0);
+
+    if (bytes_received <= 0) {
+        if (bytes_received == 0 || (errno != EAGAIN && errno != EWOULDBLOCK))
+            __user_disconnect(client);
+        return;
+    }
+    user_msg_buffer[client].append(buffer, bytes_received);
+    
+    std::string& buf = user_msg_buffer[client];
+    std::size_t pos;
+    std::string input;
+    while ((pos = buf.find("\r\n")) != std::string::npos) {
+        input = buf.substr(0, pos);
+        buf.erase(0, pos + 2);
+        __message_execution(client, input);
+    }
 }
