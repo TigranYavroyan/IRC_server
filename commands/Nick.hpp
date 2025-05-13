@@ -1,12 +1,14 @@
 #ifndef NICK_HPP
 #define NICK_HPP
 
-#include <ACommand.hpp>
+#include "ACommand.hpp"
 
-class Nick : public ACommand {
+class Nick : public ACommand
+{
 public:
-	Nick (IRCServer& _server) : ACommand(_server) {}
-	virtual void execute (int socket_fd, const std::vector<std::string>& tokens);
+    Nick(IRCServer& server);
+    ~Nick();
+    void execute(int client_socket, const std::vector<std::string>& tokens);
 };
 
 #endif // NICK_HPP

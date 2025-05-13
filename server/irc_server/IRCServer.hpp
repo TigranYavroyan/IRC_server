@@ -22,6 +22,7 @@
 #include <Constants.hpp>
 #include <Executor.hpp>
 #include <Channel.hpp>
+#include <Replies.hpp>
 
 class IRCServer {
 	const int PORT;
@@ -40,6 +41,8 @@ public:
     void closeConnectionAll ();
     void setupServer ();
     void run ();
+    const std::string& getPassword() const;
+    UserTable& getUserTable();
 private:
     void __message_execution (int client, std::string& message);
     void __user_disconnect (int client);

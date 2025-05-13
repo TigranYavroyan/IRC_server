@@ -95,7 +95,7 @@ void IRCServer::__accept_connection () {
     eventhandler.subscribe_get(new_client);
 
     std::cout << "New client is trying to connect: " << new_client << "\n";
-    std::string welcome_msg = "Welcome to the IRC-like chat server!\nEnter the password: ";
+    std::string welcome_msg = Replies::connected(std::string("unknown"));
     if (send(new_client, welcome_msg.c_str(), welcome_msg.size(), 0) < 0)
         throw IRC::exception(std::strerror(errno));
 
@@ -127,31 +127,8 @@ void IRCServer::__message_execution (int client, std::string& message) {
         return;
 
     std::vector<std::string> tokens = Helpers::parse_msg(message);
-    executor.execute(client, tokens);
 
-    // This section must moved into executors commands
-    // ----
-    if (!(user_table.get_user(client).get_is_auth())) {
-        if (message == password)
-        {
-            const char* login_msg = "Welcome to the chat!\n";
-            std::cout << "New client connected: " << client << std::endl;
-            send(client, login_msg, strlen(login_msg), 0);
-            user_table.set_user_auth(client);
-        }
-        else {
-            const char* login_msg = "The password is wrong: ";
-            send(client, login_msg, strlen(login_msg), 0);
-        }
-    }
-    else {
-        std::string log = ("Client " + Helpers::to_string(client) + ": " + message + '\n');
-        std::cout << log;
-        std::cout.flush();
-    
-        __broadcast_message(client, log);
-    }
-    // ----
+    executor.execute(client, tokens);
 }
 
 void IRCServer::__message_checking (int client) {
@@ -173,4 +150,12 @@ void IRCServer::__message_checking (int client) {
         buf.erase(0, pos + 2);
         __message_execution(client, input);
     }
+}
+
+const std::string& IRCServer::getPassword() const {
+    return password;
+}
+
+UserTable& IRCServer::getUserTable() {
+    return user_table;
 }

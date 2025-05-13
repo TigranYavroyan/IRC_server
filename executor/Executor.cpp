@@ -1,12 +1,14 @@
 #include <Executor.hpp>
+#include <IRCServer.hpp>
 
 void Executor::__create_cmds_table (IRCServer& server) {
 	std::pair<std::string, ACommand*> init_table[] = {
-		std::make_pair("join", new Join(server)),
-		std::make_pair("nick", new Nick(server)),
-		std::make_pair("part", new Part(server)),
-		std::make_pair("privmsg", new PrivMsg(server)),
-		std::make_pair("quit", new Quit(server))
+		std::make_pair("PASS", new Pass(server)),
+		std::make_pair("JOIN", new Join(server)),
+		std::make_pair("NICK", new Nick(server)),
+		std::make_pair("PART", new Part(server)),
+		std::make_pair("PRIVMSG", new PrivMsg(server)),
+		std::make_pair("QUIT", new Quit(server))
 	};
 
 	commands_table = std::map<std::string, ACommand*> (
@@ -27,11 +29,24 @@ Executor::Executor (IRCServer& _server): server(&_server) {
 }
 
 void Executor::execute (int socket_fd, const std::vector<std::string>& tokens) const {
+	UserTable& user_table = server->getUserTable();
 	std::string cmd = tokens[0];
+	User client = user_table.get_user(socket_fd);
 
+	// separate method
+	if (!(client.get_is_auth()) || client.get_nickname().empty()) {
+		if (cmd != "PASS" && cmd != "NICK")
+        {
+			std::string err_msg = Replies::err_notRegistered("");
+            send(socket_fd, err_msg.c_str(), err_msg.size(), 0);
+			return;
+        }
+    }
+	
 	std::map<std::string, ACommand*>::const_iterator it = commands_table.find(cmd);
 	if (it == commands_table.end()) {
-		std::cout << "Unknown command: " << tokens[0] << std::endl;
+		std::string err_msg = Replies::err_cmdnotFound(client.get_nickname(), cmd);
+		send(socket_fd, err_msg.c_str(), err_msg.size(), 0);
 		return;
 	}
 	

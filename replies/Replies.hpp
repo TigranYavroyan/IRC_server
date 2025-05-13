@@ -24,7 +24,7 @@ public:
 	static std::string err_invaliDModeParm(cref_str channelname, cref_str mode);
 	static std::string err_keySet(cref_str channelname);
 	static std::string err_unknownMode(cref_str nickname, cref_str channelname, cref_str mode);
-	static std::string err_notenoUGHPARAM(cref_str nickname);
+	static std::string err_notEnoughParam(cref_str nickname);
 	static std::string err_channelNotFound(cref_str nickname, cref_str channelname);
 	static std::string err_notopeRATOR(cref_str channelname);
 	static std::string err_noSuchNick(cref_str channelname, cref_str name);
