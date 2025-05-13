@@ -2,13 +2,13 @@ NAME       = ircserv
 CXX        = c++
 RM         = rm -f
 
-RED		= \033[1;31m
-GREEN	= \033[1;32m
-YELLOW	= \033[1;33m
-RESET	= \033[0;37m
-SKY		= \033[1;36m
-PORT	= 6667
-PASS	= hello
+RED        = \033[1;31m
+GREEN      = \033[1;32m
+YELLOW     = \033[1;33m
+RESET      = \033[0;37m
+SKY        = \033[1;36m
+PORT       = 6667
+PASS       = hello
 
 SRC_DIRS   = ./user \
              ./server/channel \
@@ -17,36 +17,39 @@ SRC_DIRS   = ./user \
              ./exceptions \
              ./commands \
              ./executor \
-			 ./main \
-			 ./parsing \
-			 ./helpers \
-			 ./constants \
-			 ./usertable \
-			 ./typedefs
+             ./main \
+             ./parsing \
+             ./helpers \
+             ./constants \
+             ./usertable \
+             ./typedefs \
+			 ./replies
 
 INCLUDES   = $(addprefix -I, $(SRC_DIRS) .)
 
-SRCS       = $(wildcard $(addsuffix /*.cpp, $(SRC_DIRS)))
-OBJS       = $(SRCS:.cpp=.o)
+BUILD_DIR  = build
+
+SRCS       = $(wildcard $(addsuffix /*.cpp,$(SRC_DIRS)))
+OBJS       = $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(SRCS))
 
 CXXERRFLAGS = #-Wall -Wextra -Werror
-DEBUG = #-fsanitize=address
-CXXFLAGS   = $(CXXERRFLAGS) -std=c++98 $(INCLUDES)
+DEBUG       = #-fsanitize=address
+CXXFLAGS    = $(CXXERRFLAGS) -std=c++98 $(INCLUDES)
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	@$(CXX) $(DEBUG) $(OBJS) -o $@
+	@$(CXX) $(DEBUG) $^ -o $@
 	@echo "$(GREEN) - The executable file is ready$(RESET)"
 
-%.o: %.cpp
+$(BUILD_DIR)/%.o: %.cpp
+	@mkdir -p $(dir $@)
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
-	@echo "$(YELLOW) - The object file is compiled$(RESET)"
+	@echo "$(YELLOW) - Compiled $< → $@$(RESET)"
 
 clean:
 	@$(RM) $(OBJS)
-	@echo "$(RED) - The object file is removed$(RESET)"
-
+	@echo "$(RED) - The object files are removed$(RESET)"
 
 fclean: clean
 	@$(RM) $(NAME)
