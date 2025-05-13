@@ -18,7 +18,7 @@ SRC_DIRS   = ./user \
              ./commands \
              ./executor \
              ./main \
-             ./parsing \
+             ./inputvalidator \
              ./helpers \
              ./constants \
              ./usertable \

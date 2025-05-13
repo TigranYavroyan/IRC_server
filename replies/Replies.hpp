@@ -4,10 +4,10 @@
 #include <string>
 
 class Replies {
+	static std::string crlf ();
 public:
 	typedef const std::string& cref_str;
 
-	static std::string crlf ();
 	static std::string connected (cref_str nickname);
 	static std::string umodeIs (cref_str hostname, cref_str channelname, cref_str mode, cref_str user);
 	static std::string creationOnTime (cref_str nickname, cref_str channelname, cref_str creationtime);
