@@ -29,7 +29,7 @@ Executor::Executor (IRCServer& _server): server(&_server) {
 }
 
 void Executor::execute (int socket_fd, const std::vector<std::string>& tokens) const {
-	UserTable user_table = server->getUserTable();
+	UserTable& user_table = server->getUserTable();
 	std::string cmd = tokens[0];
 	User client = user_table.get_user(socket_fd);
 	std::cout << "Execute called" << std::endl;

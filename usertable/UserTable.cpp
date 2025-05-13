@@ -111,6 +111,7 @@ User UserTable::get_user (int socket_fd) const {
 	std::map<int, User*>::const_iterator it = table_by_socket.find(socket_fd);
 	if (it == table_by_socket.end())
 		throw IRC::ServerError("The is no user with that socket_fd: " + socket_fd);
+	User* user = (it->second);
 	std::cout << "nick: " << it->second->get_nickname().size() << std::endl;
 	std::cout << "host: " << it->second->get_hostname().size() << std::endl;
 	std::cout << "user: " << it->second->get_username().size() << std::endl;
