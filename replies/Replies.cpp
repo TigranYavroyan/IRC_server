@@ -62,7 +62,7 @@ std::string Replies::err_unknownMode(cref_str nickname, cref_str channelname, cr
 	return ": 472 " + nickname + " #" + channelname + " " + mode + " :is not a recognised channel mode" + crlf();
 }
 
-std::string Replies::err_notenoUGHPARAM(cref_str nickname) {
+std::string Replies::err_notEnoughParam(cref_str nickname) {
 	return ": 461 " + nickname + " :Not enough parameters." + crlf();
 }
 

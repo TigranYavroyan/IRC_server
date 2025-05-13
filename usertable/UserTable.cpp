@@ -107,19 +107,17 @@ bool UserTable::is_nickname_taken (const std::string& nickname) const {
 
 #include <iostream>
 User UserTable::get_user (int socket_fd) const {
-
 	std::map<int, User*>::const_iterator it = table_by_socket.find(socket_fd);
+
 	if (it == table_by_socket.end())
 		throw IRC::ServerError("The is no user with that socket_fd: " + socket_fd);
-	User* user = (it->second);
-	std::cout << "nick: " << it->second->get_nickname().size() << std::endl;
-	std::cout << "host: " << it->second->get_hostname().size() << std::endl;
-	std::cout << "user: " << it->second->get_username().size() << std::endl;
+
 	return *(it->second);
 }
 
 User UserTable::get_user (const std::string& nickname) const {
 	std::map<std::string, User*>::const_iterator it = table_by_name.find(nickname);
+
 	if (it == table_by_name.end())
 		throw IRC::ServerError("The is no user with that nicname: " + nickname);
 	
