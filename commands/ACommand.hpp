@@ -5,6 +5,8 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <cstring>
+#include <sys/socket.h>
 
 class IRCServer;
 

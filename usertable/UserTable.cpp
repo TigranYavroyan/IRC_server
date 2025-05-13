@@ -101,11 +101,19 @@ void UserTable::set_user_auth (int socket_fd, bool auth) {
 	it->second->set_is_auth(auth);
 }
 
+bool UserTable::is_nickname_taken (const std::string& nickname) const {
+	return table_by_name.count(nickname);
+}
+
+#include <iostream>
 User UserTable::get_user (int socket_fd) const {
+
 	std::map<int, User*>::const_iterator it = table_by_socket.find(socket_fd);
 	if (it == table_by_socket.end())
 		throw IRC::ServerError("The is no user with that socket_fd: " + socket_fd);
-	
+	std::cout << "nick: " << it->second->get_nickname().size() << std::endl;
+	std::cout << "host: " << it->second->get_hostname().size() << std::endl;
+	std::cout << "user: " << it->second->get_username().size() << std::endl;
 	return *(it->second);
 }
 
