@@ -1,1 +1,143 @@
-#include <Channel.hpp>
+#include "Channel.hpp"
+#include "User.hpp"
+#include <iostream>
+#include <set>
+#include <string>
+
+Channel::Channel(const std::string& channel_name) 
+    : name(channel_name), topic(""), key(""), user_limit(0), invite_only(false), topic_restricted(false) {}
+
+
+bool Channel::addUser(User* user, const std::string& provided_key) {
+    if (invite_only) {
+        std::set<User*>::iterator it = invited.find(user);
+        if (it == invited.end()) 
+            return false;
+    }
+    
+    if (!key.empty() && key != provided_key) 
+        return false;
+
+    if (user_limit > 0 && users.size() >= static_cast<size_t>(user_limit)) 
+        return false;
+
+    users.insert(user);
+    if (users.size() == 1) 
+        addOperator(user);
+    return true;
+}
+
+void Channel::removeUser(User* user) {
+    users.erase(user);
+    operators.erase(user);
+    invited.erase(user);
+}
+
+bool Channel::hasUser(User* user) const {
+    return users.find(user) != users.end();
+}
+
+void Channel::addOperator(User* user) {
+    if (hasUser(user)) {
+        operators.insert(user);
+    }
+}
+
+void Channel::removeOperator(User* user) {
+    operators.erase(user);
+}
+
+bool Channel::isOperator(User* user) const {
+    return operators.find(user) != operators.end();
+}
+
+void Channel::inviteUser(User* user) {
+    invited.insert(user);
+}
+
+bool Channel::isInvited(User* user) const {
+    return invited.find(user) != invited.end();
+}
+
+
+void Channel::setTopic(const std::string& new_topic) {
+    if (!topic_restricted || isOperator(NULL))
+        topic = new_topic;
+}
+
+std::string Channel::getTopic() const {
+    return topic;
+}
+
+void Channel::broadcast(const std::string& message, User* sender) {
+    std::set<User*>::iterator it = users.begin();
+    while (it != users.end()) {
+        if (*it != sender) {
+            (*it)->sendMessage(message);
+        }
+        ++it;
+    }
+}
+
+void Channel::setInviteOnly(bool mode) {
+    invite_only = mode;
+}
+
+void Channel::setTopicRestricted(bool mode) {
+    topic_restricted = mode;
+}
+
+void Channel::setKey(const std::string& new_key) {
+    key = new_key;
+}
+
+void Channel::removeKey() {
+    key = "";
+}
+
+void Channel::setUserLimit(int limit) {
+    user_limit = limit;
+}
+
+void Channel::removeUserLimit() {
+    user_limit = 0;
+}
+
+const std::string& Channel::getName() const {
+    return name;
+}
+
+bool Channel::getInviteOnly() const {
+    return invite_only;
+}
+
+bool Channel::getTopicRestricted() const {
+    return topic_restricted;
+}
+
+bool Channel::hasKey() const {
+    return !key.empty();
+}
+
+std::string Channel::getKey() const {
+    return key;
+}
+
+int Channel::getUserLimit() const {
+    return user_limit;
+}
+
+size_t Channel::getUserCount() const {
+    return users.size();
+}
+
+User* Channel::getUserByNick(const std::string& nick)
+{
+    std::set<User*>::iterator it = this->users.begin();
+    for (; it != this->users.end(); ++it)
+    {
+        if ((*it)->get_nickname() == nick)
+            return *it;
+    }
+    return NULL;
+}
