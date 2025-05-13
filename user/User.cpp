@@ -83,3 +83,11 @@ std::ostream& operator<< (std::ostream& os, const User& user) {
 		<< "\nis_auth: " << user.get_is_auth();
 	return os;
 }
+
+void User::sendMessage(const std::string& msg) const {
+    std::string full_msg = msg + "\r\n";
+    ssize_t bytes_sent = send(socket_fd, full_msg.c_str(), full_msg.length(), 0);
+    if (bytes_sent == -1) {
+        std::cerr << "Error sending message to user " << nickname << std::endl;
+    }
+}

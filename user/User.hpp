@@ -2,7 +2,8 @@
 #define USER_HPP
 
 #include <string>
-#include <ostream>
+#include <iostream>
+#include <sys/socket.h>
 
 class User {
 	// realname
@@ -39,6 +40,8 @@ public:
    std::string get_hostname () const;
    int get_socket_fd () const;
    bool get_is_auth () const;
+
+   void sendMessage(const std::string& msg) const;
 };
 
 std::ostream& operator<< (std::ostream& os, const User& user);
