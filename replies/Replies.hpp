@@ -1,34 +1,40 @@
 #ifndef REPLIES_HPP
 #define REPLIES_HPP
 
-#define CRLF "\r\n"
+#include <string>
 
-#define RPL_CONNECTED(nickname) (": 001 " + nickname + " : Welcome to the IRC server!" + CRLF)
-#define RPL_UMODEIS(hostname, channelname, mode, user)  ":" + hostname + " MODE " + channelname + " " + mode + " " + user + CRLF
-#define RPL_CREATIONTIME(nickname, channelname, creationtime) ": 329 " + nickname + " #" + channelname + " " + creationtime + CRLF
-#define RPL_CHANNELMODES(nickname, channelname, modes) ": 324 " + nickname + " #" + channelname + " " + modes + CRLF
-#define RPL_CHANGEMODE(hostname, channelname, mode, arguments) (":" + hostname + " MODE #" + channelname + " " + mode + " " + arguments + CRLF)
-#define RPL_NICKCHANGE(oldnickname, nickname) (":" + oldnickname + " NICK " + nickname + CRLF)
-#define RPL_JOINMSG(hostname, ipaddress, channelname) (":" + hostname + "@" + ipaddress + " JOIN #" + channelname + CRLF)
-#define RPL_NAMREPLY(nickname, channelname, clientslist) (": 353 " + nickname + " @ #" + channelname + " :" + clientslist + CRLF)
-#define RPL_ENDOFNAMES(nickname, channelname) (": 366 " + nickname + " #" + channelname + " :END of /NAMES list" + CRLF)
-#define RPL_TOPICIS(nickname, channelname, topic) (": 332 " + nickname + " #" +channelname + " :" + topic + "\r\n")
+class Replies {
+public:
+	typedef const std::string& cref_str;
 
-///////// ERRORS ////////////////
-#define ERR_NEEDMODEPARM(channelname, mode) (": 696 #" + channelname + " * You must specify a parameter for the key mode. " + mode + CRLF)
-#define ERR_INVALIDMODEPARM(channelname, mode) ": 696 #" + channelname + " Invalid mode parameter. " + mode + CRLF
-#define ERR_KEYSET(channelname) ": 467 #" + channelname + " Channel key already set. " + CRLF
-#define ERR_UNKNOWNMODE(nickname, channelname, mode) ": 472 " + nickname + " #" + channelname + " " + mode + " :is not a recognised channel mode" + CRLF
-#define ERR_NOTENOUGHPARAM(nickname) (": 461 " + nickname + " :Not enough parameters." + CRLF)
-#define ERR_CHANNELNOTFOUND(nickname, channelname) (": 403 " + nickname + " " + channelname + " :No such channel" + CRLF)
-#define ERR_NOTOPERATOR(channelname) (": 482 #" + channelname + " :You're not a channel operator" + CRLF)
-#define ERR_NOSUCHNICK(channelname, name) (": 401 #" + channelname + " " + name + " :No such nick/channel" + CRLF )
-#define ERR_INCORPASS(nickname) (": 464 " + nickname + " :Password incorrect !" + CRLF )
-#define ERR_ALREADYREGISTERED(nickname) (": 462 " + nickname + " :You may not reregister !" + CRLF )
-#define ERR_NONICKNAME(nickname) (": 431 " + nickname + " :No nickname given" + CRLF )
-#define ERR_NICKINUSE(nickname) (": 433 " + nickname + " :Nickname is already in use" + CRLF)
-#define ERR_ERRONEUSNICK(nickname) (": 432 " + nickname + " :Erroneus nickname" + CRLF)
-#define ERR_NOTREGISTERED(nickname) (": 451 " + nickname + " :You have not registered!" + CRLF)
-#define ERR_CMDNOTFOUND(nickname, command) (": 421 " + nickname + " " + command + " :Unknown command" + CRLF)
+	static std::string crlf ();
+	static std::string connected (cref_str nickname);
+	static std::string umodeIs (cref_str hostname, cref_str channelname, cref_str mode, cref_str user);
+	static std::string creationOnTime (cref_str nickname, cref_str channelname, cref_str creationtime);
+	static std::string channelModes (cref_str nickname, cref_str channelname, cref_str modes);
+	static std::string changeMode (cref_str hostname, cref_str channelname, cref_str mode, cref_str arguments);
+	static std::string nickChange (cref_str oldnickname, cref_str nickname);
+	static std::string joinMsg (cref_str hostname, cref_str ipaddress, cref_str channelname);
+	static std::string namReply (cref_str nickname, cref_str channelname, cref_str clientslist);
+	static std::string endOfNames (cref_str nickname, cref_str channelname);
+	static std::string topicIs (cref_str nickname, cref_str channelname, cref_str topic);
+
+	// ///////// ERRORS ////////////////
+	static std::string err_needModeParm(cref_str channelname, cref_str mode);
+	static std::string err_invaliDModeParm(cref_str channelname, cref_str mode);
+	static std::string err_keySet(cref_str channelname);
+	static std::string err_unknownMode(cref_str nickname, cref_str channelname, cref_str mode);
+	static std::string err_notenoUGHPARAM(cref_str nickname);
+	static std::string err_channelNotFound(cref_str nickname, cref_str channelname);
+	static std::string err_notopeRATOR(cref_str channelname);
+	static std::string err_noSuchNick(cref_str channelname, cref_str name);
+	static std::string err_incorpass(cref_str nickname);
+	static std::string err_alreadyRegistered(cref_str nickname);
+	static std::string err_noNickName(cref_str nickname);
+	static std::string err_nickInUse(cref_str nickname);
+	static std::string err_oneUsNick(cref_str nickname);
+	static std::string err_notRegistered(cref_str nickname);
+	static std::string err_cmdnotFound(cref_str nickname, cref_str command);
+};
 
 #endif // REPLIES_HPP
