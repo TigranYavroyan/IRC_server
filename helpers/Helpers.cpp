@@ -12,3 +12,29 @@ void Helpers::trim (std::string& str, const char* delims) {
     left_trim(str, delims);
     right_trim(str, delims);
 }
+
+
+std::vector<std::string> Helpers::parse_msg (const char* msg) {
+	std::vector<std::string> tokens;
+	std::string input(msg);
+	std::string token;
+	std::istringstream ss(input);
+
+	while (ss >> token) {
+		tokens.push_back(token);
+	}
+
+	return tokens;
+}
+
+std::vector<std::string> Helpers::parse_msg (const std::string& msg) {
+	std::vector<std::string> tokens;
+	std::string token;
+	std::istringstream ss(msg);
+
+	while (ss >> token) {
+		tokens.push_back(token);
+	}
+
+	return tokens;
+}

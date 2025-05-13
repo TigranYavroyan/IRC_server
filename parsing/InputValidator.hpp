@@ -1,5 +1,5 @@
-#ifndef PARSING_HPP
-#define PARSING_HPP
+#ifndef INPUTVALIDATOR_HPP
+#define INPUTVALIDATOR_HPP
 
 #include <utility>
 #include <string>
@@ -7,7 +7,7 @@
 
 #include <Constants.hpp>
 
-class Parsing {
+class InputValidator {
 	static int __validate_port (char* port);
 	static std::string __validate_password (char* password);
 	static bool __is_special_char (char ch);
@@ -18,4 +18,4 @@ public:
 	static bool is_valid_nickname (const std::string& nickname);
 };
 
-#endif // PARSING_HPP
+#endif // INPUTVALIDATOR_HPP

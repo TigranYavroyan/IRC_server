@@ -126,7 +126,7 @@ void IRCServer::__message_execution (int client, std::string& message) {
     if (message.empty())
         return;
 
-    std::vector<std::string> tokens = Parsing::parse_msg(message);
+    std::vector<std::string> tokens = Helpers::parse_msg(message);
     executor.execute(client, tokens);
 
     // This section must moved into executors commands

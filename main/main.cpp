@@ -1,12 +1,12 @@
 #include <IRCServer.hpp>
-#include <Parsing.hpp>
+#include <InputValidator.hpp>
 #include <InputError.hpp>
 #include <ServerError.hpp>
 #include <UserTable.hpp>
 #include <User.hpp>
 
 int main (int argc, char* argv[]) try {
-    std::pair<int, std::string> input = Parsing::validate_input(argc, argv);
+    std::pair<int, std::string> input = InputValidator::validate_input(argc, argv);
 
     IRCServer server(input.first, input.second);
     server.setupServer();
