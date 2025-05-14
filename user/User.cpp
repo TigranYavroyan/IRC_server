@@ -119,3 +119,10 @@ std::ostream& operator<<(std::ostream& os, const User& user) {
 	   << "\nhas_nick: " << user.get_has_nick();
 	return os;
 }
+
+void User::sendMessage(const std::string& message) const {
+	if (socket_fd >= 0) {
+		std::string msg_with_newline = message + "\r\n";
+		write(socket_fd, msg_with_newline.c_str(), msg_with_newline.size());
+	}
+}

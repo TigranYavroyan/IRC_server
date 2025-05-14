@@ -5,7 +5,7 @@ void Executor::__create_cmds_table (IRCServer& server) {
 	std::pair<std::string, ACommand*> init_table[] = {
 		std::make_pair("PASS", new Pass(server)),
 		std::make_pair("NICK", new Nick(server)),
-		std::make_pair("JOIN", new UserCommand(server)),
+		std::make_pair("USER", new UserCommand(server)),
 		std::make_pair("JOIN", new Join(server)),
 		std::make_pair("PART", new Part(server)),
 		std::make_pair("PRIVMSG", new PrivMsg(server)),

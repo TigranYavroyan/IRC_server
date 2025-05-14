@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <sys/socket.h>
+#include <unistd.h>
 
 class User {
 	std::string username;
