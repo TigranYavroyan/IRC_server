@@ -12,7 +12,7 @@ void Nick::execute(int client_socket, const std::vector<std::string>& tokens) {
 
     if (tokens.size() < 2) 
     {
-        std::string msg = Replies::err_noNickName(user.get_nickname());
+        std::string msg = Replies::err_noNickName("NICK", user.get_nickname());
         send(client_socket, msg.c_str(), msg.length(), 0);
         return;
     }
@@ -21,7 +21,7 @@ void Nick::execute(int client_socket, const std::vector<std::string>& tokens) {
 
     if (user_table.is_nickname_taken(new_nick))
     {
-        std::string msg = Replies::err_nickInUse(new_nick);
+        std::string msg = Replies::err_nickInUse("NICK", new_nick);
         send(client_socket, msg.c_str(), msg.length(), 0);
         return;
     }

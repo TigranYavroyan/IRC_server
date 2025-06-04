@@ -21,7 +21,7 @@ void Pass::execute(int socket_fd, const std::vector<std::string>& tokens) {
     }
     else
     {
-        std::string error_msg = Replies::err_incorpass(client.get_nickname());
+        std::string error_msg = Replies::err_incorpass("PASS", client.get_nickname());
         send(socket_fd, error_msg.c_str(), error_msg.size(), 0);
     }
 }

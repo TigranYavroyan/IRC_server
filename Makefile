@@ -8,7 +8,7 @@ YELLOW     = \033[1;33m
 RESET      = \033[0;37m
 SKY        = \033[1;36m
 PORT       = 6667
-PASS       = hello
+PASS       = aa
 
 SRC_DIRS   = ./user \
              ./server/channel \
