@@ -3,10 +3,13 @@
 
 #include <ACommand.hpp>
 #include <Pass.hpp>
-#include <Join.hpp>
 #include <Nick.hpp>
+#include <UserCommand.hpp>
+#include <Join.hpp>
 #include <Part.hpp>
 #include <PrivMsg.hpp>
 #include <Quit.hpp>
+#include <Ping.hpp>
+#include <Pong.hpp>
 
 #endif // COMMANDS_HPP

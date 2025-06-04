@@ -43,6 +43,7 @@ public:
     void run ();
     const std::string& getPassword() const;
     UserTable& getUserTable();
+    Channel& getChannel(std::string chanel_name);
 private:
     void __message_execution (int client, std::string& message);
     void __user_disconnect (int client);

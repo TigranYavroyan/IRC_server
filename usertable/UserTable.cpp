@@ -18,12 +18,13 @@ void UserTable::set_user (
 	const std::string& nickname,
 	const std::string& username,
 	const std::string& hostname,
+	const std::string& realname,
 	bool is_auth
 )
 {
 	UserBySocketIter it = table_by_socket.find(socket_fd);
 	if (it == table_by_socket.end()) {
-		User* new_user = new User(socket_fd, username, nickname, hostname, is_auth);
+		User* new_user = new User(socket_fd, username, nickname, hostname, realname, is_auth);
 		table_by_socket.insert(
 			std::make_pair(socket_fd, new_user)
 		);
@@ -34,13 +35,12 @@ void UserTable::set_user (
 	else {
 		std::string old_nickname = it->second->get_nickname();
 
-		it->second->set(socket_fd, nickname, username, hostname, is_auth);
+		it->second->set(socket_fd, nickname, username, hostname, realname, is_auth);
 
 		if (old_nickname == nickname)
 			return;
 
-		table_by_name.erase(old_nickname);
-		table_by_name.insert(
+		table_by_name.erase(old_nickname);		table_by_name.insert(
 			std::make_pair(nickname, it->second)
 		);
 	}
@@ -52,6 +52,7 @@ void UserTable::set_user (const User& user) {
 		user.get_nickname(),
 		user.get_username(),
 		user.get_hostname(),
+		user.get_realname(),
 		user.get_is_auth()
 	);
 }

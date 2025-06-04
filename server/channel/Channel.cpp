@@ -141,3 +141,15 @@ User* Channel::getUserByNick(const std::string& nick)
     }
     return NULL;
 }
+
+std::string Channel::getUserList() const
+{
+    std::string result;
+    for (std::set<User*>::const_iterator it = users.begin(); it != users.end(); ++it) {
+        if (*it)
+            result += (*it)->get_nickname() + " ";
+    }
+    if (!result.empty())
+        result.erase(result.size() - 1);
+    return result;
+}

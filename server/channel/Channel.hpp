@@ -24,6 +24,7 @@ private:
     std::set<User*> invited;
 
 public:
+    Channel(){};
     Channel(const std::string& channel_name);
 
     bool addUser(User* user, const std::string& provided_key = "");
@@ -58,6 +59,7 @@ public:
     size_t getUserCount() const;
 
 	User* getUserByNick(const std::string& nick);
+    std::string getUserList() const;
 
 };
 
