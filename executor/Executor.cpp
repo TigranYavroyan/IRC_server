@@ -9,6 +9,8 @@ void Executor::__create_cmds_table (IRCServer& server) {
 		std::make_pair("JOIN", new Join(server)),
 		std::make_pair("PART", new Part(server)),
 		std::make_pair("PRIVMSG", new PrivMsg(server)),
+		std::make_pair("PING", new Ping(server)),
+		std::make_pair("PONG", new Pong(server)),
 		std::make_pair("QUIT", new Quit(server))
 	};
 

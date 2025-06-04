@@ -9,5 +9,7 @@
 #include <Part.hpp>
 #include <PrivMsg.hpp>
 #include <Quit.hpp>
+#include <Ping.hpp>
+#include <Pong.hpp>
 
 #endif // COMMANDS_HPP

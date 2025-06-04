@@ -95,9 +95,6 @@ void IRCServer::__accept_connection () {
     eventhandler.subscribe_get(new_client);
 
     std::cout << "New client is trying to connect: " << new_client << "\n";
-    std::string welcome_msg = Replies::connected(std::string("unknown"));
-    if (send(new_client, welcome_msg.c_str(), welcome_msg.size(), 0) < 0)
-        throw IRC::exception(std::strerror(errno));
 
 }
 
@@ -158,4 +155,9 @@ const std::string& IRCServer::getPassword() const {
 
 UserTable& IRCServer::getUserTable() {
     return user_table;
+}
+
+Channel& IRCServer::getChannel(std::string chanel_name)
+{
+    return(channels[chanel_name]);
 }
