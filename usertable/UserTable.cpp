@@ -75,6 +75,15 @@ void UserTable::set_user_nickname (int socket_fd, const std::string& nickname) {
 	);
 }
 
+void UserTable::set_user_realname (int socket_fd, const std::string& realname) {
+	UserBySocketIter it = table_by_socket.find(socket_fd);
+
+	if (it == table_by_socket.end())
+		throw IRC::ServerError("The user must be set for separate username set");
+
+	it->second->set_username(realname);
+}
+
 void UserTable::set_user_username (int socket_fd, const std::string& username) {
 	UserBySocketIter it = table_by_socket.find(socket_fd);
 
