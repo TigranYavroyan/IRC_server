@@ -35,11 +35,14 @@ void Executor::execute (int socket_fd, const std::vector<std::string>& tokens) c
 	UserTable& user_table = server->getUserTable();
 	std::string cmd = tokens[0];
 	User client = user_table.get_user(socket_fd);
+	static bool is_welcome_msg_sent = false;
+	bool can_welcome;
 
 	// separate method
 	if (!(client.get_is_auth())) {
 		if (cmd != "PASS")
 		{
+			std::cout << "mtav" << std::endl;
 			std::string err_msg = Replies::err_notRegistered(cmd, "");
             send(socket_fd, err_msg.c_str(), err_msg.size(), 0);
 			return;
@@ -49,11 +52,13 @@ void Executor::execute (int socket_fd, const std::vector<std::string>& tokens) c
 	if (client.get_is_auth() && (client.get_nickname().empty() || client.get_username().empty())) {
 		if (cmd != "NICK" && cmd != "USER")
         {
+			std::cout << "mtav2" << std::endl;
 			std::string err_msg = Replies::err_notRegistered(cmd, "");
             send(socket_fd, err_msg.c_str(), err_msg.size(), 0);
 			return;
         }
     }
+
 	
 	std::map<std::string, ACommand*>::const_iterator it = commands_table.find(cmd);
 	if (it == commands_table.end()) {
@@ -63,6 +68,16 @@ void Executor::execute (int socket_fd, const std::vector<std::string>& tokens) c
 	}
 	
 	it->second->execute(socket_fd, tokens);
+
+	// This must be fixed, just get at the of this reference
+	User kosyak = user_table.get_user(socket_fd);
+	can_welcome = !kosyak.get_nickname().empty() && !kosyak.get_username().empty();
+
+	if (can_welcome && !is_welcome_msg_sent) {
+		is_welcome_msg_sent = true;
+		std::string welcome_msg = Replies::connected(kosyak.get_nickname());
+		send(socket_fd, welcome_msg.c_str(), welcome_msg.size(), 0);
+	}
 }
 
 void Executor::clear_cmds () {

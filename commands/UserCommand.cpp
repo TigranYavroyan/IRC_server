@@ -21,7 +21,10 @@ std::string UserCommand::__merge_form(const std::vector<std::string>& tokens, si
 }
 
 void UserCommand::execute(int client_fd, const std::vector<std::string>& tokens) {
-    User user = server.getUserTable().get_user(client_fd);
+
+    // need to get the reference , not copy to affect the change of username
+    UserTable& user_table = server.getUserTable();
+    User user = user_table.get_user(client_fd);
 
     if (user.get_has_user_info()) {
         std::string msg = Replies::err_alreadyRegistered("USER", user.get_nickname());
@@ -40,8 +43,10 @@ void UserCommand::execute(int client_fd, const std::vector<std::string>& tokens)
     if (realname[0] == ':')
         realname = realname.substr(1);
 
-    user.set_username(username);
-    user.set_realname(realname);
+    user_table.set_user_username(client_fd, username);
+    user_table.set_user_realname(client_fd, realname);
+
+    // explain this
     user.set_has_user_info(true);
 
     if (user.get_is_auth() && user.get_has_nick()) {
