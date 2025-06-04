@@ -11,12 +11,12 @@ void Join::execute(int client_fd, const std::vector<std::string>& tokens) {
     User user = server.getUserTable().get_user(client_fd);
 
     if (!user.get_is_auth()) {
-        user.sendMessage(Replies::err_notRegistered(user.get_nickname()));
+        user.sendMessage(Replies::err_notRegistered("JOIN", user.get_nickname()));
         return;
     }
 
     if (tokens.size() < 2) {
-        user.sendMessage(Replies::err_notEnoughParam("JOIN" , user.get_nickname()));
+        user.sendMessage(Replies::err_notEnoughParam("JOIN", user.get_nickname()));
         return;
     }
 
@@ -25,7 +25,7 @@ void Join::execute(int client_fd, const std::vector<std::string>& tokens) {
         std::string channelName = *it;
 
         if (channelName.empty() || channelName[0] != '#') {
-            user.sendMessage(Replies::err_cannotJoin(user.get_nickname(), channelName));
+            user.sendMessage(Replies::err_cannotJoin("JOIN", user.get_nickname(), channelName));
             continue;
         }
 

@@ -37,10 +37,19 @@ void Executor::execute (int socket_fd, const std::vector<std::string>& tokens) c
 	User client = user_table.get_user(socket_fd);
 
 	// separate method
-	if (!(client.get_is_auth()) || client.get_nickname().empty()) {
-		if (cmd != "PASS" && cmd != "NICK")
+	if (!(client.get_is_auth())) {
+		if (cmd != "PASS")
+		{
+			std::string err_msg = Replies::err_notRegistered(cmd, "");
+            send(socket_fd, err_msg.c_str(), err_msg.size(), 0);
+			return;
+		}
+	}
+
+	if (client.get_is_auth() && (client.get_nickname().empty() || client.get_username().empty())) {
+		if (cmd != "NICK" && cmd != "USER")
         {
-			std::string err_msg = Replies::err_notRegistered("");
+			std::string err_msg = Replies::err_notRegistered(cmd, "");
             send(socket_fd, err_msg.c_str(), err_msg.size(), 0);
 			return;
         }
