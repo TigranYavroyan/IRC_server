@@ -34,8 +34,7 @@ Executor::Executor (IRCServer& _server): server(&_server) {
 void Executor::execute (int socket_fd, const std::vector<std::string>& tokens) const {
 	UserTable& user_table = server->getUserTable();
 	std::string cmd = tokens[0];
-	User client = user_table.get_user(socket_fd);
-	static bool is_welcome_msg_sent = false;
+	User& client = user_table[socket_fd];
 	bool can_welcome;
 
 	// separate method
@@ -70,12 +69,11 @@ void Executor::execute (int socket_fd, const std::vector<std::string>& tokens) c
 	it->second->execute(socket_fd, tokens);
 
 	// This must be fixed, just get at the of this reference
-	User kosyak = user_table.get_user(socket_fd);
-	can_welcome = !kosyak.get_nickname().empty() && !kosyak.get_username().empty();
+	can_welcome = !client.get_nickname().empty() && !client.get_username().empty();
 
-	if (can_welcome && !is_welcome_msg_sent) {
-		is_welcome_msg_sent = true;
-		std::string welcome_msg = Replies::connected(kosyak.get_nickname());
+	if (can_welcome && !client.get_is_get_welcome_msg()) {
+		client.set_is_get_welcome_msg();
+		std::string welcome_msg = Replies::connected(client.get_nickname());
 		send(socket_fd, welcome_msg.c_str(), welcome_msg.size(), 0);
 	}
 }

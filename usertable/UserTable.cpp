@@ -158,6 +158,10 @@ void UserTable::remove_user (const std::string& nickname) {
 	table_by_socket.erase(socket_fd);
 }
 
+User& UserTable::operator[] (int socket_fd) {
+	return *(table_by_socket[socket_fd]);
+}
+
 UserBySocketIter UserTable::tsbegin() {
 	return table_by_socket.begin();
 }

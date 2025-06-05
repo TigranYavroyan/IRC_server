@@ -14,6 +14,7 @@ User::User(int fd,
 	, is_auth(auth)
 	, has_user_info(false)
 	, has_nick(false)
+	, is_get_welcome_msg(false)
 {}
 
 void User::set(
@@ -106,6 +107,15 @@ bool User::get_has_user_info() const {
 
 bool User::get_has_nick() const {
 	return has_nick;
+}
+
+
+void User::set_is_get_welcome_msg(bool is_get) {
+	is_get_welcome_msg = is_get;
+}
+
+bool User::get_is_get_welcome_msg() const {
+	return is_get_welcome_msg;
 }
 
 std::ostream& operator<<(std::ostream& os, const User& user) {

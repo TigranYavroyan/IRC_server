@@ -37,6 +37,8 @@ public:
 
 	User get_user (int socket_fd) const;
 	User get_user (const std::string& nickname) const;
+
+	User& operator[] (int socket_fd);
 	
 	void remove_user (int socket_fd);
 	void remove_user (const std::string& nickname);

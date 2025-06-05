@@ -15,6 +15,7 @@ class User {
 	bool is_auth;
 	bool has_user_info;
 	bool has_nick; 
+	bool is_get_welcome_msg;
 public:
 	User(int fd,
 		const std::string& user = "",
@@ -40,6 +41,7 @@ public:
    void set_realname(const std::string& realname);
    void set_is_auth (bool auth = true);
    void set_socket_fd (int fd);
+   void set_is_get_welcome_msg (bool is_get = true);
 
    std::string get_username () const;
    std::string get_nickname () const;
@@ -47,7 +49,9 @@ public:
    std::string get_realname() const;
    int get_socket_fd () const;
    bool get_is_auth () const;
+   bool get_is_get_welcome_msg () const;
 
+   
    void set_has_user_info(bool value);
    void set_has_nick(bool value);
    bool get_has_user_info() const;
