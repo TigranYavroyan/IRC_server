@@ -120,7 +120,7 @@ User UserTable::get_user (int socket_fd) const {
 	std::map<int, User*>::const_iterator it = table_by_socket.find(socket_fd);
 
 	if (it == table_by_socket.end())
-		throw IRC::ServerError("The is no user with that socket_fd: " + socket_fd);
+		throw IRC::ServerError("The is no user with that socket_fd: " + Helpers::to_string(socket_fd));
 
 	return *(it->second);
 }

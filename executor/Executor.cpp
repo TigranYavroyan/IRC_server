@@ -58,7 +58,6 @@ void Executor::execute (int socket_fd, const std::vector<std::string>& tokens) c
 	
 	it->second->execute(socket_fd, tokens);
 
-	// This must be fixed, just get at the of this reference
 	can_register = !client.is_nick() && !client.is_user();
 
 	if (can_register && !client.get_is_registered()) {
@@ -101,6 +100,16 @@ bool Executor::__cap_ls_handling (const User& client, const std::vector<std::str
 }
 
 bool Executor::is_registration_done (const User& client, const std::string& cmd) const {
+	if (cmd == "PASS") {
+		Debugger::client_pass(client);
+	}
+	else if (cmd == "NICK") {
+		Debugger::client_nick(client);
+	}
+	else if (cmd == "USER") {
+		Debugger::client_user(client);
+	}
+
 	if (!(client.get_is_auth()) && cmd != "PASS")
 		return true;
 

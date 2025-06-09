@@ -21,3 +21,19 @@ void Debugger::__debug_start () {
 void Debugger::__debug_end () {
     std::cout << " ---------- [DEBUG END] ----------" << std::endl;
 }
+
+std::string Debugger::__debug_msg () {
+    return std::string("[DEBUG]: ");
+}
+
+void Debugger::client_pass (const User& client) {
+    std::cout << __debug_msg() << "Client " << client.get_socket_fd() << " inputed the pass" << std::endl;
+}
+
+void Debugger::client_nick (const User& client) {
+    std::cout << __debug_msg() << "Client " << client.get_socket_fd() << " got nickname" << std::endl;
+}
+
+void Debugger::client_user (const User& client) {
+    std::cout << __debug_msg() << "Client " << client.get_socket_fd() << " got username" << std::endl;
+}

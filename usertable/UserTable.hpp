@@ -3,6 +3,7 @@
 
 #include <map>
 #include <User.hpp>
+#include <Helpers.hpp>
 #include <string>
 #include <aliases.hpp>
 

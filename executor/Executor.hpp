@@ -23,7 +23,7 @@ public:
 	bool is_registration_done (const User& client, const std::string& cmd) const;
 	~Executor ();
 private:
-	bool __cap_ls_handling(const User& client, const std::vector<std::string>& tokens) const;
+	bool __cap_ls_handling (const User& client, const std::vector<std::string>& tokens) const;
 	void __create_cmds_table (IRCServer& server);
 };
 
