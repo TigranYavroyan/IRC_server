@@ -6,6 +6,10 @@ std::string Replies::crlf () {
 	return "\r\n";
 }
 
+std::string Replies::cap_ls () {
+	return "CAP * LS :" + crlf();
+}
+
 std::string Replies::connected (cref_str nickname) {
 	return ":" + server_name + " 001 " + nickname + " : Welcome to the IRC server!" + crlf();
 }

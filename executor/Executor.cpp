@@ -1,5 +1,6 @@
 #include <Executor.hpp>
 #include <IRCServer.hpp>
+#include <Debugger.hpp>
 
 void Executor::__create_cmds_table (IRCServer& server) {
 	std::pair<std::string, ACommand*> init_table[] = {
@@ -35,29 +36,18 @@ void Executor::execute (int socket_fd, const std::vector<std::string>& tokens) c
 	UserTable& user_table = server->getUserTable();
 	std::string cmd = tokens[0];
 	User& client = user_table[socket_fd];
-	bool can_welcome;
+	bool can_register;
 
-	// separate method
-	if (!(client.get_is_auth())) {
-		if (cmd != "PASS")
-		{
-			std::cout << "mtav" << std::endl;
-			std::string err_msg = Replies::err_notRegistered(cmd, "");
-            send(socket_fd, err_msg.c_str(), err_msg.size(), 0);
-			return;
-		}
+	if (__cap_ls_handling(client, tokens))
+		return;
+
+	Debugger::print_tokens(tokens);
+
+	if (is_registration_done(client, cmd)) {
+		std::string err_msg = Replies::err_notRegistered(cmd, client.get_nickname());
+		send(socket_fd, err_msg.c_str(), err_msg.size(), 0);
+		return;
 	}
-
-	if (client.get_is_auth() && (client.get_nickname().empty() || client.get_username().empty())) {
-		if (cmd != "NICK" && cmd != "USER")
-        {
-			std::cout << "mtav2" << std::endl;
-			std::string err_msg = Replies::err_notRegistered(cmd, "");
-            send(socket_fd, err_msg.c_str(), err_msg.size(), 0);
-			return;
-        }
-    }
-
 	
 	std::map<std::string, ACommand*>::const_iterator it = commands_table.find(cmd);
 	if (it == commands_table.end()) {
@@ -69,10 +59,10 @@ void Executor::execute (int socket_fd, const std::vector<std::string>& tokens) c
 	it->second->execute(socket_fd, tokens);
 
 	// This must be fixed, just get at the of this reference
-	can_welcome = !client.get_nickname().empty() && !client.get_username().empty();
+	can_register = !client.is_nick() && !client.is_user();
 
-	if (can_welcome && !client.get_is_get_welcome_msg()) {
-		client.set_is_get_welcome_msg();
+	if (can_register && !client.get_is_registered()) {
+		client.set_is_registered();
 		std::string welcome_msg = Replies::connected(client.get_nickname());
 		send(socket_fd, welcome_msg.c_str(), welcome_msg.size(), 0);
 	}
@@ -94,4 +84,30 @@ void Executor::clear_cmds () {
 
 Executor::~Executor () {
 	clear_cmds();
+}
+
+bool Executor::__cap_ls_handling (const User& client, const std::vector<std::string>& tokens) const {
+	if (tokens.empty() || tokens.size() < 2)
+		return false;
+	
+	if (tokens[0] == "CAP") {
+		if (tokens[1] == "LS") {
+			const std::string msg = Replies::cap_ls();
+			send(client.get_socket_fd(), msg.c_str(), msg.size(), 0);
+		}
+		return true;
+	}
+	return false;
+}
+
+bool Executor::is_registration_done (const User& client, const std::string& cmd) const {
+	if (!(client.get_is_auth()) && cmd != "PASS")
+		return true;
+
+	if (client.get_is_auth() && (client.is_nick() || client.is_user())) {
+		if (cmd != "NICK" && cmd != "USER")
+			return true;
+    }
+
+	return false;
 }

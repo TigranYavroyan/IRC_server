@@ -13,9 +13,7 @@ class User {
 	std::string realname;
 	int socket_fd;
 	bool is_auth;
-	bool has_user_info;
-	bool has_nick; 
-	bool is_get_welcome_msg;
+	bool is_registered;
 public:
 	User(int fd,
 		const std::string& user = "",
@@ -41,7 +39,7 @@ public:
    void set_realname(const std::string& realname);
    void set_is_auth (bool auth = true);
    void set_socket_fd (int fd);
-   void set_is_get_welcome_msg (bool is_get = true);
+   void set_is_registered (bool is_get = true);
 
    std::string get_username () const;
    std::string get_nickname () const;
@@ -49,13 +47,10 @@ public:
    std::string get_realname() const;
    int get_socket_fd () const;
    bool get_is_auth () const;
-   bool get_is_get_welcome_msg () const;
+   bool get_is_registered () const;
 
-   
-   void set_has_user_info(bool value);
-   void set_has_nick(bool value);
-   bool get_has_user_info() const;
-   bool get_has_nick() const;
+   bool is_nick () const;
+   bool is_user () const;
 
    void sendMessage(const std::string& msg) const;
 };
