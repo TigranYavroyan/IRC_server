@@ -8,18 +8,6 @@ UserCommand::UserCommand(IRCServer& server) : ACommand(server) {}
 
 UserCommand::~UserCommand() {}
 
-std::string UserCommand::__merge_form(const std::vector<std::string>& tokens, size_t start){
-	std::string result;
-	for (size_t i = start; i < tokens.size(); ++i) {
-		if (i != start)
-			result += " ";
-		result += tokens[i];
-	}
-	if (!result.empty() && result[0] == ':')
-		result.erase(0, 1);
-	return result;
-}
-
 void UserCommand::execute(int client_fd, const std::vector<std::string>& tokens) {
 
     // need to get the reference , not copy to affect the change of username
@@ -39,9 +27,9 @@ void UserCommand::execute(int client_fd, const std::vector<std::string>& tokens)
     }
 
     std::string username = tokens[1];
-    std::string realname = __merge_form(tokens, 4);
-    if (realname[0] == ':')
-        realname = realname.substr(1);
+    std::string realname = Helpers::merge_from(tokens, 4);
+    // if (realname[0] == ':')
+    //     realname = realname.substr(1);
 
     user_table.set_user_username(client_fd, username);
     user_table.set_user_realname(client_fd, realname);

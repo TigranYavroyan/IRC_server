@@ -2,6 +2,7 @@
 #define REPLIES_HPP
 
 #include <string>
+#include <User.hpp>
 
 class Replies {
 	static std::string server_name;
@@ -10,6 +11,7 @@ public:
 	typedef const std::string& cref_str;
 
 	static std::string cap_ls ();
+	static std::string privateMessage(const User& sender, cref_str target, cref_str message);
 	static std::string connected (cref_str nickname);
 	static std::string umodeIs (cref_str hostname, cref_str channelname, cref_str mode, cref_str user);
 	static std::string creationOnTime (cref_str nickname, cref_str channelname, cref_str creationtime);
@@ -28,7 +30,7 @@ public:
 	static std::string err_unknownMode(cref_str command_name, cref_str nickname, cref_str channelname, cref_str mode);
 	static std::string err_notEnoughParam(cref_str command_name, cref_str nickname);
 	static std::string err_channelNotFound(cref_str command_name, cref_str nickname, cref_str channelname);
-	static std::string err_notopeRATOR(cref_str command_name, cref_str channelname);
+	static std::string err_notOperator(cref_str command_name, cref_str channelname);
 	static std::string err_noSuchNick(cref_str command_name, cref_str channelname, cref_str name);
 	static std::string err_incorpass(cref_str command_name, cref_str nickname);
 	static std::string err_alreadyRegistered(cref_str command_name, cref_str nickname);

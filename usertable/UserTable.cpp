@@ -162,6 +162,10 @@ User& UserTable::operator[] (int socket_fd) {
 	return *(table_by_socket[socket_fd]);
 }
 
+User& UserTable::operator[] (const std::string& nickname) {
+	return *(table_by_name[nickname]);
+}
+
 UserBySocketIter UserTable::tsbegin() {
 	return table_by_socket.begin();
 }

@@ -10,6 +10,10 @@ std::string Replies::cap_ls () {
 	return "CAP * LS :" + crlf();
 }
 
+std::string Replies::privateMessage(const User& sender, cref_str target, cref_str message) {
+	return ":" + sender.get_nickname() + "!" + sender.get_username() + '@' + sender.get_hostname() + " PRIVMSG " + target + " :" + message + crlf();
+}
+
 std::string Replies::connected (cref_str nickname) {
 	return ":" + server_name + " 001 " + nickname + " : Welcome to the IRC server!" + crlf();
 }
@@ -76,12 +80,19 @@ std::string Replies::err_channelNotFound(cref_str command_name, cref_str nicknam
 	return ":" + server_name + " 403 " + command_name + " " + nickname + " " + channelname + " :No such channel" + crlf();
 }
 
-std::string Replies::err_notopeRATOR(cref_str command_name, cref_str channelname) {
+std::string Replies::err_notOperator(cref_str command_name, cref_str channelname) {
 	return ":" + server_name + " 482 #" + command_name + " " + channelname + " :You're not a channel operator" + crlf();
 }
 
 std::string Replies::err_noSuchNick(cref_str command_name, cref_str channelname, cref_str name) {
-	return ":" + server_name + " 401 #" + command_name + " " + channelname + " " + name + " :No such nick/channel" + crlf();
+	std::string recipient;
+	if (!channelname.empty()) {
+		recipient = " " + channelname + " ";
+	}
+	else if (!name.empty()) {
+		recipient = " " + name + " ";
+	}
+	return ":" + server_name + " 401 #" + command_name + recipient + " :No such nick/channel" + crlf();
 }
 
 std::string Replies::err_incorpass(cref_str command_name, cref_str nickname) {
