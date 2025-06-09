@@ -5,7 +5,8 @@
 
 class PrivMsg : public ACommand {
 public:
-	PrivMsg (IRCServer& _server) : ACommand(_server) {}
+	PrivMsg (IRCServer& _server);
+	virtual ~PrivMsg();
 	virtual void execute (int socket_fd, const std::vector<std::string>& tokens);
 };
 

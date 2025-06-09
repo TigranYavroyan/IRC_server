@@ -12,9 +12,7 @@ User::User(int fd,
 	, realname(realname)
 	, socket_fd(fd)
 	, is_auth(auth)
-	, has_user_info(false)
-	, has_nick(false)
-	, is_get_welcome_msg(false)
+	, is_registered(false)
 {}
 
 void User::set(
@@ -41,8 +39,7 @@ void User::set(const User& user) {
 	username = user.username;
 	realname = user.realname;
 	is_auth = user.is_auth;
-	has_user_info = user.has_user_info;
-	has_nick = user.has_nick;
+	is_registered = user.is_registered;
 }
 
 void User::set_username(const std::string& user) {
@@ -69,14 +66,6 @@ void User::set_socket_fd(int fd) {
 	socket_fd = fd;
 }
 
-void User::set_has_user_info(bool value) {
-	has_user_info = value;
-}
-
-void User::set_has_nick(bool value) {
-	has_nick = value;
-}
-
 std::string User::get_username() const {
 	return username;
 }
@@ -101,21 +90,13 @@ bool User::get_is_auth() const {
 	return is_auth;
 }
 
-bool User::get_has_user_info() const {
-	return has_user_info;
+
+void User::set_is_registered(bool is_get) {
+	is_registered = is_get;
 }
 
-bool User::get_has_nick() const {
-	return has_nick;
-}
-
-
-void User::set_is_get_welcome_msg(bool is_get) {
-	is_get_welcome_msg = is_get;
-}
-
-bool User::get_is_get_welcome_msg() const {
-	return is_get_welcome_msg;
+bool User::get_is_registered() const {
+	return is_registered;
 }
 
 std::ostream& operator<<(std::ostream& os, const User& user) {
@@ -124,10 +105,16 @@ std::ostream& operator<<(std::ostream& os, const User& user) {
 	   << "\nusername: " << user.get_username()
 	   << "\nhostname: " << user.get_hostname()
 	   << "\nrealname: " << user.get_realname()
-	   << "\nis_auth: " << user.get_is_auth()
-	   << "\nhas_user_info: " << user.get_has_user_info()
-	   << "\nhas_nick: " << user.get_has_nick();
+	   << "\nis_auth: " << user.get_is_auth();
 	return os;
+}
+
+bool User::is_nick () const {
+	return nickname.empty();
+}
+
+bool User::is_user () const {
+	return username.empty();
 }
 
 void User::sendMessage(const std::string& message) const {

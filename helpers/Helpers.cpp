@@ -38,3 +38,15 @@ std::vector<std::string> Helpers::parse_msg (const std::string& msg) {
 
 	return tokens;
 }
+
+std::string Helpers::merge_from(const std::vector<std::string>& tokens, size_t start) {
+	std::string result;
+	for (size_t i = start; i < tokens.size(); ++i) {
+		if (i != start)
+			result += " ";
+		result += tokens[i];
+	}
+	if (!result.empty() && result[0] == ':')
+		result.erase(0, 1);
+	return result;
+}

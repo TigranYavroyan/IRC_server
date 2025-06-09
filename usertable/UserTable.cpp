@@ -120,7 +120,7 @@ User UserTable::get_user (int socket_fd) const {
 	std::map<int, User*>::const_iterator it = table_by_socket.find(socket_fd);
 
 	if (it == table_by_socket.end())
-		throw IRC::ServerError("The is no user with that socket_fd: " + socket_fd);
+		throw IRC::ServerError("The is no user with that socket_fd: " + Helpers::to_string(socket_fd));
 
 	return *(it->second);
 }
@@ -160,6 +160,10 @@ void UserTable::remove_user (const std::string& nickname) {
 
 User& UserTable::operator[] (int socket_fd) {
 	return *(table_by_socket[socket_fd]);
+}
+
+User& UserTable::operator[] (const std::string& nickname) {
+	return *(table_by_name[nickname]);
 }
 
 UserBySocketIter UserTable::tsbegin() {

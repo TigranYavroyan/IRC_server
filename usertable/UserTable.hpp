@@ -3,6 +3,7 @@
 
 #include <map>
 #include <User.hpp>
+#include <Helpers.hpp>
 #include <string>
 #include <aliases.hpp>
 
@@ -28,7 +29,7 @@ public:
 	void set_user_realname (int socket_fd, const std::string& realname);
 	void set_user_auth (int socket_fd, bool auth = true);
 
-	bool is_nickname_taken (const std::string& username) const;
+	bool is_nickname_taken (const std::string& nickname) const;
 
 	UserBySocketIter tsbegin();
 	UserBySocketIter tsend();
@@ -39,6 +40,7 @@ public:
 	User get_user (const std::string& nickname) const;
 
 	User& operator[] (int socket_fd);
+	User& operator[] (const std::string& nickname);
 	
 	void remove_user (int socket_fd);
 	void remove_user (const std::string& nickname);
