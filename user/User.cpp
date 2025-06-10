@@ -1,4 +1,6 @@
-#include "User.hpp"
+#include <User.hpp>
+#include <Replies.hpp>
+
 
 User::User(int fd,
 	const std::string& user,
@@ -119,7 +121,7 @@ bool User::is_user () const {
 
 void User::sendMessage(const std::string& message) const {
 	if (socket_fd >= 0) {
-		std::string msg_with_newline = message + "\r\n";
-		write(socket_fd, msg_with_newline.c_str(), msg_with_newline.size());
+		std::string to_send = Replies::privateMessage(*this, "#channel", message);
+		send(socket_fd, to_send.c_str(), to_send.size(), 0);
 	}
 }

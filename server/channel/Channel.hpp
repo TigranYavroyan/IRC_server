@@ -41,7 +41,7 @@ public:
     void setTopic(const std::string& new_topic);
     std::string getTopic() const;
 
-    void broadcast(const std::string& message, User* sender = NULL);
+    void broadcast(const std::string& message, const User* sender = NULL);
 
     void setInviteOnly(bool mode);
     void setTopicRestricted(bool mode);
@@ -51,6 +51,8 @@ public:
     void removeUserLimit();
 
     const std::string& getName() const;
+    void setName(const std::string& _name);
+
     bool getInviteOnly() const;
     bool getTopicRestricted() const;
     bool hasKey() const;

@@ -7,6 +7,9 @@
 Channel::Channel(const std::string& channel_name) 
     : name(channel_name), topic(""), key(""), user_limit(0), invite_only(false), topic_restricted(false) {}
 
+void Channel::setName(const std::string& _name) {
+    name = _name;
+}
 
 bool Channel::addUser(User* user, const std::string& provided_key) {
     if (invite_only) {
@@ -69,7 +72,7 @@ std::string Channel::getTopic() const {
     return topic;
 }
 
-void Channel::broadcast(const std::string& message, User* sender) {
+void Channel::broadcast(const std::string& message, const User* sender) {
     std::set<User*>::iterator it = users.begin();
     while (it != users.end()) {
         if (*it != sender) {
