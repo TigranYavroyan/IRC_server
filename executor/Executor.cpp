@@ -62,6 +62,7 @@ void Executor::execute (int socket_fd, const std::vector<std::string>& tokens) c
 
 	if (can_register && !client.get_is_registered()) {
 		client.set_is_registered();
+		std::cout << "Client " << socket_fd << " is registered" << std::endl;
 		std::string welcome_msg = Replies::connected(client.get_nickname());
 		send(socket_fd, welcome_msg.c_str(), welcome_msg.size(), 0);
 	}

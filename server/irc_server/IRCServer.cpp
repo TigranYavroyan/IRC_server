@@ -95,7 +95,7 @@ void IRCServer::__accept_connection () {
     user_msg_buffer[new_client] = "";
     eventhandler.subscribe_get(new_client);
 
-    std::cout << "New client is trying to connect: " << new_client << "\n";
+    std::cout << "Client " << new_client << " is trying to register" << std::endl;
 
 }
 
@@ -116,7 +116,7 @@ void IRCServer::__user_disconnect (int client) {
     eventhandler.unsubscribe_get(client);
     user_table.remove_user(client);
     user_msg_buffer.erase(client);
-    std::cout << "Client disconnected: " << client << std::endl;
+    std::cout << "Client " << client << " disconnected" << std::endl;
 }
 
 void IRCServer::__message_execution (int client, std::string& message) {
