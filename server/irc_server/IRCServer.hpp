@@ -43,13 +43,13 @@ public:
     void run ();
     const std::string& getPassword() const;
     UserTable& getUserTable();
-    Channel& getChannel(std::string chanel_name);
+    Channel& getChannel(const std::string& channel_name);
+    bool is_channel_exist (const std::string& channel_name);
 private:
     void __message_execution (int client, std::string& message);
     void __user_disconnect (int client);
     void __accept_connection ();
     void __message_checking (int client);
-    void __broadcast_message (int client, const std::string& msg);
 };
 
 #endif // IRCSERVER_HPP

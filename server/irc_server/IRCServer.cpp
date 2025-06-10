@@ -72,6 +72,28 @@ void IRCServer::run () {
     }
 }
 
+const std::string& IRCServer::getPassword() const {
+    return password;
+}
+
+UserTable& IRCServer::getUserTable() {
+    return user_table;
+}
+
+bool IRCServer::is_channel_exist (const std::string& channel_name) {
+    return channels.count(channel_name);
+}
+
+Channel& IRCServer::getChannel(const std::string& channel_name) {
+    std::map<std::string, Channel>::iterator it = channels.find(channel_name);
+
+    if (it == channels.end()) {
+        channels.insert(std::pair<std::string, Channel>(channel_name, Channel(channel_name)));
+    }
+
+    return channels[channel_name];
+}
+
 // ----------------------------- Private methods ---------------------------------
 
 void IRCServer::__accept_connection () {
@@ -97,18 +119,6 @@ void IRCServer::__accept_connection () {
 
     std::cout << "Client " << new_client << " is trying to register" << std::endl;
 
-}
-
-// This function must be in channel
-void IRCServer::__broadcast_message (int client, const std::string& msg) {
-    UserBySocketIter it = user_table.tsbegin();
-
-    while (it != user_table.tsend()) {
-        User to_send = user_table.get_user(it->first);
-        ++it;
-        if (client != to_send.get_socket_fd() && to_send.get_is_auth())
-            send(to_send.get_socket_fd(), msg.c_str(), msg.size(), 0);
-    }
 }
 
 void IRCServer::__user_disconnect (int client) {
@@ -148,17 +158,4 @@ void IRCServer::__message_checking (int client) {
         buf.erase(0, pos + 2);
         __message_execution(client, input);
     }
-}
-
-const std::string& IRCServer::getPassword() const {
-    return password;
-}
-
-UserTable& IRCServer::getUserTable() {
-    return user_table;
-}
-
-Channel& IRCServer::getChannel(std::string chanel_name)
-{
-    return(channels[chanel_name]);
 }

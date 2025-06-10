@@ -1,14 +1,15 @@
-#include "Join.hpp"
-#include "Replies.hpp"
-#include "Channel.hpp"
-#include "UserTable.hpp"
-#include "IRCServer.hpp"
+#include <Join.hpp>
+#include <Replies.hpp>
+#include <Channel.hpp>
+#include <UserTable.hpp>
+#include <IRCServer.hpp>
 #include <sstream>
 
 Join::Join(IRCServer& server) : ACommand::ACommand(server) {}
 
 void Join::execute(int client_fd, const std::vector<std::string>& tokens) {
-    User user = server.getUserTable().get_user(client_fd);
+    UserTable& usertable = server.getUserTable();
+    User& user = usertable[client_fd];
 
     if (!user.get_is_auth()) {
         user.sendMessage(Replies::err_notRegistered("JOIN", user.get_nickname()));
@@ -28,10 +29,12 @@ void Join::execute(int client_fd, const std::vector<std::string>& tokens) {
             user.sendMessage(Replies::err_cannotJoin("JOIN", user.get_nickname(), channelName));
             continue;
         }
-
+        
+        channelName.erase(0, 1);
         Channel& channel = server.getChannel(channelName);
 
-        channel.addUser(&user);
+        if (channel.addUser(&user))
+            std::cout << "User " << user.get_nickname() << " added in " << channelName << std::endl;
 
         std::string joinMsg = Replies::joinMsg(user.get_hostname(), "0.0.0.0", channelName);
         channel.broadcast(joinMsg);

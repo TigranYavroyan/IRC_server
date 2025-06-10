@@ -2,6 +2,7 @@
 #define SERVERERROR_HPP
 
 #include <exception.hpp>
+#include <string>
 
 namespace IRC {
 	class ServerError : public IRC::exception {

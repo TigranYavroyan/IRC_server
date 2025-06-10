@@ -84,15 +84,8 @@ std::string Replies::err_notOperator(cref_str command_name, cref_str channelname
 	return ":" + server_name + " 482 #" + command_name + " " + channelname + " :You're not a channel operator" + crlf();
 }
 
-std::string Replies::err_noSuchNick(cref_str command_name, cref_str channelname, cref_str name) {
-	std::string recipient;
-	if (!channelname.empty()) {
-		recipient = " " + channelname + " ";
-	}
-	else if (!name.empty()) {
-		recipient = " " + name + " ";
-	}
-	return ":" + server_name + " 401 #" + command_name + recipient + " :No such nick/channel" + crlf();
+std::string Replies::err_noSuchNick(cref_str sender, cref_str recipient) {
+	return ":" + server_name + " 401 " + sender + " " + recipient + " :No such nick/channel" + crlf();
 }
 
 std::string Replies::err_incorpass(cref_str command_name, cref_str nickname) {
