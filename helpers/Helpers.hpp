@@ -14,6 +14,8 @@ public:
     static std::vector<std::string> parse_msg (const std::string& msg);
 
     static std::string merge_from (const std::vector<std::string>& tokens, size_t start);
+    static std::string reverseDNS(struct sockaddr_in &clientAddr);
+
 
     template <typename T>
     static std::string to_string(const T& value);

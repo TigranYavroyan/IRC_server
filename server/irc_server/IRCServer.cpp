@@ -89,8 +89,9 @@ void IRCServer::__accept_connection () {
     }
     
     fcntl(new_client, F_SETFL, O_NONBLOCK);
-    // --------
-    user_table.set_user(new_client);
+    std::string hostname = Helpers::reverseDNS(client_addr);
+
+    user_table.set_user(new_client, hostname);
     user_msg_buffer[new_client] = "";
     eventhandler.subscribe_get(new_client);
 

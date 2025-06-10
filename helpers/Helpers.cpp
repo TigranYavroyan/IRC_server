@@ -1,4 +1,10 @@
 #include <Helpers.hpp>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <string.h>
 
 void Helpers::right_trim (std::string& str, const char* delims) {
     str.erase(str.find_last_not_of(delims) + 1);
@@ -49,4 +55,23 @@ std::string Helpers::merge_from(const std::vector<std::string>& tokens, size_t s
 	if (!result.empty() && result[0] == ':')
 		result.erase(0, 1);
 	return result;
+}
+
+std::string Helpers::reverseDNS(struct sockaddr_in &clientAddr)
+{
+
+	const char *ip = inet_ntoa(clientAddr.sin_addr);
+	struct addrinfo hints, *res = NULL;
+	memset(&hints, 0, sizeof(hints));
+	hints.ai_family = AF_INET;
+	hints.ai_flags = AI_CANONNAME;
+	if (getaddrinfo(ip, NULL, &hints, &res) == 0 && res->ai_canonname)
+	{
+		std::string hn(res->ai_canonname);
+		freeaddrinfo(res);
+		return hn;
+	}
+	if (res)
+		freeaddrinfo(res);
+	return std::string(ip);
 }
