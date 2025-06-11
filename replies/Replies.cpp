@@ -46,6 +46,10 @@ std::string Replies::nickChange (cref_str oldnickname, cref_str nickname) {
 	return ":" + server_name + "" + oldnickname + " NICK " + nickname + crlf();
 }
 
+std::string Replies::quitMsg (const User& quited_user, cref_str quit_msg) {
+	return userFullName(quited_user) + " QUIT :" + quit_msg + crlf();
+}
+
 std::string Replies::joinMsg (const User& joined_user, cref_str channelname) {
 	return userFullName(joined_user) + " JOIN " + channelname + crlf();
 }

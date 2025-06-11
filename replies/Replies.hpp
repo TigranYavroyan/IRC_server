@@ -19,6 +19,7 @@ public:
 	static std::string changeMode (cref_str hostname, cref_str channelname, cref_str mode, cref_str arguments);
 	static std::string nickChange (cref_str oldnickname, cref_str nickname);
 	static std::string joinMsg (const User& joined_user, cref_str channelname);
+	static std::string quitMsg (const User& quited_user, cref_str quit_msg = "Client Quit");
 	static std::string namReply (cref_str nickname, cref_str channelname, cref_str clientslist);
 	static std::string endOfNames (cref_str nickname, cref_str channelname);
 	static std::string topicIs (cref_str nickname, cref_str channelname, cref_str topic);
