@@ -18,10 +18,11 @@ public:
 	static std::string channelModes (cref_str nickname, cref_str channelname, cref_str modes);
 	static std::string changeMode (cref_str hostname, cref_str channelname, cref_str mode, cref_str arguments);
 	static std::string nickChange (cref_str oldnickname, cref_str nickname);
-	static std::string joinMsg (cref_str hostname, cref_str ipaddress, cref_str channelname);
+	static std::string joinMsg (const User& joined_user, cref_str channelname);
 	static std::string namReply (cref_str nickname, cref_str channelname, cref_str clientslist);
 	static std::string endOfNames (cref_str nickname, cref_str channelname);
 	static std::string topicIs (cref_str nickname, cref_str channelname, cref_str topic);
+	static std::string userFullName(const User& user);
 
 	// ///////// ERRORS ////////////////
 	static std::string err_needModeParm(cref_str command_name, cref_str channelname, cref_str mode);
@@ -40,6 +41,8 @@ public:
 	static std::string err_notRegistered(cref_str command_name, cref_str nickname);
 	static std::string err_cmdnotFound(cref_str command_name, cref_str nickname);
 	static std::string err_cannotJoin(cref_str command_name, cref_str nickname, cref_str channelname);
+	static std::string err_noTextToSend(cref_str nickname);
+	static std::string err_noRecipientGiven(cref_str nickname, cref_str command_name);
 
 };
 

@@ -30,13 +30,12 @@ void Join::execute(int client_fd, const std::vector<std::string>& tokens) {
             continue;
         }
         
-        channelName.erase(0, 1);
         Channel& channel = server.getChannel(channelName);
 
         if (channel.addUser(&user))
             std::cout << "User " << user.get_nickname() << " added in " << channelName << std::endl;
 
-        std::string joinMsg = Replies::joinMsg(user.get_hostname(), "0.0.0.0", channelName);
+        std::string joinMsg = Replies::joinMsg(user, channelName);
         channel.broadcast(joinMsg);
         
         if (!channel.getTopic().empty()) {

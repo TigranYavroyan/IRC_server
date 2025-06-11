@@ -12,7 +12,19 @@ void PrivMsg::execute (int socket_fd, const std::vector<std::string>& tokens) {
 	const User& sender = user_table[socket_fd];
 	std::string msg;
 
-	if (tokens.size() < 3 || tokens[2][0] != ':') {
+	if (tokens.size() == 1) {
+		msg = Replies::err_noRecipientGiven(sender.get_nickname(), "PRIVMSG");
+		send(socket_fd, msg.c_str(), msg.size(), 0);
+		return;
+	}
+
+	if (tokens.size() == 2) {
+		msg = Replies::err_noTextToSend(sender.get_nickname());
+		send(socket_fd, msg.c_str(), msg.size(), 0);
+		return;
+	}
+
+	if (tokens[2][0] != ':') {
 		msg = Replies::err_notEnoughParam("PRIVMSG", sender.get_nickname());
         send(socket_fd, msg.c_str(), msg.size(), 0);
         return;
@@ -22,24 +34,20 @@ void PrivMsg::execute (int socket_fd, const std::vector<std::string>& tokens) {
 	msg = Helpers::merge_from(tokens, 2);
 
 	if (recipients_name[0] == '#') {
-		recipients_name.erase(0, 1);
 
-		if (!server.is_channel_exist(recipients_name)) {
+		if (!server.is_channel_exist(tokens[1])) {
 			msg = Replies::err_noSuchNick(sender.get_nickname(), recipients_name);
 			send(socket_fd, msg.c_str(), msg.size(), 0);
 			return;
 		}
-		Channel& ch = server.getChannel(recipients_name);
-		ch.broadcast(msg, &sender);
 
-		std::cout << "----- DEBUG -----" << std::endl;
-		std::cout << "channel name: " << ch.getName() << std::endl;
-		std::cout << "Users: " << ch.getUserList() << std::endl;
-		std::cout << "----- DEBUG -----" << std::endl;
+		Channel& ch = server.getChannel(recipients_name);
+		msg = Replies::privateMessage(sender, recipients_name, msg);
+		ch.broadcast(msg, &sender);
 		return;
 	}
 
-	if (!user_table.is_nickname_taken(recipients_name)) {
+	if (!user_table.is_nickname_taken(tokens[1])) {
 		msg = Replies::err_noSuchNick(sender.get_nickname(), recipients_name);
 		send(sender.get_socket_fd(), msg.c_str(), msg.size(), 0);
 		return;

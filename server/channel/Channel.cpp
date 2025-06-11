@@ -149,6 +149,9 @@ std::string Channel::getUserList() const
 {
     std::string result;
     for (std::set<User*>::const_iterator it = users.begin(); it != users.end(); ++it) {
+        if (operators.find(*it) != operators.end()) {
+            result += '@';
+        }
         if (*it)
             result += (*it)->get_nickname() + " ";
     }

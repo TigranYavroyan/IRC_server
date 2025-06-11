@@ -119,9 +119,8 @@ bool User::is_user () const {
 	return username.empty();
 }
 
-void User::sendMessage(const std::string& message) const {
+void User::sendMessage(const std::string& msg) const {
 	if (socket_fd >= 0) {
-		std::string to_send = Replies::privateMessage(*this, "#channel", message);
-		send(socket_fd, to_send.c_str(), to_send.size(), 0);
+		send(socket_fd, msg.c_str(), msg.size(), 0);
 	}
 }

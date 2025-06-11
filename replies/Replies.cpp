@@ -10,8 +10,16 @@ std::string Replies::cap_ls () {
 	return "CAP * LS :" + crlf();
 }
 
+std::string Replies::userFullName (const User& user) {
+	return ":" + user.get_nickname() + "!~" + user.get_username() + "@" + user.get_hostname();
+}
+
+std::string Replies::err_noRecipientGiven(cref_str nickname, cref_str command_name) {
+	return ":" + server_name + " 421 " + nickname + " :No recipient given (" + command_name + ")" + crlf();
+}
+
 std::string Replies::privateMessage(const User& sender, cref_str target, cref_str message) {
-	return ":" + sender.get_nickname() + "!" + sender.get_username() + '@' + sender.get_hostname() + " PRIVMSG " + target + " :" + message + crlf();
+	return userFullName(sender) + " PRIVMSG " + target + " :" + message + crlf();
 }
 
 std::string Replies::connected (cref_str nickname) {
@@ -38,16 +46,16 @@ std::string Replies::nickChange (cref_str oldnickname, cref_str nickname) {
 	return ":" + server_name + "" + oldnickname + " NICK " + nickname + crlf();
 }
 
-std::string Replies::joinMsg (cref_str hostname, cref_str ipaddress, cref_str channelname) {
-	return ":" + server_name + "" + hostname + "@" + ipaddress + " JOIN #" + channelname + crlf();
+std::string Replies::joinMsg (const User& joined_user, cref_str channelname) {
+	return userFullName(joined_user) + " JOIN " + channelname + crlf();
 }
 
 std::string Replies::namReply (cref_str nickname, cref_str channelname, cref_str clientslist) {
-	return ":" + server_name + " 353 " + nickname + " @ #" + channelname + " :" + clientslist + crlf();
+	return ":" + server_name + " 353 " + nickname + " @ " + channelname + " :" + clientslist + crlf();
 }
 
 std::string Replies::endOfNames (cref_str nickname, cref_str channelname) {
-	return ":" + server_name + " 366 " + nickname + " #" + channelname + " :END of /NAMES list" + crlf();
+	return ":" + server_name + " 366 " + nickname + " " + channelname + " :END of /NAMES list" + crlf();
 }
 
 std::string Replies::topicIs (cref_str nickname, cref_str channelname, cref_str topic) {
@@ -81,7 +89,7 @@ std::string Replies::err_channelNotFound(cref_str command_name, cref_str nicknam
 }
 
 std::string Replies::err_notOperator(cref_str command_name, cref_str channelname) {
-	return ":" + server_name + " 482 #" + command_name + " " + channelname + " :You're not a channel operator" + crlf();
+	return ":" + server_name + " 482 " + command_name + " " + channelname + " :You're not a channel operator" + crlf();
 }
 
 std::string Replies::err_noSuchNick(cref_str sender, cref_str recipient) {
@@ -118,4 +126,8 @@ std::string Replies::err_cmdnotFound(cref_str command_name, cref_str nickname) {
 
 std::string Replies::err_cannotJoin(cref_str command_name, cref_str nickname, cref_str channelname) {
 	return ":" + server_name + " 475 " + command_name + " " + nickname + " " + channelname + " :Cannot join channel (+k or +i or full)" + crlf();
+}
+
+std::string Replies::err_noTextToSend(cref_str nickname) {
+	return ":" + server_name + " 412 " + nickname + " :No text to send" + crlf();
 }
