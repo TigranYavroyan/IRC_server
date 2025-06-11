@@ -3,7 +3,7 @@
 void Debugger::print_tokens (const std::vector<std::string>& tokens) {
     __debug_start();
     if (!tokens.empty()) {
-		std::cout << "Command: " << tokens.at(0) << std::endl;
+		std::cout << "Command: " << tokens[0] << std::endl;
 		for (int i = 1; i < tokens.size(); ++i) {
 			std::cout << "arg[" << i << "]: " << tokens[i] << std::endl;
 		}

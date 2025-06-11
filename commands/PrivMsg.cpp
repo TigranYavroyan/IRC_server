@@ -14,19 +14,19 @@ void PrivMsg::execute (int socket_fd, const std::vector<std::string>& tokens) {
 
 	if (tokens.size() == 1) {
 		msg = Replies::err_noRecipientGiven(sender.get_nickname(), "PRIVMSG");
-		send(socket_fd, msg.c_str(), msg.size(), 0);
+		sender.sendMessage(msg);
 		return;
 	}
 
 	if (tokens.size() == 2) {
 		msg = Replies::err_noTextToSend(sender.get_nickname());
-		send(socket_fd, msg.c_str(), msg.size(), 0);
+		sender.sendMessage(msg);
 		return;
 	}
 
 	if (tokens[2][0] != ':') {
 		msg = Replies::err_notEnoughParam("PRIVMSG", sender.get_nickname());
-        send(socket_fd, msg.c_str(), msg.size(), 0);
+		sender.sendMessage(msg);
         return;
 	}
 
@@ -37,7 +37,7 @@ void PrivMsg::execute (int socket_fd, const std::vector<std::string>& tokens) {
 
 		if (!server.is_channel_exist(tokens[1])) {
 			msg = Replies::err_noSuchNick(sender.get_nickname(), recipients_name);
-			send(socket_fd, msg.c_str(), msg.size(), 0);
+			sender.sendMessage(msg);
 			return;
 		}
 
@@ -49,11 +49,11 @@ void PrivMsg::execute (int socket_fd, const std::vector<std::string>& tokens) {
 
 	if (!user_table.is_nickname_taken(tokens[1])) {
 		msg = Replies::err_noSuchNick(sender.get_nickname(), recipients_name);
-		send(sender.get_socket_fd(), msg.c_str(), msg.size(), 0);
+		sender.sendMessage(msg);
 		return;
 	}
 
 	const User& recipient = user_table[recipients_name];
 	msg = Replies::privateMessage(sender, recipients_name, msg);
-	send(recipient.get_socket_fd(), msg.c_str(), msg.size(), 0);
+	recipient.sendMessage(msg);
 }

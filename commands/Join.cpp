@@ -4,6 +4,7 @@
 #include <UserTable.hpp>
 #include <IRCServer.hpp>
 #include <sstream>
+#include <Logger.hpp>
 
 Join::Join(IRCServer& server) : ACommand::ACommand(server) {}
 
@@ -33,7 +34,7 @@ void Join::execute(int client_fd, const std::vector<std::string>& tokens) {
         Channel& channel = server.getChannel(channelName);
 
         if (channel.addUser(&user))
-            std::cout << "User " << user.get_nickname() << " added in " << channelName << std::endl;
+            Logger::client_join(user.get_nickname(), channelName);
 
         std::string joinMsg = Replies::joinMsg(user, channelName);
         channel.broadcast(joinMsg);

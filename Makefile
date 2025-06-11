@@ -24,7 +24,8 @@ SRC_DIRS   = ./user \
              ./usertable \
              ./typedefs \
 			 ./replies \
-			 ./debugger
+			 ./debugger \
+			 ./logger
 
 INCLUDES   = $(addprefix -I, $(SRC_DIRS) .)
 

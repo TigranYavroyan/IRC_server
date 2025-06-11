@@ -1,6 +1,7 @@
 #include <Executor.hpp>
 #include <IRCServer.hpp>
 #include <Debugger.hpp>
+#include <Logger.hpp>
 
 void Executor::__create_cmds_table (IRCServer& server) {
 	std::pair<std::string, ACommand*> init_table[] = {
@@ -41,18 +42,18 @@ void Executor::execute (int socket_fd, const std::vector<std::string>& tokens) c
 	if (__cap_ls_handling(client, tokens))
 		return;
 
-	Debugger::print_tokens(tokens);
+	// Debugger::print_tokens(tokens);
 
 	if (is_registration_done(client, cmd)) {
 		std::string err_msg = Replies::err_notRegistered(cmd, client.get_nickname());
-		send(socket_fd, err_msg.c_str(), err_msg.size(), 0);
+		client.sendMessage(err_msg);
 		return;
 	}
 	
 	std::map<std::string, ACommand*>::const_iterator it = commands_table.find(cmd);
 	if (it == commands_table.end()) {
 		std::string err_msg = Replies::err_cmdnotFound(client.get_nickname(), cmd);
-		send(socket_fd, err_msg.c_str(), err_msg.size(), 0);
+		client.sendMessage(err_msg);
 		return;
 	}
 	
@@ -62,9 +63,9 @@ void Executor::execute (int socket_fd, const std::vector<std::string>& tokens) c
 
 	if (can_register && !client.get_is_registered()) {
 		client.set_is_registered();
-		std::cout << "Client " << socket_fd << " is registered" << std::endl;
+		Logger::client_registered(socket_fd);
 		std::string welcome_msg = Replies::connected(client.get_nickname());
-		send(socket_fd, welcome_msg.c_str(), welcome_msg.size(), 0);
+		client.sendMessage(welcome_msg);
 	}
 }
 

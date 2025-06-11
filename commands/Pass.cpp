@@ -8,7 +8,7 @@ void Pass::execute(int socket_fd, const std::vector<std::string>& tokens) {
     if (tokens.size() < 2)
     {
         std::string error_msg = Replies::err_notEnoughParam("PASS", client.get_nickname());
-        send(socket_fd, error_msg.c_str(), error_msg.size(), 0);
+        client.sendMessage(error_msg);
         return;
     }
 
@@ -22,6 +22,6 @@ void Pass::execute(int socket_fd, const std::vector<std::string>& tokens) {
     else
     {
         std::string error_msg = Replies::err_incorpass("PASS", client.get_nickname());
-        send(socket_fd, error_msg.c_str(), error_msg.size(), 0);
+        client.sendMessage(error_msg);
     }
 }

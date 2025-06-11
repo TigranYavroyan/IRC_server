@@ -1,4 +1,5 @@
 #include <IRCServer.hpp>
+#include <Logger.hpp>
 #include <errno.h>
 
 IRCServer::IRCServer (int port, const std::string& _password): PORT(port), password(_password) {
@@ -45,8 +46,7 @@ void IRCServer::setupServer () {
 
     eventhandler.subscribe_get(server_fd);
 
-    std::cout << "Listening on " << INADDR_ANY << ":" << PORT << "..." << std::endl;
-    std::cout << "The password: " << password << std::endl;
+    Logger::server_on(PORT, password);
 }
 
 void IRCServer::run () {
@@ -117,8 +117,7 @@ void IRCServer::__accept_connection () {
     user_msg_buffer[new_client] = "";
     eventhandler.subscribe_get(new_client);
 
-    std::cout << "Client " << new_client << " is trying to register" << std::endl;
-
+    Logger::client_try_to_connect(new_client);
 }
 
 void IRCServer::__user_disconnect (int client) {
@@ -126,7 +125,7 @@ void IRCServer::__user_disconnect (int client) {
     eventhandler.unsubscribe_get(client);
     user_table.remove_user(client);
     user_msg_buffer.erase(client);
-    std::cout << "Client " << client << " disconnected" << std::endl;
+    Logger::client_disconnected(client);
 }
 
 void IRCServer::__message_execution (int client, std::string& message) {
