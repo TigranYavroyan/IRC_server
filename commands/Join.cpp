@@ -39,6 +39,8 @@ void Join::execute(int client_fd, const std::vector<std::string>& tokens) {
         std::string joinMsg = Replies::joinMsg(user, channelName);
         channel.broadcast(joinMsg);
         
+        user.join_channel(channelName);
+
         if (!channel.getTopic().empty()) {
             user.sendMessage(Replies::topicIs(user.get_nickname(), channelName, channel.getTopic()));
         }

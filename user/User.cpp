@@ -124,3 +124,15 @@ void User::sendMessage(const std::string& msg) const {
 		send(socket_fd, msg.c_str(), msg.size(), 0);
 	}
 }
+
+void User::join_channel (const std::string& channel_name) {
+	joined_channels.insert(channel_name);
+}
+
+void User::exit_channel(const std::string& channel_name) {
+	joined_channels.erase(channel_name);
+}
+
+bool User::is_in_channel (const std::string& channel_name) const {
+	return joined_channels.count(channel_name);
+}

@@ -50,6 +50,10 @@ std::string Replies::quitMsg (const User& quited_user, cref_str quit_msg) {
 	return userFullName(quited_user) + " QUIT :" + quit_msg + crlf();
 }
 
+std::string Replies::partMsg (const User& quited_user, cref_str channelname ,cref_str part_msg) {
+	return userFullName(quited_user) + " PART " + channelname + " " + part_msg + crlf();
+}
+
 std::string Replies::joinMsg (const User& joined_user, cref_str channelname) {
 	return userFullName(joined_user) + " JOIN " + channelname + crlf();
 }
@@ -86,10 +90,6 @@ std::string Replies::err_unknownMode(cref_str command_name, cref_str nickname, c
 
 std::string Replies::err_notEnoughParam(cref_str command_name, cref_str nickname) {
 	return ":" + server_name + " 461 " + command_name + " " + nickname + " :Not enough parameters." + crlf();
-}
-
-std::string Replies::err_channelNotFound(cref_str command_name, cref_str nickname, cref_str channelname) {
-	return ":" + server_name + " 403 " + command_name + " " + nickname + " " + channelname + " :No such channel" + crlf();
 }
 
 std::string Replies::err_notOperator(cref_str command_name, cref_str channelname) {
@@ -134,4 +134,12 @@ std::string Replies::err_cannotJoin(cref_str command_name, cref_str nickname, cr
 
 std::string Replies::err_noTextToSend(cref_str nickname) {
 	return ":" + server_name + " 412 " + nickname + " :No text to send" + crlf();
+}
+
+std::string Replies::err_noOnThatChannel (cref_str nickname, cref_str channelname) {
+	return ":" + server_name + " 442 " + nickname + " " + channelname + " :You're not on that channel" + crlf();
+}
+
+std::string Replies::err_noSuchChannel (cref_str nickname, cref_str channelname) {
+	return ":" + server_name + " 403 " + nickname + " " + channelname + " :No such channel" + crlf();
 }

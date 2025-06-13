@@ -94,6 +94,11 @@ Channel& IRCServer::getChannel(const std::string& channel_name) {
     return channels[channel_name];
 }
 
+void IRCServer::removeFromChannel (User& user, const std::string& channel_name) {
+    Channel& channel = channels[channel_name];
+    channel.removeUser(&user);
+}
+
 // ----------------------------- Private methods ---------------------------------
 
 void IRCServer::__accept_connection () {

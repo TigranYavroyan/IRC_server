@@ -22,7 +22,7 @@ void Quit::execute (int socket_fd, const std::vector<std::string>& tokens) {
 		}
 	}
 
-	
+	// should call part from all channels
 
 	std::cout << "Quit called" << std::endl;
 }

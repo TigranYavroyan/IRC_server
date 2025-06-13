@@ -75,3 +75,18 @@ std::string Helpers::reverseDNS(struct sockaddr_in &clientAddr)
 		freeaddrinfo(res);
 	return std::string(ip);
 }
+
+std::vector<std::string> Helpers::split_by_delim(const std::string& input, char delim) {
+    std::vector<std::string> result;
+    std::string::size_type start = 0;
+    std::string::size_type delimPos;
+
+    while ((delimPos = input.find(delim, start)) != std::string::npos) {
+        result.push_back(input.substr(start, delimPos - start));
+        start = delimPos + 1;
+    }
+
+    result.push_back(input.substr(start));
+
+    return result;
+}
