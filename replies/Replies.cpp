@@ -89,7 +89,7 @@ std::string Replies::err_unknownMode(cref_str command_name, cref_str nickname, c
 }
 
 std::string Replies::err_notEnoughParam(cref_str command_name, cref_str nickname) {
-	return ":" + server_name + " 461 " + command_name + " " + nickname + " :Not enough parameters." + crlf();
+	return ":" + server_name + " 461 " + nickname + " " + command_name + " :Not enough parameters." + crlf();
 }
 
 std::string Replies::err_notOperator(cref_str command_name, cref_str channelname) {

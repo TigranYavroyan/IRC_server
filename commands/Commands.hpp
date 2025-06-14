@@ -11,5 +11,6 @@
 #include <Quit.hpp>
 #include <Ping.hpp>
 #include <Pong.hpp>
+#include <Mode.hpp>
 
 #endif // COMMANDS_HPP

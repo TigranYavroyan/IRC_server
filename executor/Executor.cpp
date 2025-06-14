@@ -13,7 +13,8 @@ void Executor::__create_cmds_table (IRCServer& server) {
 		std::make_pair("PRIVMSG", new PrivMsg(server)),
 		std::make_pair("PING", new Ping(server)),
 		std::make_pair("PONG", new Pong(server)),
-		std::make_pair("QUIT", new Quit(server))
+		std::make_pair("QUIT", new Quit(server)),
+		std::make_pair("MODE", new Mode(server))
 	};
 
 	commands_table = std::map<std::string, ACommand*> (

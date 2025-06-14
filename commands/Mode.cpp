@@ -21,6 +21,8 @@ void Mode::execute (int socket_fd, const std::vector<std::string>& tokens) {
 		else {
 			/**
 			 * $ Must send the channel mode with 324 reply number
+			 * 
+			 * $ <server_name> 324 <nicname> <channel_name> +nt
 			*/
 			// msg = Replies::channelModes();
 			// user.sendMessage(msg);
