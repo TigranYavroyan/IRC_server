@@ -1,5 +1,6 @@
 #include <Mode.hpp>
 #include <IRCServer.hpp>
+#include <Debugger.hpp>
 
 void Mode::execute (int socket_fd, const std::vector<std::string>& tokens) {
 	UserTable& usertable = server.getUserTable();
@@ -30,5 +31,7 @@ void Mode::execute (int socket_fd, const std::vector<std::string>& tokens) {
 		return;
 	}
 
-	
+	Debugger::print_input(tokens);
+	std::vector<ModeChange> operations = Helpers::mode_parse_command(tokens, msg);
+	Debugger::mode_print_commands(operations);
 }

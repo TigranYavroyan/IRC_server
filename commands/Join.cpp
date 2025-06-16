@@ -22,7 +22,7 @@ void Join::execute(int client_fd, const std::vector<std::string>& tokens) {
         return;
     }
 
-    std::vector<std::string> channelNames = ft_split(tokens[1], ',');
+    std::vector<std::string> channelNames = Helpers::split_by_delim(tokens[1], ',');
     for (std::vector<std::string>::iterator it = channelNames.begin(); it != channelNames.end(); ++it) {
         std::string channelName = *it;
 
@@ -49,16 +49,4 @@ void Join::execute(int client_fd, const std::vector<std::string>& tokens) {
         user.sendMessage(Replies::namReply(user.get_nickname(), channelName, channel.getUserList()));
         user.sendMessage(Replies::endOfNames(user.get_nickname(), channelName));
     }
-}
-
-std::vector<std::string> Join::ft_split(const std::string& str, char delimiter)
-{
-	std::vector<std::string> result;
-	std::string token;
-	std::istringstream tokenStream(str);
-	while (std::getline(tokenStream, token, delimiter)) {
-		if (!token.empty())
-			result.push_back(token);
-	}
-	return result;
 }

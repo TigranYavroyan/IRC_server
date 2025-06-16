@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 #include <User.hpp>
+#include <Helpers.hpp>
 
 class Debugger {
     static void __debug_start ();
@@ -15,6 +16,8 @@ public:
     static void client_pass (const User& client);
     static void client_nick (const User& client);
     static void client_user (const User& client);
+    static void print_input (const std::vector<std::string>& input);
+    static void mode_print_commands (const std::vector<ModeChange>& commands);
 };
 
 #endif // DEBUGGER_HPP

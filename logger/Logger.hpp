@@ -2,9 +2,12 @@
 #define LOGGER_HPP
 
 #include <string>
+#include <vector>
 
 class Logger {
     static void __info ();
+    static void __info_start ();
+    static void __info_end ();
 public:
     static void client_join (const std::string& nickname, const std::string& channelname);
     static void client_try_to_connect (int socket_fd);
