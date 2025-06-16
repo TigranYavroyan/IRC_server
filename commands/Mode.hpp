@@ -7,6 +7,7 @@ class Mode : public ACommand {
 private:
 	void __mode_set (const ModeChange& cmd, User& user, Channel& channel);
 	void __mode_remove (const ModeChange& cmd, User& user, Channel& channel);
+	std::string __formatModeReply (const std::string& channel, const std::vector<ModeChange>& changes);
 public:
 	Mode (IRCServer& server) : ACommand(server) {}
 	virtual void execute (int socket_fd, const std::vector<std::string>& tokens);

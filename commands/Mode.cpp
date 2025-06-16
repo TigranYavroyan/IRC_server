@@ -72,6 +72,8 @@ void Mode::execute (int socket_fd, const std::vector<std::string>& tokens) {
 			break;
 		}
 	}
+
+	channel.broadcast(Replies::message(user, __formatModeReply(channel.getName(), operations)));
 }
 
 void Mode::__mode_set(const ModeChange& cmd, User& user, Channel& channel) {
@@ -149,4 +151,34 @@ void Mode::__mode_remove(const ModeChange& cmd, User& user, Channel& channel) {
 			std::cerr << "Invalid option is remained in ModeChange: (" << option << ')' << std::endl;
 			break;
 	}
+}
+
+std::string Mode::__formatModeReply(const std::string& channel, const std::vector<ModeChange>& changes) {
+    std::ostringstream reply;
+    std::ostringstream modeString;
+    std::vector<std::string> params;
+
+    // Start with server prefix
+    reply << "MODE " << channel << " ";
+
+    char currentAction = '\0';
+    for (std::size_t i = 0; i < changes.size(); ++i) {
+        const ModeChange& mc = changes[i];
+        if (mc.action != currentAction) {
+            currentAction = mc.action;
+            modeString << currentAction;
+        }
+        modeString << mc.mode;
+        if (!mc.param.empty()) {
+            params.push_back(mc.param);
+        }
+    }
+
+    reply << modeString.str();
+
+    for (std::size_t i = 0; i < params.size(); ++i) {
+        reply << " " << params[i];
+    }
+
+    return reply.str();
 }
