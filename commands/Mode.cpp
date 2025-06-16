@@ -73,7 +73,7 @@ void Mode::execute (int socket_fd, const std::vector<std::string>& tokens) {
 		}
 	}
 
-	channel.broadcast(Replies::message(user, __formatModeReply(channel.getName(), operations)));
+	channel.broadcast(Replies::message(user, __format_mode_reply(channel.getName(), operations)));
 }
 
 void Mode::__mode_set(const ModeChange& cmd, User& user, Channel& channel) {
@@ -153,7 +153,7 @@ void Mode::__mode_remove(const ModeChange& cmd, User& user, Channel& channel) {
 	}
 }
 
-std::string Mode::__formatModeReply(const std::string& channel, const std::vector<ModeChange>& changes) {
+std::string Mode::__format_mode_reply(const std::string& channel, const std::vector<ModeChange>& operations) {
     std::ostringstream reply;
     std::ostringstream modeString;
     std::vector<std::string> params;
@@ -162,8 +162,8 @@ std::string Mode::__formatModeReply(const std::string& channel, const std::vecto
     reply << "MODE " << channel << " ";
 
     char currentAction = '\0';
-    for (std::size_t i = 0; i < changes.size(); ++i) {
-        const ModeChange& mc = changes[i];
+    for (std::size_t i = 0; i < operations.size(); ++i) {
+        const ModeChange& mc = operations[i];
         if (mc.action != currentAction) {
             currentAction = mc.action;
             modeString << currentAction;
