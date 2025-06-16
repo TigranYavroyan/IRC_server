@@ -27,7 +27,7 @@ public:
     Channel(){};
     Channel(const std::string& channel_name);
 
-    bool addUser(User* user, const std::string& provided_key = "");
+    bool addUser(User* user, std::string& err_msg, const std::string& provided_key = "");
     void removeUser(User* user);
     bool hasUser(User* user) const;
 

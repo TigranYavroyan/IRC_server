@@ -42,6 +42,10 @@ std::string Replies::changeMode (cref_str hostname, cref_str channelname, cref_s
 	return ":" + server_name + "" + hostname + " MODE #" + channelname + " " + mode + " " + arguments + crlf();
 }
 
+std::string Replies::message (const User& user, cref_str msg) {
+	return userFullName(user) + " " + msg + crlf();
+}
+
 std::string Replies::nickChange (cref_str oldnickname, cref_str nickname) {
 	return ":" + server_name + "" + oldnickname + " NICK " + nickname + crlf();
 }
@@ -128,8 +132,12 @@ std::string Replies::err_cmdnotFound(cref_str command_name, cref_str nickname) {
 	return ":" + server_name + " 421 " + command_name + " " + nickname + " :Unknown command" + crlf();
 }
 
-std::string Replies::err_cannotJoin(cref_str command_name, cref_str nickname, cref_str channelname) {
-	return ":" + server_name + " 475 " + command_name + " " + nickname + " " + channelname + " :Cannot join channel (+k or +i or full)" + crlf();
+std::string Replies::err_cannotJoin(cref_str nickname, cref_str channelname) {
+	return ":" + server_name + " 475 JOIN " + nickname + " " + channelname + " :Cannot join channel " + crlf();
+}
+
+std::string Replies::err_cannotJoin(cref_str err_code, cref_str nickname, cref_str channelname, cref_str mode) {
+	return ":" + server_name + " " + err_code + " " + nickname + " " + channelname + " :Cannot join channel " + mode + crlf();
 }
 
 std::string Replies::err_noTextToSend(cref_str nickname) {

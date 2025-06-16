@@ -25,6 +25,7 @@ public:
 	static std::string topicIs (cref_str nickname, cref_str channelname, cref_str topic);
 	static std::string userFullName(const User& user);
 	static std::string partMsg (const User& quited_user, cref_str channelname ,cref_str part_msg);
+	static std::string message (const User& user, cref_str msg);
 	
 
 	// ///////// ERRORS ////////////////
@@ -42,7 +43,10 @@ public:
 	static std::string err_oneUsNick(cref_str command_name, cref_str nickname);
 	static std::string err_notRegistered(cref_str command_name, cref_str nickname);
 	static std::string err_cmdnotFound(cref_str command_name, cref_str nickname);
-	static std::string err_cannotJoin(cref_str command_name, cref_str nickname, cref_str channelname);
+
+	static std::string err_cannotJoin(cref_str nickname, cref_str channelname);
+	static std::string err_cannotJoin(cref_str err_code, cref_str nickname, cref_str channelname, cref_str mode);
+
 	static std::string err_noTextToSend(cref_str nickname);
 	static std::string err_noRecipientGiven(cref_str nickname, cref_str command_name);
 	static std::string err_noOnThatChannel(cref_str nickname, cref_str channelname);
