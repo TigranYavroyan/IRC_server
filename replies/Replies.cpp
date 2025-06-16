@@ -76,8 +76,8 @@ std::string Replies::err_needModeParm(cref_str command_name, cref_str channelnam
 	return ":" + server_name + " 696 #" + command_name + " " + channelname + " * You must specify a parameter for the key mode. " + mode + crlf();
 }
 
-std::string Replies::err_invaliDModeParm(cref_str command_name, cref_str channelname, cref_str mode) {
-	return ":" + server_name + " 696 #" + command_name + " " + channelname + " Invalid mode parameter. " + mode + crlf();
+std::string Replies::err_invaliDModeParm(cref_str nickname, char mode) {
+	return ":" + server_name + " 501 " + nickname + " :Unknown MODE flag " + mode + crlf();
 }
 
 std::string Replies::err_keySet(cref_str command_name, cref_str channelname) {
@@ -92,8 +92,8 @@ std::string Replies::err_notEnoughParam(cref_str command_name, cref_str nickname
 	return ":" + server_name + " 461 " + nickname + " " + command_name + " :Not enough parameters." + crlf();
 }
 
-std::string Replies::err_notOperator(cref_str command_name, cref_str channelname) {
-	return ":" + server_name + " 482 " + command_name + " " + channelname + " :You're not a channel operator" + crlf();
+std::string Replies::err_notOperator(cref_str channelname) {
+	return ":" + server_name + " 482 " + channelname + " :You're not a channel operator" + crlf();
 }
 
 std::string Replies::err_noSuchNick(cref_str sender, cref_str recipient) {

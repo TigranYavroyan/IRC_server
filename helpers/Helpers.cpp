@@ -7,6 +7,7 @@
 #include <string.h>
 #include <iostream>
 #include <Logger.hpp>
+#include <Replies.hpp>
 
 void Helpers::right_trim (std::string& str, const char* delims) {
     str.erase(str.find_last_not_of(delims) + 1);
@@ -139,7 +140,7 @@ std::vector<std::string> Helpers::__normalize_mode_arguments(const std::vector<s
     return result;
 }
 
-std::vector<ModeChange> Helpers::mode_parse_command(const std::vector<std::string>& raw_input, std::string& err_msg) {
+std::vector<ModeChange> Helpers::mode_parse_command(const User& user, const std::vector<std::string>& raw_input) {
 
     std::vector<ModeChange> result;
     std::vector<std::string> args = __normalize_mode_arguments(raw_input);
@@ -149,6 +150,7 @@ std::vector<ModeChange> Helpers::mode_parse_command(const std::vector<std::strin
 
     std::vector<std::string> modeBlocks;
     std::vector<std::string> params;
+    std::string err_msg;
 
     for (std::size_t i = 2; i < args.size(); ++i) {
         const std::string& arg = args[i];
@@ -172,12 +174,14 @@ std::vector<ModeChange> Helpers::mode_parse_command(const std::vector<std::strin
                 currentAction = c;
             } else {
                 if (currentAction == 0) {
-                    std::cerr << "Error: Mode character '" << c << "' has no associated + or - action.\n";
+                    err_msg = Replies::err_notEnoughParam("MODE", user.get_nickname());
+                    user.sendMessage(err_msg);
                     continue;
                 }
 
                 if (!std::isalpha(c) || !__is_valid_mode_char(c)) {
-                    std::cerr << "Error: Invalid or unsupported mode character '" << c << "'\n";
+                    err_msg = Replies::err_invaliDModeParm(user.get_nickname(), c);
+                    user.sendMessage(err_msg);
                     continue;
                 }
 
@@ -189,7 +193,8 @@ std::vector<ModeChange> Helpers::mode_parse_command(const std::vector<std::strin
                     if (paramIndex < params.size()) {
                         mc.param = params[paramIndex++];
                     } else {
-                        std::cerr << "Error: Mode '" << c << "' requires parameter but none provided.\n";
+                        err_msg = Replies::err_notEnoughParam("MODE", user.get_nickname());
+                        user.sendMessage(err_msg);
                         continue;
                     }
                 }
@@ -199,13 +204,8 @@ std::vector<ModeChange> Helpers::mode_parse_command(const std::vector<std::strin
         }
     }
 
-    if (paramIndex < params.size()) {
-        std::cerr << "Warning: " << (params.size() - paramIndex)
-                  << " unused parameter(s): ";
-        for (std::size_t i = paramIndex; i < params.size(); ++i)
-            std::cerr << params[i] << " ";
-        std::cerr << std::endl;
-    }
+    // Optional warning, for unused parameters
+    // if (paramIndex < params.size()) {}
 
     return result;
 }

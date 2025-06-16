@@ -4,6 +4,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <User.hpp>
 
 struct ModeChange {
     char action;
@@ -26,7 +27,7 @@ public:
     static std::string merge_from (const std::vector<std::string>& tokens, size_t start);
     static std::string reverseDNS(struct sockaddr_in &clientAddr);
     static std::vector<std::string> split_by_delim(const std::string& input, char delim);
-    static std::vector<ModeChange> mode_parse_command (const std::vector<std::string>& raw_input, std::string& err_msg);
+    static std::vector<ModeChange> mode_parse_command (const User& user, const std::vector<std::string>& raw_input);
 
     template <typename T>
     static std::string to_string(const T& value);
