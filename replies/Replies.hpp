@@ -53,9 +53,11 @@ public:
 	static std::string err_noTextToSend(cref_str nickname);
 	static std::string err_noRecipientGiven(cref_str nickname, cref_str command_name);
 	static std::string err_noOnThatChannel(cref_str nickname, cref_str channelname);
+	static std::string err_kickingNotInChannel (cref_str kicker, cref_str user, cref_str channelname);
 	static std::string err_noSuchChannel (cref_str nickname, cref_str channelname);
 	static std::string err_noTopicSet (cref_str nickname, cref_str channelname);
 	static std::string err_alreadyInChannel (cref_str sender_nick, cref_str recipient_name, cref_str channelname);
+	static std::string err_invalidChannelName (cref_str nickname, cref_str invChannelname);
 };
 
 #endif // REPLIES_HPP

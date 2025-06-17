@@ -170,5 +170,12 @@ std::string Replies::err_noTopicSet (cref_str nickname, cref_str channelname) {
 
 std::string Replies::err_alreadyInChannel (cref_str sender_nick, cref_str recipient_nick, cref_str channelname) {
 	return ":" + server_name + " 443 " + sender_nick + " " + recipient_nick + " " + channelname + " :is already on channel" + crlf();
-	//:copper.libera.chat 443 heno gegham #hayer :is already on channel
+}
+
+std::string Replies::err_invalidChannelName (cref_str nickname, cref_str invChannelname) {
+	return ":" + server_name + " 476 " + nickname + " " + invChannelname + " :Bad Channel Mask" + crlf();
+}
+
+std::string Replies::err_kickingNotInChannel (cref_str kicker, cref_str user, cref_str channelname) {
+	return ":" + server_name + " 441 " + kicker + " " + user + " " + channelname + " :They aren't on that channel" + crlf();
 }
