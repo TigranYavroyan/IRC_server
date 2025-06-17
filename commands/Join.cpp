@@ -22,7 +22,7 @@ void Join::execute(int client_fd, const std::vector<std::string>& tokens) {
     std::vector<std::string> channelNames = Helpers::split_by_delim(tokens[1], ',');
     std::vector<std::string> channelKeys;
     try {
-        channelKeys = Helpers::split_by_delim(tokens[2], ',');
+        channelKeys = Helpers::split_by_delim(tokens.at(2), ',');
     }
     catch (const std::out_of_range& ex) {
         Debugger::exception_msg(ex);
