@@ -78,6 +78,14 @@ std::string Replies::topicMsg (const User& user, cref_str channelname, cref_str 
 	return userFullName(user) + " TOPIC " + channelname + " :" + topic + crlf();
 }
 
+std::string Replies::inviteMsg (const User& user, cref_str recipient_name, cref_str chanellname) {
+	return userFullName(user) + " INVITE " + recipient_name + " :" + chanellname + crlf();
+}
+
+std::string Replies::inviteMsgToSender (cref_str sender_nick, cref_str recipient_nick, cref_str channelname) {
+	return ":" + server_name + " 341 " + sender_nick + " " + recipient_nick + " " + channelname + crlf();
+}
+
 // ///////// ERRORS ////////////////
 
 std::string Replies::err_needModeParm(cref_str command_name, cref_str channelname, cref_str mode) {
@@ -158,4 +166,9 @@ std::string Replies::err_noSuchChannel (cref_str nickname, cref_str channelname)
 
 std::string Replies::err_noTopicSet (cref_str nickname, cref_str channelname) {
 	return ":" + server_name + " 331 " + nickname + " " + channelname + " :No topic is set." + crlf();
+}
+
+std::string Replies::err_alreadyInChannel (cref_str sender_nick, cref_str recipient_nick, cref_str channelname) {
+	return ":" + server_name + " 443 " + sender_nick + " " + recipient_nick + " " + channelname + " :is already on channel" + crlf();
+	//:copper.libera.chat 443 heno gegham #hayer :is already on channel
 }

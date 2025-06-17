@@ -13,5 +13,7 @@
 #include <Pong.hpp>
 #include <Mode.hpp>
 #include <Topic.hpp>
+#include <Invite.hpp>
+#include <Kick.hpp>
 
 #endif // COMMANDS_HPP

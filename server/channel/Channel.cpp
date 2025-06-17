@@ -33,7 +33,7 @@ bool Channel::addUser(User* user, std::string& err_msg, const std::string& provi
 
     users.insert(user);
     if (invite_only) {
-        users.erase(user);
+        invited.erase(user);
     }
     if (users.size() == 1) 
         addOperator(user);

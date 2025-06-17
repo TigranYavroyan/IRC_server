@@ -26,6 +26,8 @@ public:
 	static std::string userFullName(const User& user);
 	static std::string partMsg (const User& quited_user, cref_str channelname ,cref_str part_msg);
 	static std::string topicMsg (const User& user, cref_str channelname, cref_str topic);
+	static std::string inviteMsg (const User& user, cref_str recipient_name, cref_str channelname);
+	static std::string inviteMsgToSender (cref_str sender_nick, cref_str recipient_nick, cref_str channelname);
 	static std::string message (const User& user, cref_str msg);
 	
 
@@ -53,7 +55,7 @@ public:
 	static std::string err_noOnThatChannel(cref_str nickname, cref_str channelname);
 	static std::string err_noSuchChannel (cref_str nickname, cref_str channelname);
 	static std::string err_noTopicSet (cref_str nickname, cref_str channelname);
-
+	static std::string err_alreadyInChannel (cref_str sender_nick, cref_str recipient_name, cref_str channelname);
 };
 
 #endif // REPLIES_HPP
