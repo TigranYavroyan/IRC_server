@@ -86,6 +86,10 @@ std::string Replies::inviteMsgToSender (cref_str sender_nick, cref_str recipient
 	return ":" + server_name + " 341 " + sender_nick + " " + recipient_nick + " " + channelname + crlf();
 }
 
+std::string Replies::kickMsg (const User& kicker, cref_str channelname, cref_str target, cref_str kickmsg) {
+	return userFullName(kicker) + " KICK " + channelname + " " + target + " :" + kickmsg + crlf();
+}
+
 // ///////// ERRORS ////////////////
 
 std::string Replies::err_needModeParm(cref_str command_name, cref_str channelname, cref_str mode) {
