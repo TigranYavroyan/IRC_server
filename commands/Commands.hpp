@@ -12,5 +12,6 @@
 #include <Ping.hpp>
 #include <Pong.hpp>
 #include <Mode.hpp>
+#include <Topic.hpp>
 
 #endif // COMMANDS_HPP

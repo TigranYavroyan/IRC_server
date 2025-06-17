@@ -53,7 +53,7 @@ void Mode::execute (int socket_fd, const std::vector<std::string>& tokens) {
 	Channel& channel = server.getChannel(tokens[1]);
 
 	if (!channel.isOperator(&user)) {
-		msg = Replies::err_notOperator(channel.getName());
+		msg = Replies::err_notOperator(user.get_nickname(), channel.getName());
 		user.sendMessage(msg);
 		return;
 	}
@@ -100,7 +100,7 @@ void Mode::__mode_set(const ModeChange& cmd, User& user, Channel& channel) {
 			channel.setKey(cmd.param);
 			break;
 		case 't':
-			channel.setTopicRestricted(false);
+			channel.setTopicRestricted(true);
 			break;
 		case 'l':
 			if (limit == 0) {
@@ -142,7 +142,7 @@ void Mode::__mode_remove(const ModeChange& cmd, User& user, Channel& channel) {
 			channel.removeKey();
 			break;
 		case 't':
-			channel.setTopicRestricted(true);
+			channel.setTopicRestricted(false);
 			break;
 		case 'l':
 			channel.setUserLimit(0);

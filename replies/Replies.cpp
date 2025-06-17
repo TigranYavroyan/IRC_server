@@ -71,7 +71,11 @@ std::string Replies::endOfNames (cref_str nickname, cref_str channelname) {
 }
 
 std::string Replies::topicIs (cref_str nickname, cref_str channelname, cref_str topic) {
-	return ":" + server_name + " 332 " + nickname + " #" +channelname + " :" + topic + crlf();
+	return ":" + server_name + " 332 " + nickname + " " + channelname + " :" + topic + crlf();
+}
+
+std::string Replies::topicMsg (const User& user, cref_str channelname, cref_str topic) {
+	return userFullName(user) + " TOPIC " + channelname + " :" + topic + crlf();
 }
 
 // ///////// ERRORS ////////////////
@@ -96,8 +100,8 @@ std::string Replies::err_notEnoughParam(cref_str command_name, cref_str nickname
 	return ":" + server_name + " 461 " + nickname + " " + command_name + " :Not enough parameters." + crlf();
 }
 
-std::string Replies::err_notOperator(cref_str channelname) {
-	return ":" + server_name + " 482 " + channelname + " :You're not a channel operator" + crlf();
+std::string Replies::err_notOperator(cref_str nickname, cref_str channelname) {
+	return ":" + server_name + " 482 " + nickname + " " + channelname + " :You're not a channel operator" + crlf();
 }
 
 std::string Replies::err_noSuchNick(cref_str sender, cref_str recipient) {
@@ -117,7 +121,7 @@ std::string Replies::err_noNickName(cref_str command_name, cref_str nickname) {
 }
 
 std::string Replies::err_nickInUse(cref_str command_name, cref_str nickname) {
-	return ":" + server_name + " 433 " + command_name + " " + command_name + " " + nickname + " :Nickname is already in use" + crlf();
+	return ":" + server_name + " 433 " +  command_name + " " + nickname + " :Nickname is already in use" + crlf();
 }
 
 std::string Replies::err_oneUsNick(cref_str command_name, cref_str nickname) {
@@ -150,4 +154,8 @@ std::string Replies::err_noOnThatChannel (cref_str nickname, cref_str channelnam
 
 std::string Replies::err_noSuchChannel (cref_str nickname, cref_str channelname) {
 	return ":" + server_name + " 403 " + nickname + " " + channelname + " :No such channel" + crlf();
+}
+
+std::string Replies::err_noTopicSet (cref_str nickname, cref_str channelname) {
+	return ":" + server_name + " 331 " + nickname + " " + channelname + " :No topic is set." + crlf();
 }
