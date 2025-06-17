@@ -21,16 +21,9 @@ bool Channel::addUser(User* user, std::string& err_msg, const std::string& provi
         }
     }
     
-    if (!key.empty())  {
-        /**
-         * 
-         * $ somehow got the key from the user
-         * 
-        */
-        if (key != provided_key) {
-            err_msg = Replies::err_cannotJoin("475", user->get_nickname(), name, "(+k)");
-            return false;
-        }
+    if (!key.empty() && key != provided_key)  {
+        err_msg = Replies::err_cannotJoin("475", user->get_nickname(), name, "(+k)");
+        return false;
     }
 
     if (user_limit > 0 && users.size() >= static_cast<size_t>(user_limit)) {

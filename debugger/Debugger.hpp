@@ -18,6 +18,7 @@ public:
     static void client_user (const User& client);
     static void print_input (const std::vector<std::string>& input);
     static void mode_print_commands (const std::vector<ModeChange>& commands);
+    static void exception_msg (const std::exception& ex);
 };
 
 #endif // DEBUGGER_HPP

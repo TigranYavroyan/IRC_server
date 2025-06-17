@@ -5,6 +5,7 @@
 #include <IRCServer.hpp>
 #include <sstream>
 #include <Logger.hpp>
+#include <Debugger.hpp>
 
 Join::Join(IRCServer& server) : ACommand::ACommand(server) {}
 
@@ -13,19 +14,33 @@ void Join::execute(int client_fd, const std::vector<std::string>& tokens) {
     User& user = usertable[client_fd];
     std::string msg;
 
-    // if (!user.get_is_auth()) {
-    //     user.sendMessage(Replies::err_notRegistered("JOIN", user.get_nickname()));
-    //     return;
-    // }
-
     if (tokens.size() < 2) {
         user.sendMessage(Replies::err_notEnoughParam("JOIN", user.get_nickname()));
         return;
     }
 
     std::vector<std::string> channelNames = Helpers::split_by_delim(tokens[1], ',');
-    for (std::vector<std::string>::iterator it = channelNames.begin(); it != channelNames.end(); ++it) {
-        std::string channelName = *it;
+    std::vector<std::string> channelKeys;
+    try {
+        channelKeys = Helpers::split_by_delim(tokens[2], ',');
+    }
+    catch (const std::out_of_range& ex) {
+        Debugger::exception_msg(ex);
+        channelKeys = std::vector<std::string>();
+    }
+    std::string channelName;
+    std::string channelKey;
+
+    for (std::size_t i = 0; i < channelNames.size(); ++i) {
+        channelName = channelNames[i];
+
+        try {
+            channelKey = channelKeys.at(i);
+        }
+        catch (const std::out_of_range& ex) {
+            Debugger::exception_msg(ex);
+            channelKey = "";
+        }
 
         if (channelName.empty() || channelName[0] != '#') {
             user.sendMessage(Replies::err_cannotJoin(user.get_nickname(), channelName));
@@ -33,7 +48,7 @@ void Join::execute(int client_fd, const std::vector<std::string>& tokens) {
         }
         
         Channel& channel = server.getChannel(channelName);
-        if (!channel.addUser(&user, msg)) {
+        if (!channel.addUser(&user, msg, channelKey)) {
             user.sendMessage(msg);
             continue;
         }

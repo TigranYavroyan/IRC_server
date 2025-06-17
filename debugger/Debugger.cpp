@@ -61,3 +61,7 @@ void Debugger::mode_print_commands (const std::vector<ModeChange>& commands) {
     }
     __debug_end();
 }
+
+void Debugger::exception_msg (const std::exception& ex) {
+    std::cout << __debug_msg() << "Error: " << ex.what() << std::endl;
+}

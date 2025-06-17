@@ -158,7 +158,6 @@ std::string Mode::__format_mode_reply(const std::string& channel, const std::vec
     std::ostringstream modeString;
     std::vector<std::string> params;
 
-    // Start with server prefix
     reply << "MODE " << channel << " ";
 
     char currentAction = '\0';
