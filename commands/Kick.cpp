@@ -93,7 +93,7 @@ void Kick::handleKick(User& kicker, const std::string &channelName, const std::s
     }
 
     if (!channel.getUserByNick(targetNick)) {
-        msg = Replies::err_kickingNotInChannel(kicker.get_nickname(), targetNick, channelName);
+        msg = Replies::err_recipientNotInChannel(kicker.get_nickname(), targetNick, channelName);
         kicker.sendMessage(msg);
         return;
     }

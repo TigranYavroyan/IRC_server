@@ -180,6 +180,6 @@ std::string Replies::err_invalidChannelName (cref_str nickname, cref_str invChan
 	return ":" + server_name + " 476 " + nickname + " " + invChannelname + " :Bad Channel Mask" + crlf();
 }
 
-std::string Replies::err_kickingNotInChannel (cref_str kicker, cref_str user, cref_str channelname) {
-	return ":" + server_name + " 441 " + kicker + " " + user + " " + channelname + " :They aren't on that channel" + crlf();
+std::string Replies::err_recipientNotInChannel (cref_str sender, cref_str recipient, cref_str channelname) {
+	return ":" + server_name + " 441 " + sender + " " + recipient + " " + channelname + " :They aren't on that channel" + crlf();
 }

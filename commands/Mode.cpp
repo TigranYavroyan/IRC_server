@@ -12,51 +12,46 @@ void Mode::execute (int socket_fd, const std::vector<std::string>& tokens) {
 		user.sendMessage(msg);
 		return;
 	}
+	
+	std::string channel_name = tokens[1];
 
-	if (tokens.size() == 2) {
-		std::string channel_name = tokens[1];
-		if (!server.is_channel_exist(channel_name)) {
-			msg = Replies::err_noSuchChannel(user.get_nickname(), channel_name);
-			user.sendMessage(msg);
-		}
-		else {
-			/**
-			 * $ Must send the channel mode with 324 reply number
-			 * 
-			 * $ <server_name> 324 <nickname> <channel_name> +nt
-			*/
-			// msg = Replies::channelModes();
-			// user.sendMessage(msg);
-		}
+	if (!server.is_channel_exist(channel_name)) {
+		msg = Replies::err_noSuchChannel(user.get_nickname(), channel_name);
+		user.sendMessage(msg);
 		return;
 	}
 
-	Debugger::print_input(tokens);
-	std::vector<ModeChange> operations = Helpers::mode_parse_command(user, tokens);
-	Debugger::mode_print_commands(operations);
+	if (tokens.size() == 2) {
+		/**
+		 * $ Must send the channel mode with 324 reply number
+		 * 
+		 * $ <server_name> 324 <nickname> <channel_name> +nt
+		*/
+		// msg = Replies::channelModes();
+		// user.sendMessage(msg);
+		return;
+	}
 
-	/**
-	 * struct ModeChange {
-	 *		char action;
-	 *		char mode;
-	 *		std::string param;
-	 *	};
-	*/
+	Channel& channel = server.getChannel(channel_name);
 
-	/**
-	 * i (invite)
-	 * t (topic)
-	 * o (operator) <nickname>
-	 * k (key or password) + (param), -
-	 * l (user limit) + (param), -
-	*/
-	Channel& channel = server.getChannel(tokens[1]);
+	if (!channel.getUserByNick(user.get_nickname())) {
+        msg = Replies::err_noOnThatChannel(user.get_nickname(), channel_name);
+		user.sendMessage(msg);
+		return;
+	}
 
 	if (!channel.isOperator(&user)) {
 		msg = Replies::err_notOperator(user.get_nickname(), channel.getName());
 		user.sendMessage(msg);
 		return;
 	}
+
+	Debugger::print_input(tokens);
+
+	std::vector<ModeChange> raw = Helpers::parse_modes_raw(tokens);
+	std::vector<ModeChange> operations = Helpers::filter_valid_modes(user, raw, channel);
+
+	Debugger::mode_print_commands(operations);
 
 	for (std::size_t i = 0; i < operations.size(); ++i) {
 		ModeChange& cmd = operations[i];
@@ -73,13 +68,13 @@ void Mode::execute (int socket_fd, const std::vector<std::string>& tokens) {
 		}
 	}
 
-	channel.broadcast(Replies::message(user, __format_mode_reply(channel.getName(), operations)));
+	if (operations.size() > 0)
+		channel.broadcast(Replies::message(user, __format_mode_reply(channel.getName(), operations)));
 }
 
 void Mode::__mode_set(const ModeChange& cmd, User& user, Channel& channel) {
 	char option = cmd.mode;
-	User* new_operator = channel.getUserByNick(cmd.param);
-	int limit = std::atoi(cmd.param.c_str());
+	User* new_operator;
 
 	switch (option)
 	{
@@ -87,13 +82,7 @@ void Mode::__mode_set(const ModeChange& cmd, User& user, Channel& channel) {
 			channel.setInviteOnly(true);
 			break;
 		case 'o':
-			if (!new_operator) {
-				/**
-				 * 
-				 * $ some logic
-				 * 
-				*/
-			}
+			new_operator = channel.getUserByNick(cmd.param);
 			channel.addOperator(new_operator);
 			break;
 		case 'k':
@@ -103,15 +92,7 @@ void Mode::__mode_set(const ModeChange& cmd, User& user, Channel& channel) {
 			channel.setTopicRestricted(true);
 			break;
 		case 'l':
-			if (limit == 0) {
-				/**
-				 * 
-				 * $ some logic
-				 * 
-				*/
-				break;
-			}
-			channel.setUserLimit(limit);
+			channel.setUserLimit(std::atoi(cmd.param.c_str()));
 			break;
 		default:
 			std::cerr << "Invalid option is remained in ModeChange: (" << option << ')' << std::endl;
@@ -121,7 +102,7 @@ void Mode::__mode_set(const ModeChange& cmd, User& user, Channel& channel) {
 
 void Mode::__mode_remove(const ModeChange& cmd, User& user, Channel& channel) {
 	char option = cmd.mode;
-	User* to_remove = channel.getUserByNick(cmd.param);
+	User* to_remove;
 
 	switch (option)
 	{
@@ -129,13 +110,7 @@ void Mode::__mode_remove(const ModeChange& cmd, User& user, Channel& channel) {
 			channel.setInviteOnly(false);
 			break;
 		case 'o':
-			if (!to_remove) {
-				/**
-				 * 
-				 * $ some logic
-				 * 
-				*/
-			}
+			to_remove = channel.getUserByNick(cmd.param);
 			channel.removeOperator(to_remove);
 			break;
 		case 'k':
