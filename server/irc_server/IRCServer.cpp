@@ -99,6 +99,10 @@ void IRCServer::removeFromChannel (User& user, const std::string& channel_name) 
     channel.removeUser(&user);
 }
 
+void IRCServer::removeChannel (const std::string& channel_name) {
+    channels.erase(channel_name);
+}
+
 // ----------------------------- Private methods ---------------------------------
 
 void IRCServer::__accept_connection () {

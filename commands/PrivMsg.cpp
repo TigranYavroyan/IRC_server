@@ -42,6 +42,13 @@ void PrivMsg::execute (int socket_fd, const std::vector<std::string>& tokens) {
 		}
 
 		Channel& ch = server.getChannel(recipients_name);
+
+		if (!ch.getUserByNick(sender.get_nickname())) {
+	        msg = Replies::err_noOnThatChannel(sender.get_nickname(), ch.getName());
+			sender.sendMessage(msg);
+			return;
+		}
+
 		msg = Replies::privateMessage(sender, recipients_name, msg);
 		ch.broadcast(msg, &sender);
 		return;

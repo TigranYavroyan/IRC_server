@@ -50,5 +50,11 @@ void Part::execute (int socket_fd, const std::vector<std::string>& tokens) {
 		ch.removeOperator(&user);
 		ch.removeUser(&user);
 		user.exit_channel(channelName);
+		
+		if (!ch.getUserCount()) {
+			server.removeChannel(channelName);
+		}
 	}
+
+	
 }

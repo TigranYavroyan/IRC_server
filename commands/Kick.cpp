@@ -87,7 +87,7 @@ void Kick::handleKick(User& kicker, const std::string &channelName, const std::s
     UserTable& usertable = server.getUserTable();
 
     if (!usertable.is_nickname_taken(targetNick)) {
-        msg = Replies::err_noSuchNick("KICK", kicker.get_nickname()); // maybe argument may change
+        msg = Replies::err_noSuchNick("KICK", targetNick); // maybe argument may change
         kicker.sendMessage(msg);
         return;
     }
@@ -115,6 +115,9 @@ void Kick::handleKick(User& kicker, const std::string &channelName, const std::s
     channel.broadcast(msg);
     channel.removeOperator(&targetUser);
     channel.removeUser(&targetUser);
+    targetUser.exit_channel(channelName);
 
-    // ! check is channel empty or not , in part too
+    if (!channel.getUserCount()) {
+        server.removeChannel(channelName);
+    }
 }

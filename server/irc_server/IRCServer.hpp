@@ -45,6 +45,7 @@ public:
     UserTable& getUserTable();
     Channel& getChannel(const std::string& channel_name);
     void removeFromChannel (User& user, const std::string& channel_name);
+    void removeChannel (const std::string& channel_name);
     bool is_channel_exist (const std::string& channel_name);
 private:
     void __message_execution (int client, std::string& message);
