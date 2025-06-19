@@ -37,31 +37,33 @@ Executor::Executor (IRCServer& _server): server(&_server) {
 	__create_cmds_table(*server);
 }
 
-void Executor::execute (int socket_fd, const std::vector<std::string>& tokens) const {
+bool Executor::execute (int socket_fd, const std::vector<std::string>& tokens) const {
 	UserTable& user_table = server->getUserTable();
 	std::string cmd = tokens[0];
 	User& client = user_table[socket_fd];
 	bool can_register;
 
 	if (__cap_ls_handling(client, tokens))
-		return;
-
-	// Debugger::print_tokens(tokens);
+		return true;
 
 	if (is_registration_done(client, cmd)) {
 		std::string err_msg = Replies::err_notRegistered(cmd, client.get_nickname());
 		client.sendMessage(err_msg);
-		return;
+		return true;
 	}
 	
 	std::map<std::string, ACommand*>::const_iterator it = commands_table.find(cmd);
 	if (it == commands_table.end()) {
 		std::string err_msg = Replies::err_cmdnotFound(client.get_nickname(), cmd);
 		client.sendMessage(err_msg);
-		return;
+		return true;
 	}
 	
 	it->second->execute(socket_fd, tokens);
+	
+	// $ if quit, just return
+	if (tokens[0] == "QUIT")
+		return false;
 
 	can_register = !client.is_nick() && !client.is_user();
 
@@ -71,6 +73,8 @@ void Executor::execute (int socket_fd, const std::vector<std::string>& tokens) c
 		std::string welcome_msg = Replies::connected(client.get_nickname());
 		client.sendMessage(welcome_msg);
 	}
+
+	return true;
 }
 
 void Executor::clear_cmds () {

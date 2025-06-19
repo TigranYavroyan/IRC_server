@@ -113,7 +113,6 @@ void IRCServer::removeFromAllChannels (User& user, const std::string& msg) {
 
     while (begin != end) {
         Channel& ch = getChannel(*begin);
-        ch.removeOperator(&user);
         ch.removeUser(&user);
         ch.broadcast(msg);
 
@@ -130,7 +129,6 @@ void IRCServer::removeFromAllChannels (User& user) {
 
     while (begin != end) {
         Channel& ch = getChannel(*begin);
-        ch.removeOperator(&user);
         ch.removeUser(&user);
         msg = Replies::partMsg(user, ch.getName());
         ch.broadcast(msg);
@@ -173,22 +171,22 @@ void IRCServer::__accept_connection () {
 }
 
 void IRCServer::__user_disconnect (int client) {
-    close(client);
     eventhandler.unsubscribe_get(client);
     eventhandler.unsubscribe_send(client);
-    user_table.remove_user(client);
     user_msg_buffer.erase(client);
+    user_table.remove_user(client);
+    close(client);
     Logger::client_disconnected(client);
 }
 
-void IRCServer::__message_execution (int client, std::string& message) {
+bool IRCServer::__message_execution (int client, std::string& message) {
     Helpers::trim(message);
     if (message.empty())
-        return;
+        return true;
 
     std::vector<std::string> tokens = Helpers::parse_msg(message);
 
-    executor.execute(client, tokens);
+    return executor.execute(client, tokens);
 }
 
 void IRCServer::__message_checking (int client) {
@@ -208,6 +206,10 @@ void IRCServer::__message_checking (int client) {
     while ((pos = buf.find("\r\n")) != std::string::npos) {
         input = buf.substr(0, pos);
         buf.erase(0, pos + 2);
-        __message_execution(client, input);
+
+        // ! if client disconnected
+        if (!__message_execution(client, input)) {
+            break;
+        }
     }
 }

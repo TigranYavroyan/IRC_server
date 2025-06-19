@@ -113,7 +113,6 @@ void Kick::handleKick(User& kicker, const std::string &channelName, const std::s
     User& targetUser = usertable[targetNick];
     msg = Replies::kickMsg(kicker, channelName, targetNick, kickMsg);
     channel.broadcast(msg);
-    channel.removeOperator(&targetUser);
     channel.removeUser(&targetUser);
     targetUser.exit_channel(channelName);
 

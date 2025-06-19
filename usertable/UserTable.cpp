@@ -129,7 +129,7 @@ User UserTable::get_user (const std::string& nickname) const {
 	std::map<std::string, User*>::const_iterator it = table_by_name.find(nickname);
 
 	if (it == table_by_name.end())
-		throw IRC::ServerError("The is no user with that nicname: " + nickname);
+		throw IRC::ServerError("The is no user with that nickname: " + nickname);
 	
 	return *(it->second);
 }

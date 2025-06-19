@@ -53,7 +53,7 @@ public:
     void removeChannel (const std::string& channel_name);
     bool is_channel_exist (const std::string& channel_name);
 private:
-    void __message_execution (int client, std::string& message);
+    bool __message_execution (int client, std::string& message);
     void __user_disconnect (int client);
     void __accept_connection ();
     void __message_checking (int client);

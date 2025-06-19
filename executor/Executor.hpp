@@ -18,7 +18,7 @@ public:
 	Executor (IRCServer& _server);
 public:
 	void set_server (IRCServer& _server);
-	void execute (int socket_fd, const std::vector<std::string>& tokens) const;
+	bool execute (int socket_fd, const std::vector<std::string>& tokens) const;
 	void clear_cmds ();
 	bool is_registration_done (const User& client, const std::string& cmd) const;
 	~Executor ();
