@@ -103,6 +103,45 @@ void IRCServer::removeChannel (const std::string& channel_name) {
     channels.erase(channel_name);
 }
 
+void IRCServer::removeFromAllChannels (User& user, const std::string& msg) {
+    std::set<std::string>::iterator begin = user.ch_begin();
+    std::set<std::string>::iterator end = user.ch_end();
+
+    while (begin != end) {
+        Channel& ch = getChannel(*begin);
+        ch.removeOperator(&user);
+        ch.removeUser(&user);
+        ch.broadcast(msg);
+
+        ++begin;
+    }
+
+    user.exit_from_all_channels();
+}
+
+void IRCServer::removeFromAllChannels (User& user) {
+    std::set<std::string>::iterator begin = user.ch_begin();
+    std::set<std::string>::iterator end = user.ch_end();
+    std::string msg;
+
+    while (begin != end) {
+        Channel& ch = getChannel(*begin);
+        ch.removeOperator(&user);
+        ch.removeUser(&user);
+        msg = Replies::partMsg(user, ch.getName());
+        ch.broadcast(msg);
+
+        ++begin;
+    }
+
+    user.exit_from_all_channels();
+}
+
+void IRCServer::disconnectClient (User& user) {
+    __user_disconnect(user.get_socket_fd());
+}
+
+
 // ----------------------------- Private methods ---------------------------------
 
 void IRCServer::__accept_connection () {
@@ -132,6 +171,7 @@ void IRCServer::__accept_connection () {
 void IRCServer::__user_disconnect (int client) {
     close(client);
     eventhandler.unsubscribe_get(client);
+    eventhandler.unsubscribe_send(client);
     user_table.remove_user(client);
     user_msg_buffer.erase(client);
     Logger::client_disconnected(client);

@@ -19,6 +19,11 @@ void Join::execute(int client_fd, const std::vector<std::string>& tokens) {
         return;
     }
 
+    if (tokens.size() == 2 && tokens[1] == "0") {
+        server.removeFromAllChannels(user);
+        return;
+    }
+
     std::vector<std::string> channelNames = Helpers::split_by_delim(tokens[1], ',');
     std::vector<std::string> channelKeys;
     try {
@@ -46,8 +51,13 @@ void Join::execute(int client_fd, const std::vector<std::string>& tokens) {
             user.sendMessage(Replies::err_cannotJoin(user.get_nickname(), channelName));
             continue;
         }
-        
+
         Channel& channel = server.getChannel(channelName);
+
+        if (channel.getUserByNick(user.get_nickname())) {
+            continue;
+        }
+
         if (!channel.addUser(&user, msg, channelKey)) {
             user.sendMessage(msg);
             continue;

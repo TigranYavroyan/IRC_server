@@ -1,4 +1,5 @@
 #include <Debugger.hpp>
+#include <Channel.hpp>
 
 void Debugger::print_tokens (const std::vector<std::string>& tokens) {
     __debug_start();
@@ -64,4 +65,8 @@ void Debugger::mode_print_commands (const std::vector<ModeChange>& commands) {
 
 void Debugger::exception_msg (const std::exception& ex) {
     std::cout << __debug_msg() << "Error: " << ex.what() << std::endl;
+}
+
+void Debugger::channel_user_count (const Channel& channel) {
+    std::cout << __debug_msg() << "In " << channel.getName() << " users count is " << channel.getUserCount() << std::endl;
 }

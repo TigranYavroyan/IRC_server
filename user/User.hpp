@@ -42,6 +42,7 @@ public:
    void set_is_auth (bool auth = true);
    void set_socket_fd (int fd);
    void set_is_registered (bool is_get = true);
+   void exit_from_all_channels ();
 
    void join_channel (const std::string& channel_name);
    void exit_channel (const std::string& channel_name);
@@ -51,6 +52,9 @@ public:
    std::string get_nickname () const;
    std::string get_hostname () const;
    std::string get_realname() const;
+   std::set<std::string>::iterator ch_begin () const;
+   std::set<std::string>::iterator ch_end () const;
+
    int get_socket_fd () const;
    bool get_is_auth () const;
    bool get_is_registered () const;

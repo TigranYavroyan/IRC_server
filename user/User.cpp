@@ -68,6 +68,10 @@ void User::set_socket_fd(int fd) {
 	socket_fd = fd;
 }
 
+void User::exit_from_all_channels () {
+	joined_channels.clear();
+}
+
 std::string User::get_username() const {
 	return username;
 }
@@ -82,6 +86,14 @@ std::string User::get_hostname() const {
 
 std::string User::get_realname() const {
 	return realname;
+}
+
+std::set<std::string>::iterator User::ch_begin () const {
+	return joined_channels.begin();
+}
+
+std::set<std::string>::iterator User::ch_end () const {
+	return joined_channels.end();
 }
 
 int User::get_socket_fd() const {
