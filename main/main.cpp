@@ -19,5 +19,5 @@ catch (const IRC::ServerError& ex) {
     std::clog << "ServerError: " << ex.what() << std::endl;
 }
 catch (const IRC::exception& ex) {
-    std::clog << "Excetion: " << ex.what() << std::endl;
+    std::clog << "Exception: " << ex.what() << std::endl;
 }

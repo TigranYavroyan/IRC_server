@@ -3,6 +3,7 @@
 #include <iostream>
 #include <set>
 #include <string>
+#include <Replies.hpp>
 
 Channel::Channel(const std::string& channel_name) 
     : name(channel_name), topic(""), key(""), user_limit(0), invite_only(false), topic_restricted(false) {}
@@ -11,20 +12,29 @@ void Channel::setName(const std::string& _name) {
     name = _name;
 }
 
-bool Channel::addUser(User* user, const std::string& provided_key) {
+bool Channel::addUser(User* user, std::string& err_msg, const std::string& provided_key) {
     if (invite_only) {
         std::set<User*>::iterator it = invited.find(user);
-        if (it == invited.end()) 
+        if (it == invited.end()) {
+            err_msg = Replies::err_cannotJoin("473", user->get_nickname(), name, "(+i)");
             return false;
+        }
     }
     
-    if (!key.empty() && key != provided_key) 
+    if (!key.empty() && key != provided_key)  {
+        err_msg = Replies::err_cannotJoin("475", user->get_nickname(), name, "(+k)");
         return false;
+    }
 
-    if (user_limit > 0 && users.size() >= static_cast<size_t>(user_limit)) 
+    if (user_limit > 0 && users.size() >= static_cast<size_t>(user_limit)) {
+        err_msg = Replies::err_cannotJoin("471", user->get_nickname(), name, "(+l)");
         return false;
+    }
 
     users.insert(user);
+    if (invite_only) {
+        invited.erase(user);
+    }
     if (users.size() == 1) 
         addOperator(user);
     return true;

@@ -68,6 +68,10 @@ void User::set_socket_fd(int fd) {
 	socket_fd = fd;
 }
 
+void User::exit_from_all_channels () {
+	joined_channels.clear();
+}
+
 std::string User::get_username() const {
 	return username;
 }
@@ -82,6 +86,14 @@ std::string User::get_hostname() const {
 
 std::string User::get_realname() const {
 	return realname;
+}
+
+std::set<std::string>::iterator User::ch_begin () const {
+	return joined_channels.begin();
+}
+
+std::set<std::string>::iterator User::ch_end () const {
+	return joined_channels.end();
 }
 
 int User::get_socket_fd() const {
@@ -123,4 +135,16 @@ void User::sendMessage(const std::string& msg) const {
 	if (socket_fd >= 0) {
 		send(socket_fd, msg.c_str(), msg.size(), 0);
 	}
+}
+
+void User::join_channel (const std::string& channel_name) {
+	joined_channels.insert(channel_name);
+}
+
+void User::exit_channel(const std::string& channel_name) {
+	joined_channels.erase(channel_name);
+}
+
+bool User::is_in_channel (const std::string& channel_name) const {
+	return joined_channels.count(channel_name);
 }
