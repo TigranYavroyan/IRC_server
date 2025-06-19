@@ -60,13 +60,17 @@ listen(server_fd, MAX_PENDING_CONNECTIONS);
  * $ accept returning active sockets fd, which is the fd of the client side 
 */
 new_client = accept(server_fd, (struct sockaddr*)&client_addr, &addr_len);
+}
 
 /**
  * 
+ *  definitely lost: 0 bytes in 0 blocks
+ *  ==54428==    indirectly lost: 0 bytes in 0 blocks
+ *   ==54428==      possibly lost: 0 bytes in 0 blocks
+ *  ==54428==    still reachable: 76,224 bytes in 30 blocks
+ *   ==54428==         suppressed: 0 bytes in 0 blocks
+ *
  * 
- * Write info about select
  * 
  * 
 */
-
-}

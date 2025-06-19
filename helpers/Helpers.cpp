@@ -205,6 +205,14 @@ std::vector<ModeChange> Helpers::filter_valid_modes(const User& user, const std:
             continue;
         }
 
+        if (mc.mode == 'k' && mc.action == '+') {
+            if (mc.param.empty()) {
+                err_msg = Replies::err_notEnoughParam("MODE", user.get_nickname());
+                user.sendMessage(err_msg);
+                continue;
+            }
+        }
+
         if (mc.mode == 'l' && mc.action == '+') {
             if (mc.param.empty()) {
                 err_msg = Replies::err_notEnoughParam("MODE", user.get_nickname());
