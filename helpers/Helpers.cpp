@@ -83,8 +83,8 @@ bool Helpers::__is_valid_mode_char(char c) {
 }
 
 bool Helpers::__mode_needs_param(char mode, char action) {
-    if (mode == 'o' || mode == 'k') return true;
-    if (mode == 'l') return action == '+';
+    if (mode == 'o') return true;
+    if (mode == 'l' || mode == 'k') return action == '+';
     return false;
 }
 
@@ -174,7 +174,7 @@ std::vector<ModeChange> Helpers::parse_modes_raw(const std::vector<std::string>&
             if (c == '+' || c == '-') {
                 currentAction = c;
             } else {
-                if (!std::isalpha(c)) continue; // skip garbage
+                if (!std::isalpha(c)) continue;
 
                 ModeChange mc;
                 mc.action = currentAction;
@@ -205,7 +205,7 @@ std::vector<ModeChange> Helpers::filter_valid_modes(const User& user, const std:
             continue;
         }
 
-        if (mc.mode == 'k' && mc.action == '+') {
+        if (__mode_needs_param(mc.mode, mc.action)) {
             if (mc.param.empty()) {
                 err_msg = Replies::err_notEnoughParam("MODE", user.get_nickname());
                 user.sendMessage(err_msg);
@@ -213,13 +213,12 @@ std::vector<ModeChange> Helpers::filter_valid_modes(const User& user, const std:
             }
         }
 
-        if (mc.mode == 'l' && mc.action == '+') {
-            if (mc.param.empty()) {
-                err_msg = Replies::err_notEnoughParam("MODE", user.get_nickname());
-                user.sendMessage(err_msg);
-                continue;
-            }
+        // $ Maybe some key checking
+        // if (mc.mode == 'k' && mc.action == '+') {
+            
+        // }
 
+        if (mc.mode == 'l' && mc.action == '+') {
             bool valid_number = true;
             int limit = __number_validation(mc.param.c_str(), valid_number);
             if (!valid_number || limit <= 0) {
@@ -230,18 +229,11 @@ std::vector<ModeChange> Helpers::filter_valid_modes(const User& user, const std:
         }
 
         if (mc.mode == 'o') {
-            if (mc.param.empty()) {
-                err_msg = Replies::err_notEnoughParam("MODE", user.get_nickname());
-                user.sendMessage(err_msg);
-                continue;
-            }
-
             if (!channel.getUserByNick(mc.param)) {
                 err_msg = Replies::err_recipientNotInChannel(user.get_nickname(), mc.param, channel.getName());
                 user.sendMessage(err_msg);
                 continue;
             }
-            
         }
 
         valid.push_back(mc);
