@@ -27,7 +27,6 @@ public:
     static std::vector<std::string> parse_msg (const std::string& msg);
 
     static std::string merge_from (const std::vector<std::string>& tokens, size_t start);
-    static std::string reverseDNS(struct sockaddr_in &clientAddr);
     static std::vector<std::string> split_by_delim(const std::string& input, char delim);
     static std::vector<ModeChange> parse_modes_raw(const std::vector<std::string>& raw_input);
     static std::vector<ModeChange> filter_valid_modes(const User& user, const std::vector<ModeChange>& input, Channel& channel);

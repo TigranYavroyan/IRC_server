@@ -62,25 +62,6 @@ std::string Helpers::merge_from(const std::vector<std::string>& tokens, size_t s
 	return result;
 }
 
-std::string Helpers::reverseDNS(struct sockaddr_in &clientAddr)
-{
-
-	const char *ip = inet_ntoa(clientAddr.sin_addr);
-	struct addrinfo hints, *res = NULL;
-	memset(&hints, 0, sizeof(hints));
-	hints.ai_family = AF_INET;
-	hints.ai_flags = AI_CANONNAME;
-	if (getaddrinfo(ip, NULL, &hints, &res) == 0 && res->ai_canonname)
-	{
-		std::string hn(res->ai_canonname);
-		freeaddrinfo(res);
-		return hn;
-	}
-	if (res)
-		freeaddrinfo(res);
-	return std::string(ip);
-}
-
 std::vector<std::string> Helpers::split_by_delim(const std::string& input, char delim) {
     std::vector<std::string> result;
     std::string::size_type start = 0;
