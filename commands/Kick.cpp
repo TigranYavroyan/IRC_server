@@ -1,21 +1,6 @@
 #include <Kick.hpp>
 #include <IRCServer.hpp>
 
-
-/**
- * ! Valid cases
- * 
- * $ KICK #room <userlist> :<optionalmsg>
- * $ KICK <channellist> user :<optionalmsg>
- * $ KICK #room1,#room2,#room3 user1,user2,user3 :<optionalmsg>
- * 
- * ! Invalid cases
- * 
- * $ KICK #room1,#room2 user1,user2,user3
- * $ KICK #room
- * $ and existens of users, channels and privilegies
-*/
-
 void Kick::execute (int socket_fd, const std::vector<std::string>& tokens) {
     UserTable& usertable = server.getUserTable();
     User& kicker = usertable[socket_fd];
