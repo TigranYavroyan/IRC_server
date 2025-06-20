@@ -137,8 +137,8 @@ std::string Replies::err_nickInUse(cref_str command_name, cref_str nickname) {
 	return ":" + server_name + " 433 " +  command_name + " " + nickname + " :Nickname is already in use" + crlf();
 }
 
-std::string Replies::err_oneUsNick(cref_str command_name, cref_str nickname) {
-	return ":" + server_name + " 432 " + command_name + " " + nickname + " :Erroneus nickname" + crlf();
+std::string Replies::err_oneUsNick(cref_str old_nick, cref_str new_nick) {
+	return ":" + server_name + " 432 " + old_nick + " " + new_nick + " :Erroneus nickname" + crlf();
 }
 
 std::string Replies::err_notRegistered(cref_str command_name, cref_str nickname) {

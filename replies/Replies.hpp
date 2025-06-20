@@ -44,7 +44,7 @@ public:
 	static std::string err_alreadyRegistered(cref_str command_name, cref_str nickname);
 	static std::string err_noNickName(cref_str command_name, cref_str nickname);
 	static std::string err_nickInUse(cref_str command_name, cref_str nickname);
-	static std::string err_oneUsNick(cref_str command_name, cref_str nickname);
+	static std::string err_oneUsNick(cref_str old_nick, cref_str new_nick);
 	static std::string err_notRegistered(cref_str command_name, cref_str nickname);
 	static std::string err_cmdnotFound(cref_str command_name, cref_str nickname);
 
