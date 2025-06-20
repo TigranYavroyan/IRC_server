@@ -24,13 +24,8 @@ void Mode::execute (int socket_fd, const std::vector<std::string>& tokens) {
 	Channel& channel = server.getChannel(channel_name);
 
 	if (tokens.size() == 2 || (tokens.size() > 2 && tokens[2][0] != '+' && tokens[2][0] != '-')) {
-		/**
-		 * $ Must send the channel mode with 324 reply number
-		 * 
-		 * $ <server_name> 324 <nickname> <channel_name> +nt
-		*/
-		// msg = Replies::channelModes();
-		// user.sendMessage(msg);
+		user.sendMessage(Replies::channelModes(user.get_nickname(), channel_name, channel.getModes()));
+        user.sendMessage(Replies::creationOnTime(user.get_nickname(), channel_name, channel.getTimestamp()));
 		return;
 	}
 
