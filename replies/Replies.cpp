@@ -31,11 +31,12 @@ std::string Replies::umodeIs (cref_str hostname, cref_str channelname, cref_str 
 }
 
 std::string Replies::creationOnTime (cref_str nickname, cref_str channelname, cref_str creationtime) {
-	return ":" + server_name + " 329 " + nickname + " #" + channelname + " " + creationtime + crlf();
+	return ":" + server_name + " 329 " + nickname + " " + channelname + " " + creationtime + crlf();
 }
 
-std::string Replies::channelModes (cref_str nickname, cref_str channelname, cref_str modes) {
-	return ":" + server_name + " 324 " + nickname + " #" + channelname + " " + modes + crlf();
+std::string Replies::channelModes (cref_str nickname, cref_str channelname, cref_str inp_modes) {
+	cref_str modes = "+n" + inp_modes;
+	return ":" + server_name + " 324 " + nickname + " " + channelname + " " + modes + crlf();
 }
 
 std::string Replies::changeMode (cref_str hostname, cref_str channelname, cref_str mode, cref_str arguments) {

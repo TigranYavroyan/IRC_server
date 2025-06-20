@@ -74,6 +74,8 @@ void Join::execute(int client_fd, const std::vector<std::string>& tokens) {
         }
 
         // Send NAMES list
+        user.sendMessage(Replies::channelModes(user.get_nickname(), channelName, channel.getModes()));
+        user.sendMessage(Replies::creationOnTime(user.get_nickname(), channelName, channel.getTimestamp()));
         user.sendMessage(Replies::namReply(user.get_nickname(), channelName, channel.getUserList()));
         user.sendMessage(Replies::endOfNames(user.get_nickname(), channelName));
     }

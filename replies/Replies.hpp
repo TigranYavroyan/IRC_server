@@ -15,7 +15,7 @@ public:
 	static std::string connected (cref_str nickname);
 	static std::string umodeIs (cref_str hostname, cref_str channelname, cref_str mode, cref_str user);
 	static std::string creationOnTime (cref_str nickname, cref_str channelname, cref_str creationtime);
-	static std::string channelModes (cref_str nickname, cref_str channelname, cref_str modes);
+	static std::string channelModes (cref_str nickname, cref_str channelname, cref_str inp_modes);
 	static std::string changeMode (cref_str hostname, cref_str channelname, cref_str mode, cref_str arguments);
 	static std::string nickChange (cref_str oldnickname, cref_str nickname);
 	static std::string joinMsg (const User& joined_user, cref_str channelname);

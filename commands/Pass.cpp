@@ -15,8 +15,6 @@ void Pass::execute(int socket_fd, const std::vector<std::string>& tokens) {
     const std::string& server_password = server.getPassword();
     if (tokens[1] == server_password)
     {
-        // std::string success_msg = "Password accepted. Welcome!\n";
-        // send(socket_fd, success_msg.c_str(), success_msg.size(), 0);
         server.getUserTable().set_user_auth(socket_fd);
     }
     else

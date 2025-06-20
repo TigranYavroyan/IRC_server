@@ -20,8 +20,10 @@ void Mode::execute (int socket_fd, const std::vector<std::string>& tokens) {
 		user.sendMessage(msg);
 		return;
 	}
+	
+	Channel& channel = server.getChannel(channel_name);
 
-	if (tokens.size() == 2) {
+	if (tokens.size() == 2 || (tokens.size() > 2 && tokens[2][0] != '+' && tokens[2][0] != '-')) {
 		/**
 		 * $ Must send the channel mode with 324 reply number
 		 * 
@@ -31,8 +33,6 @@ void Mode::execute (int socket_fd, const std::vector<std::string>& tokens) {
 		// user.sendMessage(msg);
 		return;
 	}
-
-	Channel& channel = server.getChannel(channel_name);
 
 	if (!channel.getUserByNick(user.get_nickname())) {
         msg = Replies::err_noOnThatChannel(user.get_nickname(), channel_name);

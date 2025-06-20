@@ -61,7 +61,7 @@ bool Executor::execute (int socket_fd, const std::vector<std::string>& tokens) c
 	
 	it->second->execute(socket_fd, tokens);
 	
-	// $ if quit, just return
+	// $ if quit, don't do anything
 	if (tokens[0] == "QUIT")
 		return false;
 

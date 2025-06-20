@@ -6,7 +6,10 @@
 #include <Replies.hpp>
 
 Channel::Channel(const std::string& channel_name) 
-    : name(channel_name), topic(""), key(""), user_limit(0), invite_only(false), topic_restricted(false) {}
+    : name(channel_name), topic(""), key(""), user_limit(0), invite_only(false), topic_restricted(false)
+{
+    timestamp = Helpers::to_string(std::time(NULL));
+}
 
 void Channel::setName(const std::string& _name) {
     name = _name;
@@ -168,4 +171,30 @@ std::string Channel::getUserList() const
     if (!result.empty())
         result.erase(result.size() - 1);
     return result;
+}
+
+std::string Channel::getModes () const {
+    std::string modes;
+
+    if (!key.empty()) {
+        modes.push_back('k');
+    }
+
+    if (user_limit) {
+        modes.push_back('l');
+    }
+
+    if (!topic_restricted) {
+        modes.push_back('t');
+    }
+
+    if (invite_only) {
+        modes.push_back('i');
+    }
+
+    return modes;
+}
+
+std::string Channel::getTimestamp () const {
+    return timestamp;
 }

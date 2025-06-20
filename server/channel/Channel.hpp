@@ -7,11 +7,13 @@
 #include <vector>
 #include <User.hpp>
 #include <UserTable.hpp>
+#include <ctime>
 
 class User;
 
 class Channel {
 private:
+    std::string timestamp;
     std::string name;
     std::string topic;
     std::string key;             // For +k mode (channel password)
@@ -24,7 +26,7 @@ private:
     std::set<User*> invited;
 
 public:
-    Channel(){};
+    Channel() { timestamp = Helpers::to_string(std::time(NULL)); }
     Channel(const std::string& channel_name);
 
     bool addUser(User* user, std::string& err_msg, const std::string& provided_key = "");
@@ -53,12 +55,14 @@ public:
     const std::string& getName() const;
     void setName(const std::string& _name);
 
+    std::string getTimestamp () const;
     bool getInviteOnly() const;
     bool getTopicRestricted() const;
     bool hasKey() const;
     std::string getKey() const;
     int getUserLimit() const;
     size_t getUserCount() const;
+    std::string getModes () const;
 
 	User* getUserByNick(const std::string& nick);
     std::string getUserList() const;
