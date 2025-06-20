@@ -34,7 +34,7 @@ BUILD_DIR  = build
 SRCS       = $(wildcard $(addsuffix /*.cpp,$(SRC_DIRS)))
 OBJS       = $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(SRCS))
 
-CXXERRFLAGS = -g3 #-Wall -Wextra -Werror
+CXXERRFLAGS = -g3 -Wall -Wextra -Werror
 DEBUG       = #-fsanitize=address
 CXXFLAGS    = $(CXXERRFLAGS) -std=c++98 $(INCLUDES)
 

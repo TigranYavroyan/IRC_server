@@ -52,10 +52,10 @@ void Mode::execute (int socket_fd, const std::vector<std::string>& tokens) {
 		ModeChange& cmd = operations[i];
 
 		if (cmd.action == '+') {
-			__mode_set(cmd, user, channel);
+			__mode_set(cmd, channel);
 		}
 		else if (cmd.action == '-') {
-			__mode_remove(cmd, user, channel);
+			__mode_remove(cmd, channel);
 		}
 		else {
 			std::cerr << "Error: cmd.action must be + or - (" << cmd.action << ")\nCommand execution is stoped" << std::endl;
@@ -67,7 +67,7 @@ void Mode::execute (int socket_fd, const std::vector<std::string>& tokens) {
 		channel.broadcast(Replies::message(user, __format_mode_reply(channel.getName(), operations)));
 }
 
-void Mode::__mode_set(const ModeChange& cmd, User& user, Channel& channel) {
+void Mode::__mode_set(const ModeChange& cmd, Channel& channel) {
 	char option = cmd.mode;
 	User* new_operator;
 
@@ -95,7 +95,7 @@ void Mode::__mode_set(const ModeChange& cmd, User& user, Channel& channel) {
 	}
 }
 
-void Mode::__mode_remove(const ModeChange& cmd, User& user, Channel& channel) {
+void Mode::__mode_remove(const ModeChange& cmd, Channel& channel) {
 	char option = cmd.mode;
 	User* to_remove;
 
