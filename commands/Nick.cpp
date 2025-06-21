@@ -38,8 +38,5 @@ void Nick::execute(int client_socket, const std::vector<std::string>& tokens) {
     }
 
     user_table.set_user_nickname(client_socket, new_nick);
-
-    // std::string msg = Replies::nickChange(old_nick, new_nick);
-    // client.sendMessage(msg);
 }
 
