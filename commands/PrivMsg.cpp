@@ -54,6 +54,11 @@ void PrivMsg::execute (int socket_fd, const std::vector<std::string>& tokens) {
 		return;
 	}
 
+	if (tokens[1] == "bot") {
+		__bot_handle(sender, msg);
+		return;
+	}
+
 	if (!user_table.is_nickname_taken(tokens[1])) {
 		msg = Replies::err_noSuchNick(sender.get_nickname(), recipients_name);
 		sender.sendMessage(msg);
@@ -61,6 +66,29 @@ void PrivMsg::execute (int socket_fd, const std::vector<std::string>& tokens) {
 	}
 
 	const User& recipient = user_table[recipients_name];
-	msg = Replies::privateMessage(sender, recipients_name, msg);
+
+	if (msg.find("\x01""DCC SEND") != std::string::npos) {
+		msg = Replies::userFullName(sender) + " PRIVMSG " + recipients_name + " :" + msg;
+		std::cout << "[DEBUG] sended message: " << msg << std::endl;
+	} else {
+		msg = Replies::privateMessage(sender, recipients_name, msg);
+	}
+	
 	recipient.sendMessage(msg);
+}
+
+void PrivMsg::__bot_handle (const User& sender, std::string& msg) const {
+	std::string bot_answer;
+	User bot(-1, "bot", "bot", "bot", "bot", true);
+
+	if (msg == "hello") {
+		bot_answer = "Hello my friend, welcome the irc.42.chat :)";
+		msg = Replies::privateMessage(bot, sender.get_nickname(), bot_answer);
+		sender.sendMessage(msg);
+	}
+	else {
+		bot_answer = "Sorry, I don't understand. You can only say \"hello\" to me :)";
+		msg = Replies::privateMessage(bot, sender.get_nickname(), bot_answer);
+		sender.sendMessage(msg);
+	}
 }

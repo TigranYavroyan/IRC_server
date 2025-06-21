@@ -4,6 +4,7 @@
 #include <ACommand.hpp>
 
 class PrivMsg : public ACommand {
+	void __bot_handle (const User& sender, std::string& msg) const;
 public:
 	PrivMsg (IRCServer& _server);
 	virtual ~PrivMsg();
