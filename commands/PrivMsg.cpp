@@ -82,7 +82,7 @@ void PrivMsg::__bot_handle (const User& sender, std::string& msg) const {
 	User bot(-1, "bot", "bot", "bot", "bot", true);
 
 	if (msg == "hello") {
-		bot_answer = "Hello my friend, welcome the irc.42.chat :)";
+		bot_answer = "Hello my friend, welcome to the irc.42.chat :)";
 		msg = Replies::privateMessage(bot, sender.get_nickname(), bot_answer);
 		sender.sendMessage(msg);
 	}
