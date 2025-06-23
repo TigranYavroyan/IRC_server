@@ -30,6 +30,7 @@ public:
 	static std::string inviteMsg (const User& user, cref_str recipient_name, cref_str channelname);
 	static std::string inviteMsgToSender (cref_str sender_nick, cref_str recipient_nick, cref_str channelname);
 	static std::string message (const User& user, cref_str msg);
+	static std::string dccMessage (const User& sender, cref_str recipient_name, cref_str msg);
 	
 
 	// ///////// ERRORS ////////////////

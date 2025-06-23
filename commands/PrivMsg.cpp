@@ -95,6 +95,6 @@ void PrivMsg::__bot_handle (const User& sender, std::string& msg) const {
 
 void PrivMsg::__file_send_handle (const User& sender, const User& recipient, const std::string& msg) {
 	std::string dcc_msg;
-	dcc_msg = Replies::userFullName(sender) + " PRIVMSG " + recipient.get_nickname() + " :" + msg + "\r\n";
+	dcc_msg = Replies::dccMessage(sender, recipient.get_nickname(), msg);
 	recipient.sendMessage(dcc_msg);
 }

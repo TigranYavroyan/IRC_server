@@ -91,6 +91,10 @@ std::string Replies::kickMsg (const User& kicker, cref_str channelname, cref_str
 	return userFullName(kicker) + " KICK " + channelname + " " + target + " :" + kickmsg + crlf();
 }
 
+std::string Replies::dccMessage (const User& sender, cref_str recipient_name, cref_str msg) {
+	return userFullName(sender) + " PRIVMSG " + recipient_name + " :" + msg + crlf();
+}
+
 // ///////// ERRORS ////////////////
 
 std::string Replies::err_needModeParm(cref_str command_name, cref_str channelname, cref_str mode) {
