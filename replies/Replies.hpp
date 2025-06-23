@@ -35,7 +35,6 @@ public:
 	// ///////// ERRORS ////////////////
 	static std::string err_needModeParm(cref_str command_name, cref_str channelname, cref_str mode);
 	static std::string err_invaliDModeParm(cref_str nickname, char mode);
-	static std::string err_keySet(cref_str command_name, cref_str channelname);
 	static std::string err_unknownMode(cref_str command_name, cref_str nickname, cref_str channelname, cref_str mode);
 	static std::string err_notEnoughParam(cref_str command_name, cref_str nickname);
 	static std::string err_notOperator(cref_str nickname, cref_str channelname);
@@ -51,6 +50,7 @@ public:
 	static std::string err_cannotJoin(cref_str nickname, cref_str channelname);
 	static std::string err_cannotJoin(cref_str err_code, cref_str nickname, cref_str channelname, cref_str mode);
 
+	static std::string err_keySet (cref_str nickname, cref_str channelname);
 	static std::string err_noTextToSend(cref_str nickname);
 	static std::string err_noRecipientGiven(cref_str nickname, cref_str command_name);
 	static std::string err_noOnThatChannel(cref_str nickname, cref_str channelname);

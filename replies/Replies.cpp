@@ -94,15 +94,11 @@ std::string Replies::kickMsg (const User& kicker, cref_str channelname, cref_str
 // ///////// ERRORS ////////////////
 
 std::string Replies::err_needModeParm(cref_str command_name, cref_str channelname, cref_str mode) {
-	return ":" + server_name + " 696 #" + command_name + " " + channelname + " * You must specify a parameter for the key mode. " + mode + crlf();
+	return ":" + server_name + " 696 " + command_name + " " + channelname + " * You must specify a parameter for the key mode. " + mode + crlf();
 }
 
 std::string Replies::err_invaliDModeParm(cref_str nickname, char mode) {
 	return ":" + server_name + " 501 " + nickname + " :Unknown MODE flag " + mode + crlf();
-}
-
-std::string Replies::err_keySet(cref_str command_name, cref_str channelname) {
-	return ":" + server_name + " 467 #" + command_name + " " + channelname + " Channel key already set. " + crlf();
 }
 
 std::string Replies::err_unknownMode(cref_str command_name, cref_str nickname, cref_str channelname, cref_str mode) {
@@ -183,4 +179,8 @@ std::string Replies::err_invalidChannelName (cref_str nickname, cref_str invChan
 
 std::string Replies::err_recipientNotInChannel (cref_str sender, cref_str recipient, cref_str channelname) {
 	return ":" + server_name + " 441 " + sender + " " + recipient + " " + channelname + " :They aren't on that channel" + crlf();
+}
+
+std::string Replies::err_keySet (cref_str nickname, cref_str channelname) {
+	return ":" + server_name + " 467 " + nickname + " " + channelname + " :Channel key already set" + crlf();
 }

@@ -6,7 +6,7 @@
 #include <Replies.hpp>
 
 Channel::Channel(const std::string& channel_name) 
-    : name(channel_name), topic(""), key(""), user_limit(0), invite_only(false), topic_restricted(false)
+    : name(channel_name), topic(""), key(""), user_limit(0), invite_only(false), topic_restricted(true)
 {
     timestamp = Helpers::to_string(std::time(NULL));
 }
@@ -184,7 +184,7 @@ std::string Channel::getModes () const {
         modes.push_back('l');
     }
 
-    if (!topic_restricted) {
+    if (topic_restricted) {
         modes.push_back('t');
     }
 

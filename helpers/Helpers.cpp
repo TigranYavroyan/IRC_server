@@ -213,10 +213,11 @@ std::vector<ModeChange> Helpers::filter_valid_modes(const User& user, const std:
             }
         }
 
-        // $ Maybe some key checking
-        // if (mc.mode == 'k' && mc.action == '+') {
-            
-        // }
+        if (mc.mode == 'k' && mc.action == '+' && !(channel.getKey().empty())) {
+            err_msg = Replies::err_keySet(user.get_nickname(), channel.getName());
+            user.sendMessage(err_msg);
+            continue;
+        }
 
         if (mc.mode == 'l' && mc.action == '+') {
             bool valid_number = true;
