@@ -8,7 +8,9 @@
 Channel::Channel(const std::string& channel_name) 
     : name(channel_name), topic(""), key(""), user_limit(0), invite_only(false), topic_restricted(true)
 {
-    timestamp = Helpers::to_string(std::time(NULL));
+    std::time_t now = std::time(NULL);
+    timestamp = std::ctime(&now);
+    timestamp.erase(timestamp.end() - 1);
 }
 
 void Channel::setName(const std::string& _name) {

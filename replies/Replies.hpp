@@ -11,6 +11,9 @@ public:
 	typedef const std::string& cref_str;
 
 	static std::string cap_ls ();
+	static std::string yourHost(cref_str nickname);
+	static std::string created(cref_str nickname, cref_str creationTime);
+	static std::string myInfo(cref_str nickname);
 	static std::string privateMessage(const User& sender, cref_str target, cref_str message);
 	static std::string connected (cref_str nickname);
 	static std::string umodeIs (cref_str hostname, cref_str channelname, cref_str mode, cref_str user);

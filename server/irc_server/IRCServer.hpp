@@ -27,6 +27,7 @@
 class IRCServer {
 	const int PORT;
     const std::string password;
+    std::string creation_time;
     int server_fd;
 
     std::map<std::string, Channel> channels;
@@ -52,6 +53,7 @@ public:
 
     void removeChannel (const std::string& channel_name);
     bool is_channel_exist (const std::string& channel_name);
+    std::string get_creation_time() const;
 private:
     bool __message_execution (int client, std::string& message);
     void __user_disconnect (int client);

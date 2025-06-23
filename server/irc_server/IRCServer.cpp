@@ -5,17 +5,25 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-
+#include <ctime>
 #include <Debugger.hpp>
 
 extern bool stopServer;
 
 IRCServer::IRCServer (int port, const std::string& _password): PORT(port), password(_password) {
     executor.set_server(*this);
+    std::time_t now = std::time(NULL);
+    creation_time = std::ctime(&now);
+    creation_time.erase(creation_time.end() - 1);
 }
+
 
 IRCServer::~IRCServer () {
     closeConnectionAll();
+}
+
+std::string IRCServer::get_creation_time() const {
+    return creation_time;
 }
 
 void IRCServer::closeConnectionAll () {

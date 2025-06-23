@@ -10,6 +10,18 @@ std::string Replies::cap_ls () {
 	return "CAP * LS :" + crlf();
 }
 
+std::string Replies::yourHost(cref_str nickname) {
+	return ":" + server_name + " 002 " + nickname + " :Your host is " + server_name + ", running version 1.0" + crlf();
+}
+
+std::string Replies::created(cref_str nickname, cref_str creationTime) {
+	return ":" + server_name + " 003 " + nickname + " :This server was created " + creationTime + crlf();
+}
+
+std::string Replies::myInfo(cref_str nickname) {
+	return ":" + server_name + " 004 " + nickname + " " + server_name + " 1.0 ioktl" + crlf();
+}
+
 std::string Replies::userFullName (const User& user) {
 	return ":" + user.get_nickname() + "!~" + user.get_username() + "@" + user.get_hostname();
 }
@@ -23,7 +35,7 @@ std::string Replies::privateMessage(const User& sender, cref_str target, cref_st
 }
 
 std::string Replies::connected (cref_str nickname) {
-	return ":" + server_name + " 001 " + nickname + " : Welcome to the IRC server!" + crlf();
+	return ":" + server_name + " 001 " + nickname + " :Welcome to the IRC server!" + crlf();
 }
 
 std::string Replies::umodeIs (cref_str hostname, cref_str channelname, cref_str mode, cref_str user) {

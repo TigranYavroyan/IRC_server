@@ -70,8 +70,10 @@ bool Executor::execute (int socket_fd, const std::vector<std::string>& tokens) c
 	if (can_register && !client.get_is_registered()) {
 		client.set_is_registered();
 		Logger::client_registered(socket_fd);
-		std::string welcome_msg = Replies::connected(client.get_nickname());
-		client.sendMessage(welcome_msg);
+		client.sendMessage(Replies::connected(client.get_nickname()));
+		client.sendMessage(Replies::yourHost(client.get_nickname()));
+		client.sendMessage(Replies::created(client.get_nickname(), server->get_creation_time()));
+		client.sendMessage(Replies::myInfo(client.get_nickname()));
 	}
 
 	return true;
