@@ -68,8 +68,8 @@ void PrivMsg::execute (int socket_fd, const std::vector<std::string>& tokens) {
 	const User& recipient = user_table[recipients_name];
 
 	if (msg.find("\x01""DCC SEND") != std::string::npos) {
-		msg = Replies::userFullName(sender) + " PRIVMSG " + recipients_name + " :" + msg;
-		std::cout << "[DEBUG] sended message: " << msg << std::endl;
+		__file_send_handle (sender, recipient, msg);
+		return;
 	} else {
 		msg = Replies::privateMessage(sender, recipients_name, msg);
 	}
@@ -91,4 +91,10 @@ void PrivMsg::__bot_handle (const User& sender, std::string& msg) const {
 		msg = Replies::privateMessage(bot, sender.get_nickname(), bot_answer);
 		sender.sendMessage(msg);
 	}
+}
+
+void PrivMsg::__file_send_handle (const User& sender, const User& recipient, const std::string& msg) {
+	std::string dcc_msg;
+	dcc_msg = Replies::userFullName(sender) + " PRIVMSG " + recipient.get_nickname() + " :" + msg + "\r\n";
+	recipient.sendMessage(dcc_msg);
 }
