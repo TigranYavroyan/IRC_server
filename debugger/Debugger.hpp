@@ -22,6 +22,7 @@ public:
     static void mode_print_commands (const std::vector<ModeChange>& commands);
     static void exception_msg (const std::exception& ex);
     static void channel_user_count (const Channel& channel);
+    static void channel_removed (const std::string& channel_name);
 };
 
 #endif // DEBUGGER_HPP
