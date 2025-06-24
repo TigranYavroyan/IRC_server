@@ -209,8 +209,12 @@ void IRCServer::__message_checking (int client) {
     int bytes_received = recv(client, buffer, BUFFER_SIZE, 0);
 
     if (bytes_received <= 0) {
-        if (bytes_received == 0 || (errno != EAGAIN && errno != EWOULDBLOCK))
-            __user_disconnect(client);
+        if (bytes_received == 0 || (errno != EAGAIN && errno != EWOULDBLOCK)) {
+            User& user = user_table[client];
+            std::string msg = Replies::quitMsg(user);
+            removeFromAllChannels(user, msg);
+	        disconnectClient(user);
+        }
         return;
     }
     user_msg_buffer[client].append(buffer, bytes_received);
