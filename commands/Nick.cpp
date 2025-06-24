@@ -31,7 +31,7 @@ void Nick::execute(int client_socket, const std::vector<std::string>& tokens) {
         return;
     }
 
-    if (user_table.is_nickname_taken(new_nick)) {
+    if (user_table.is_nickname_taken(new_nick) || new_nick == "bot") {
         msg = Replies::err_nickInUse("NICK", new_nick);
         client.sendMessage(msg);
         return;
