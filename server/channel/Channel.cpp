@@ -7,11 +7,7 @@
 
 Channel::Channel(const std::string& channel_name) 
     : name(channel_name), topic(""), key(""), user_limit(0), invite_only(false), topic_restricted(true)
-{
-    std::time_t now = std::time(NULL);
-    timestamp = std::ctime(&now);
-    timestamp.erase(timestamp.end() - 1);
-}
+{}
 
 void Channel::setName(const std::string& _name) {
     name = _name;
@@ -195,8 +191,4 @@ std::string Channel::getModes () const {
     }
 
     return modes;
-}
-
-std::string Channel::getTimestamp () const {
-    return timestamp;
 }

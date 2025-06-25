@@ -10,7 +10,6 @@
 #include <PrivMsg.hpp>
 #include <Quit.hpp>
 #include <Ping.hpp>
-#include <Pong.hpp>
 #include <Mode.hpp>
 #include <Topic.hpp>
 #include <Invite.hpp>

@@ -9,12 +9,22 @@ Ping::~Ping() {}
 
 void Ping::execute(int client_fd, const std::vector<std::string>& tokens) {
     User client = server.getUserTable().get_user(client_fd);
+    std::string msg;
+
     if (tokens.size() < 2) {
-        std::string msg = "ERROR :No origin specified" + Replies::crlf();
+        msg = Replies::err_noOrigin(client.get_nickname());
         client.sendMessage(msg);
         return;
     }
 
-    std::string response = "PONG " + tokens[1] + Replies::crlf();
-    client.sendMessage(response);
+
+    if (tokens[1][0] == ':') {
+        msg = Helpers::merge_from(tokens, 1);
+    }
+    else {
+        msg = tokens[1];
+    }
+
+	msg = Replies::pongMsg(msg);
+    client.sendMessage(msg);
 }

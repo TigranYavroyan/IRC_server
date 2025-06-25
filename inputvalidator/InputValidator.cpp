@@ -3,12 +3,14 @@
 #include <Helpers.hpp>
 #include <cstdlib>
 #include <cstring>
+#include <cerrno>
 
 int InputValidator::__validate_port (char* port) {
 	char* port_end = NULL;
+	errno = 0;
 	int res = std::strtol(port, &port_end, 10);
 
-	if (*port_end != '\0' || res < PORT_NUMBER_LOWER_BOUND || res > PORT_NUMBER_UPPER_BOUND)
+	if (*port_end != '\0' || res < PORT_NUMBER_LOWER_BOUND || res > PORT_NUMBER_UPPER_BOUND || errno != 0)
 		throw IRC::InputError("The port must be number between [1024, 49152] interval");
 
 	return res;

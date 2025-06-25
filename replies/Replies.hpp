@@ -11,6 +11,7 @@ public:
 	typedef const std::string& cref_str;
 
 	static std::string cap_ls ();
+	static std::string pongMsg (cref_str token);
 	static std::string yourHost(cref_str nickname);
 	static std::string created(cref_str nickname, cref_str creationTime);
 	static std::string myInfo(cref_str nickname);
@@ -63,6 +64,7 @@ public:
 	static std::string err_noTopicSet (cref_str nickname, cref_str channelname);
 	static std::string err_alreadyInChannel (cref_str sender_nick, cref_str recipient_name, cref_str channelname);
 	static std::string err_invalidChannelName (cref_str nickname, cref_str invChannelname);
+	static std::string err_noOrigin (cref_str nickname);
 };
 
 #endif // REPLIES_HPP

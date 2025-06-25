@@ -25,7 +25,6 @@ void Mode::execute (int socket_fd, const std::vector<std::string>& tokens) {
 
 	if (tokens.size() == 2 || (tokens.size() > 2 && tokens[2][0] != '+' && tokens[2][0] != '-')) {
 		user.sendMessage(Replies::channelModes(user.get_nickname(), channel_name, channel.getModes()));
-        user.sendMessage(Replies::creationOnTime(user.get_nickname(), channel_name, channel.getTimestamp()));
 		return;
 	}
 

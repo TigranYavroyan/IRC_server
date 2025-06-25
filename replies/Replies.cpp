@@ -10,6 +10,10 @@ std::string Replies::cap_ls () {
 	return "CAP * LS :" + crlf();
 }
 
+std::string Replies::pongMsg (cref_str token) {
+	return "PONG " + server_name + " :" + token + crlf();
+}
+
 std::string Replies::yourHost(cref_str nickname) {
 	return ":" + server_name + " 002 " + nickname + " :Your host is " + server_name + ", running version 1.0" + crlf();
 }
@@ -199,4 +203,8 @@ std::string Replies::err_recipientNotInChannel (cref_str sender, cref_str recipi
 
 std::string Replies::err_keySet (cref_str nickname, cref_str channelname) {
 	return ":" + server_name + " 467 " + nickname + " " + channelname + " :Channel key already set" + crlf();
+}
+
+std::string Replies::err_noOrigin (cref_str nickname) {
+	return ":" + server_name + " 409 " + nickname + " :No origin specified" + crlf();
 }

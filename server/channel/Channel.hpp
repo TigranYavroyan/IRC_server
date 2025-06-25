@@ -13,7 +13,6 @@ class User;
 
 class Channel {
 private:
-    std::string timestamp;
     std::string name;
     std::string topic;
     std::string key;             // For +k mode (channel password)
@@ -26,7 +25,7 @@ private:
     std::set<User*> invited;
 
 public:
-    Channel() { timestamp = Helpers::to_string(std::time(NULL)); }
+    Channel () {}
     Channel(const std::string& channel_name);
 
     bool addUser(User* user, std::string& err_msg, const std::string& provided_key = "");
@@ -55,7 +54,6 @@ public:
     const std::string& getName() const;
     void setName(const std::string& _name);
 
-    std::string getTimestamp () const;
     bool getInviteOnly() const;
     bool getTopicRestricted() const;
     bool hasKey() const;
