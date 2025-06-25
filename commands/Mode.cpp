@@ -1,6 +1,5 @@
 #include <Mode.hpp>
 #include <IRCServer.hpp>
-#include <Debugger.hpp>
 
 void Mode::execute (int socket_fd, const std::vector<std::string>& tokens) {
 	UserTable& usertable = server.getUserTable();
@@ -40,12 +39,8 @@ void Mode::execute (int socket_fd, const std::vector<std::string>& tokens) {
 		return;
 	}
 
-	Debugger::print_input(tokens);
-
 	std::vector<ModeChange> raw = Helpers::parse_modes_raw(tokens);
 	std::vector<ModeChange> operations = Helpers::filter_valid_modes(user, raw, channel);
-
-	Debugger::mode_print_commands(operations);
 
 	for (std::size_t i = 0; i < operations.size(); ++i) {
 		ModeChange& cmd = operations[i];

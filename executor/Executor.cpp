@@ -1,6 +1,5 @@
 #include <Executor.hpp>
 #include <IRCServer.hpp>
-#include <Debugger.hpp>
 #include <Logger.hpp>
 
 void Executor::__create_cmds_table (IRCServer& server) {
@@ -44,8 +43,6 @@ bool Executor::execute (int socket_fd, const std::vector<std::string>& tokens) c
 
 	if (__cap_ls_handling(client, tokens))
 		return true;
-
-	Debugger::print_input(tokens);
 
 	if (is_registration_done(client, cmd)) {
 		std::string err_msg = Replies::err_notRegistered(cmd, client.get_nickname());
@@ -113,16 +110,6 @@ bool Executor::__cap_ls_handling (const User& client, const std::vector<std::str
 }
 
 bool Executor::is_registration_done (const User& client, const std::string& cmd) const {
-	if (cmd == "PASS") {
-		Debugger::client_pass(client);
-	}
-	else if (cmd == "NICK") {
-		Debugger::client_nick(client);
-	}
-	else if (cmd == "USER") {
-		Debugger::client_user(client);
-	}
-
 	if (cmd == "QUIT")
 		return false;
 

@@ -2,7 +2,6 @@
 #include <UserTable.hpp>
 #include <IRCServer.hpp>
 #include <User.hpp>
-#include <Debugger.hpp>
 
 void Part::execute (int socket_fd, const std::vector<std::string>& tokens) {
 
@@ -51,8 +50,6 @@ void Part::execute (int socket_fd, const std::vector<std::string>& tokens) {
 		ch.removeUser(&user);
 		user.exit_channel(channelName);
 		
-		Debugger::channel_user_count(ch);
-
 		if (!ch.getUserCount()) {
 			server.removeChannel(channelName);
 		}

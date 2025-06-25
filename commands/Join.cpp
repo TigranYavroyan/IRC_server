@@ -5,7 +5,6 @@
 #include <IRCServer.hpp>
 #include <sstream>
 #include <Logger.hpp>
-#include <Debugger.hpp>
 
 Join::Join(IRCServer& server) : ACommand::ACommand(server) {}
 
@@ -30,7 +29,6 @@ void Join::execute(int client_fd, const std::vector<std::string>& tokens) {
         channelKeys = Helpers::split_by_delim(tokens.at(2), ',');
     }
     catch (const std::out_of_range& ex) {
-        Debugger::exception_msg(ex);
         channelKeys = std::vector<std::string>();
     }
     std::string channelName;
@@ -43,7 +41,6 @@ void Join::execute(int client_fd, const std::vector<std::string>& tokens) {
             channelKey = channelKeys.at(i);
         }
         catch (const std::out_of_range& ex) {
-            Debugger::exception_msg(ex);
             channelKey = "";
         }
 

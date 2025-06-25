@@ -6,9 +6,6 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <ctime>
-#include <Debugger.hpp>
-
-extern bool stopServer;
 
 IRCServer::IRCServer (int port, const std::string& _password): PORT(port), password(_password) {
     executor.set_server(*this);
@@ -68,7 +65,7 @@ void IRCServer::run () {
     UserBySocketIter it;
     int socket_fd;
 
-    while (!stopServer) {
+    while (true) {
         if (eventhandler.wait_event() < 0)
             throw IRC::exception(std::strerror(errno));
 
@@ -115,7 +112,6 @@ void IRCServer::removeFromChannel (User& user, const std::string& channel_name) 
 }
 
 void IRCServer::removeChannel (const std::string& channel_name) {
-    Debugger::channel_removed(channel_name);
     channels.erase(channel_name);
 }
 
