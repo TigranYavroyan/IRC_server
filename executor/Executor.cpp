@@ -46,6 +46,8 @@ bool Executor::execute (int socket_fd, const std::vector<std::string>& tokens) c
 	if (__cap_ls_handling(client, tokens))
 		return true;
 
+	Debugger::print_input(tokens);
+
 	if (is_registration_done(client, cmd)) {
 		std::string err_msg = Replies::err_notRegistered(cmd, client.get_nickname());
 		client.sendMessage(err_msg);
@@ -122,7 +124,10 @@ bool Executor::is_registration_done (const User& client, const std::string& cmd)
 		Debugger::client_user(client);
 	}
 
-	if (!(client.get_is_auth()) && cmd != "PASS")
+	if (cmd == "QUIT")
+		return false;
+
+	if (!(client.get_is_auth()) && (cmd != "PASS"))
 		return true;
 
 	if (client.get_is_auth() && (client.is_nick() || client.is_user())) {

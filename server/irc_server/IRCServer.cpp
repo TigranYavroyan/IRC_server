@@ -42,7 +42,6 @@ void IRCServer::setupServer () {
         throw IRC::exception(std::strerror(errno));
 
     int opt = 1;
-    // fcntl(server_fd, F_SETFL, O_NONBLOCK);
     
     if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)))
         throw IRC::exception(std::strerror(errno));
@@ -170,12 +169,9 @@ void IRCServer::__accept_connection () {
     int new_client = accept(server_fd, (struct sockaddr*)&client_addr, &addr_len);
     
     if (new_client < 0) {
-        if (errno != EAGAIN && errno != EWOULDBLOCK)
-            throw IRC::exception(std::strerror(errno));
-        return;
+        throw IRC::exception(std::strerror(errno));
     }
     
-    // fcntl(new_client, F_SETFL, O_NONBLOCK);
     std::string hostname = inet_ntoa(client_addr.sin_addr);
 
     user_table.set_user(new_client, hostname);
@@ -209,12 +205,10 @@ void IRCServer::__message_checking (int client) {
     int bytes_received = recv(client, buffer, BUFFER_SIZE, 0);
 
     if (bytes_received <= 0) {
-        if (bytes_received == 0 || (errno != EAGAIN && errno != EWOULDBLOCK)) {
-            User& user = user_table[client];
-            std::string msg = Replies::quitMsg(user);
-            removeFromAllChannels(user, msg);
-	        disconnectClient(user);
-        }
+        User& user = user_table[client];
+        std::string msg = Replies::quitMsg(user);
+        removeFromAllChannels(user, msg);
+        disconnectClient(user);
         return;
     }
     user_msg_buffer[client].append(buffer, bytes_received);
