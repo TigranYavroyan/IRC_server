@@ -124,7 +124,7 @@ std::ostream& operator<<(std::ostream& os, const User& user) {
 }
 
 bool User::is_nick () const {
-	return nickname.empty();
+	return nickname != "*";
 }
 
 bool User::is_user () const {

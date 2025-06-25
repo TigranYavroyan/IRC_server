@@ -17,7 +17,7 @@ public:
 	void set_user (
 		int socket_fd,
 		const std::string& hostname = "",
-		const std::string& nickname = "",
+		const std::string& nickname = "*",
 		const std::string& username = "",
 		const std::string& realname = "",
 		bool is_auth = false

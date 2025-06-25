@@ -21,11 +21,6 @@ void Nick::execute(int client_socket, const std::vector<std::string>& tokens) {
     std::string new_nick = tokens[1];
 
     if (!InputValidator::is_valid_nickname(new_nick)) {
-
-        if (old_nick.empty()) {
-            old_nick = "*";
-        }
-
         msg = Replies::err_oneUsNick(old_nick, new_nick);
         client.sendMessage(msg);
         return;

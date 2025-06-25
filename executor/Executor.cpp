@@ -63,7 +63,7 @@ bool Executor::execute (int socket_fd, const std::vector<std::string>& tokens) c
 	if (tokens[0] == "QUIT")
 		return false;
 
-	can_register = !client.is_nick() && !client.is_user();
+	can_register = client.is_nick() && !client.is_user();
 
 	if (can_register && !client.get_is_registered()) {
 		client.set_is_registered();
@@ -116,7 +116,7 @@ bool Executor::is_registration_done (const User& client, const std::string& cmd)
 	if (!(client.get_is_auth()) && (cmd != "PASS"))
 		return true;
 
-	if (client.get_is_auth() && (client.is_nick() || client.is_user())) {
+	if (client.get_is_auth() && (!client.is_nick() || client.is_user())) {
 		if (cmd != "NICK" && cmd != "USER")
 			return true;
     }

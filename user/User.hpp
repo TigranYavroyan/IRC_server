@@ -19,7 +19,7 @@ class User {
 public:
 	User(int fd,
 		const std::string& user = "",
-		const std::string& nick = "",
+		const std::string& nick = "*",
 		const std::string& host = "",
 		const std::string& real = "",
 		bool auth = false);
