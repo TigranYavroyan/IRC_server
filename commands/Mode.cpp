@@ -1,6 +1,10 @@
 #include <Mode.hpp>
 #include <IRCServer.hpp>
 
+#ifdef DEBUG
+	#include <Debugger.hpp>
+#endif
+
 void Mode::execute (int socket_fd, const std::vector<std::string>& tokens) {
 	UserTable& usertable = server.getUserTable();
 	User& user = usertable[socket_fd];
@@ -42,18 +46,18 @@ void Mode::execute (int socket_fd, const std::vector<std::string>& tokens) {
 	std::vector<ModeChange> raw = Helpers::parse_modes_raw(tokens);
 	std::vector<ModeChange> operations = Helpers::filter_valid_modes(user, raw, channel);
 
+	#ifdef DEBUG
+		Debugger::mode_print_commands(operations);
+	#endif
+
 	for (std::size_t i = 0; i < operations.size(); ++i) {
 		ModeChange& cmd = operations[i];
 
 		if (cmd.action == '+') {
 			__mode_set(cmd, channel);
 		}
-		else if (cmd.action == '-') {
-			__mode_remove(cmd, channel);
-		}
 		else {
-			std::cerr << "Error: cmd.action must be + or - (" << cmd.action << ")\nCommand execution is stoped" << std::endl;
-			break;
+			__mode_remove(cmd, channel);
 		}
 	}
 
@@ -83,9 +87,6 @@ void Mode::__mode_set(const ModeChange& cmd, Channel& channel) {
 		case 'l':
 			channel.setUserLimit(std::atoi(cmd.param.c_str()));
 			break;
-		default:
-			std::cerr << "Invalid option is remained in ModeChange: (" << option << ')' << std::endl;
-			break;
 	}
 }
 
@@ -110,9 +111,6 @@ void Mode::__mode_remove(const ModeChange& cmd, Channel& channel) {
 			break;
 		case 'l':
 			channel.setUserLimit(0);
-			break;
-		default:
-			std::cerr << "Invalid option is remained in ModeChange: (" << option << ')' << std::endl;
 			break;
 	}
 }

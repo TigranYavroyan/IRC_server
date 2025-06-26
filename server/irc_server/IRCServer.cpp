@@ -136,7 +136,6 @@ void IRCServer::removeFromAllChannels (User& user, const std::string& msg) {
 		}
         ++begin;
     }
-
     user.exit_from_all_channels();
 }
 
