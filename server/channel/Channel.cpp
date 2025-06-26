@@ -38,6 +38,7 @@ bool Channel::addUser(User* user, std::string& err_msg, const std::string& provi
     }
     if (users.size() == 1) 
         addOperator(user);
+
     return true;
 }
 

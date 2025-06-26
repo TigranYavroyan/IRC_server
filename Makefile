@@ -24,7 +24,8 @@ SRC_DIRS   = ./user \
              ./usertable \
              ./typedefs \
 			 ./replies \
-			 ./logger
+			 ./logger \
+			 ./debugger
 
 INCLUDES   = $(addprefix -I, $(SRC_DIRS) .)
 
@@ -34,8 +35,9 @@ SRCS       = $(wildcard $(addsuffix /*.cpp,$(SRC_DIRS)))
 OBJS       = $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(SRCS))
 
 CXXERRFLAGS = -g3 -Wall -Wextra -Werror
+DEFINE		= #-D DEBUG
 DEBUG       = #-fsanitize=address
-CXXFLAGS    = $(CXXERRFLAGS) -std=c++98 $(INCLUDES)
+CXXFLAGS    = $(DEFINE) $(CXXERRFLAGS) -std=c++98 $(INCLUDES)
 
 all: $(NAME)
 

@@ -2,6 +2,10 @@
 #include <IRCServer.hpp>
 #include <Logger.hpp>
 
+#ifdef DEBUG
+	#include <Debugger.hpp>
+#endif
+
 void Executor::__create_cmds_table (IRCServer& server) {
 	std::pair<std::string, ACommand*> init_table[] = {
 		std::make_pair("PASS", new Pass(server)),
@@ -40,6 +44,10 @@ bool Executor::execute (int socket_fd, const std::vector<std::string>& tokens) c
 	std::string cmd = tokens[0];
 	User& client = user_table[socket_fd];
 	bool can_register;
+
+	#ifdef DEBUG
+		Debugger::print_input(tokens);
+	#endif
 
 	if (__cap_ls_handling(client, tokens))
 		return true;
@@ -110,6 +118,18 @@ bool Executor::__cap_ls_handling (const User& client, const std::vector<std::str
 }
 
 bool Executor::is_registration_done (const User& client, const std::string& cmd) const {
+	#ifdef DEBUG
+		if (cmd == "PASS") {
+			Debugger::client_pass(client);
+		}
+		else if (cmd == "NICK") {
+			Debugger::client_nick(client);
+		}
+		else if (cmd == "USER") {
+			Debugger::client_user(client);
+		}
+	#endif
+	
 	if (cmd == "QUIT")
 		return false;
 

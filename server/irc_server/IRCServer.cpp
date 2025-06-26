@@ -7,6 +7,10 @@
 #include <arpa/inet.h>
 #include <ctime>
 
+#ifdef DEBUG
+    #include <Debugger.hpp>
+#endif
+
 IRCServer::IRCServer (int port, const std::string& _password): PORT(port), password(_password) {
     executor.set_server(*this);
     std::time_t now = std::time(NULL);
@@ -113,6 +117,10 @@ void IRCServer::removeFromChannel (User& user, const std::string& channel_name) 
 
 void IRCServer::removeChannel (const std::string& channel_name) {
     channels.erase(channel_name);
+
+    #ifdef DEBUG
+        Debugger::channel_removed(channel_name);
+    #endif
 }
 
 void IRCServer::removeFromAllChannels (User& user, const std::string& msg) {
