@@ -38,13 +38,12 @@ OBJS       = $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(SRCS))
 debug  ?= 0
 
 ifeq ($(debug), 1)
-	DEFINE = -D DEBUG
-	CXXERRFLAGS = -g3 -Wall -Wextra -Werror
+	DEFINE = -D DEBUG -g3
 else
 	DEFINE =
-	CXXERRFLAGS = -Wall -Wextra -Werror
 endif
 
+CXXERRFLAGS = -Wall -Wextra -Werror
 CXXFLAGS    = $(DEFINE) $(CXXERRFLAGS) -std=c++98 $(INCLUDES)
 
 all: $(NAME)
