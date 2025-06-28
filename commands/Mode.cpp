@@ -31,7 +31,7 @@ void Mode::execute (int socket_fd, const std::vector<std::string>& tokens) {
 		return;
 	}
 
-	// $ If his equals , there is no + or -
+	// $ If this equals , there is no + or -
 	if (tokens[2].find('+') == tokens[2].find('-')) {
 		msg = Replies::err_unknownMode(user.get_nickname(), channel.getName(), tokens[2][0]);
         user.sendMessage(msg);
