@@ -200,7 +200,7 @@ std::vector<ModeChange> Helpers::filter_valid_modes(const User& user, const std:
         const ModeChange& mc = input[i];
 
         if (!__is_valid_mode_char(mc.mode)) {
-            err_msg = Replies::err_invaliDModeParm(user.get_nickname(), mc.mode);
+            err_msg = Replies::err_unknownMode(user.get_nickname(), channel.getName(), mc.mode);
             user.sendMessage(err_msg);
             continue;
         }

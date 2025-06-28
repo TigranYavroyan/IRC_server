@@ -121,8 +121,8 @@ std::string Replies::err_invaliDModeParm(cref_str nickname, char mode) {
 	return ":" + server_name + " 501 " + nickname + " :Unknown MODE flag " + mode + crlf();
 }
 
-std::string Replies::err_unknownMode(cref_str command_name, cref_str nickname, cref_str channelname, cref_str mode) {
-	return ":" + server_name + " 472 " + command_name + " " + nickname + " #" + channelname + " " + mode + " :is not a recognised channel mode" + crlf();
+std::string Replies::err_unknownMode(cref_str nickname, cref_str channelname, char mode) {
+	return ":" + server_name + " 472 " + nickname + " " + mode + " :is unknown mode char to me for " + channelname + crlf();
 }
 
 std::string Replies::err_notEnoughParam(cref_str command_name, cref_str nickname) {

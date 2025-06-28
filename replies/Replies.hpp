@@ -40,7 +40,7 @@ public:
 	// ///////// ERRORS ////////////////
 	static std::string err_needModeParm(cref_str command_name, cref_str channelname, cref_str mode);
 	static std::string err_invaliDModeParm(cref_str nickname, char mode);
-	static std::string err_unknownMode(cref_str command_name, cref_str nickname, cref_str channelname, cref_str mode);
+	static std::string err_unknownMode(cref_str nickname, cref_str channelname, char mode);
 	static std::string err_notEnoughParam(cref_str command_name, cref_str nickname);
 	static std::string err_notOperator(cref_str nickname, cref_str channelname);
 	static std::string err_noSuchNick(cref_str command_name, cref_str recipient);

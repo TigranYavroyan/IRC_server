@@ -9,6 +9,7 @@
 
 #ifdef DEBUG
     #include <Debugger.hpp>
+    extern bool stopServer;
 #endif
 
 IRCServer::IRCServer (int port, const std::string& _password): PORT(port), password(_password) {
@@ -69,7 +70,13 @@ void IRCServer::run () {
     UserBySocketIter it;
     int socket_fd;
 
-    while (true) {
+    while (
+        #ifdef DEBUG
+            !stopServer
+        #else
+            true
+        #endif
+    ) {
         if (eventhandler.wait_event() < 0)
             throw IRC::exception(std::strerror(errno));
 

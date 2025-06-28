@@ -26,8 +26,15 @@ void Mode::execute (int socket_fd, const std::vector<std::string>& tokens) {
 	
 	Channel& channel = server.getChannel(channel_name);
 
-	if (tokens.size() == 2 || (tokens.size() > 2 && tokens[2][0] != '+' && tokens[2][0] != '-')) {
+	if (tokens.size() == 2) {
 		user.sendMessage(Replies::channelModes(user.get_nickname(), channel_name, channel.getModes()));
+		return;
+	}
+
+	// $ If his equals , there is no + or -
+	if (tokens[2].find('+') == tokens[2].find('-')) {
+		msg = Replies::err_unknownMode(user.get_nickname(), channel.getName(), tokens[2][0]);
+        user.sendMessage(msg);
 		return;
 	}
 
@@ -44,6 +51,11 @@ void Mode::execute (int socket_fd, const std::vector<std::string>& tokens) {
 	}
 
 	std::vector<ModeChange> raw = Helpers::parse_modes_raw(tokens);
+	
+	#ifdef DEBUG
+		Debugger::mode_print_commands(raw);
+	#endif
+
 	std::vector<ModeChange> operations = Helpers::filter_valid_modes(user, raw, channel);
 
 	#ifdef DEBUG

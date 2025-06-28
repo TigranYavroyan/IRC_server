@@ -2,6 +2,7 @@ NAME       = ircserv
 CXX        = c++
 RM         = rm -f
 
+
 RED        = \033[1;31m
 GREEN      = \033[1;32m
 YELLOW     = \033[1;33m
@@ -34,9 +35,16 @@ BUILD_DIR  = build
 SRCS       = $(wildcard $(addsuffix /*.cpp,$(SRC_DIRS)))
 OBJS       = $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(SRCS))
 
-CXXERRFLAGS = -g3 -Wall -Wextra -Werror
-DEFINE		= #-D DEBUG
-DEBUG       = #-fsanitize=address
+debug  ?= 0
+
+ifeq ($(debug), 1)
+	DEFINE = -D DEBUG
+	CXXERRFLAGS = -g3 -Wall -Wextra -Werror
+else
+	DEFINE =
+	CXXERRFLAGS = -Wall -Wextra -Werror
+endif
+
 CXXFLAGS    = $(DEFINE) $(CXXERRFLAGS) -std=c++98 $(INCLUDES)
 
 all: $(NAME)

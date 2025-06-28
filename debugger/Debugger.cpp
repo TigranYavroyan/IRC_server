@@ -52,6 +52,9 @@ void Debugger::print_input (const std::vector<std::string>& input) {
 }
 
 void Debugger::mode_print_commands (const std::vector<ModeChange>& commands) {
+    if (commands.empty())
+        return;
+
     __debug_start();
 	for (std::size_t i = 0; i < commands.size(); ++i) {
         std::cout << "Action: " << commands[i].action
