@@ -76,8 +76,7 @@ bool Channel::isInvited(User* user) const {
 
 
 void Channel::setTopic(const std::string& new_topic) {
-    if (!topic_restricted || isOperator(NULL))
-        topic = new_topic;
+    topic = new_topic;
 }
 
 std::string Channel::getTopic() const {
